@@ -1,0 +1,25 @@
+{
+  "name": "@magicyan/core",
+  "version": "1.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "tsc"
+  },
+  "types": "./dist/index.d.ts",
+  "keywords": [],
+  "author": "Rincko Dev (https://github.com/rinckodev)",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "bugs": {
+    "url": "https://github.com/rinckodev/magician/issues"
+  },
+  "homepage": "https://github.com/rinckodev/magician#readme",
+  "description": ""
+}
