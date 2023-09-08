@@ -1,6 +1,6 @@
 {
-  "name": "@magicyan/core",
-  "version": "1.0.3",
+  "name": "@magicyan/discord",
+  "version": "1.0.0",
   "publishConfig": {
     "access": "public"
   },
@@ -21,5 +21,9 @@
     "url": "https://github.com/rinckodev/magician/issues"
   },
   "homepage": "https://github.com/rinckodev/magician#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "@magicyan/core": "^1.0.3",
+    "discord.js": "^14.13.0"
+  }
 }
