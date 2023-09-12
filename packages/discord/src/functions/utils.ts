@@ -10,5 +10,6 @@ export function createModalInput(data: Omit<TextInputComponentData, "type">){
 }
 
 export function createLinkButton(data: Omit<LinkButtonComponentData, "style" | "type">){
+    if (!data.label) data.label = data.url;
     return new ButtonBuilder({style: ButtonStyle.Link, ...data});
 }
