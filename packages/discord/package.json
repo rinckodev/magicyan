@@ -1,6 +1,6 @@
 {
   "name": "@magicyan/discord",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publishConfig": {
     "access": "public"
   },
@@ -18,12 +18,14 @@
     "typescript": "^5.2.2"
   },
   "bugs": {
-    "url": "https://github.com/rinckodev/magician/issues"
+    "url": "https://github.com/rinckodev/magicyan/issues"
   },
-  "homepage": "https://github.com/rinckodev/magician#readme",
+  "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord#readme",
   "description": "",
   "dependencies": {
-    "@magicyan/core": "^1.0.3",
+    "@magicyan/core": "^1.0.5"
+  },
+  "peerDependencies": {
     "discord.js": "^14.13.0"
   }
 }

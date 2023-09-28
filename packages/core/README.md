@@ -26,11 +26,29 @@ randomNumber(1, 20) // => 12
 
 await sleep(2000) // ==> wait 2 seconds
 
+let count = 0
+createInterval({
+    time: 1000,
+    run(stop){
+        console.log(count)
+        if (count >= 10){
+            console.log("end")
+            stop()
+            return
+        }
+        count++
+    }
+})
+
 toNull() // null
 
 // string | null // any lib function
 const action = options.getString("action");
 notFound(action) // null => undefined | string => string;
+
+captalize("hello world") // Hello world
+captalize("HELLO WORLD") // Hello world
+captalize("hEllO WorLD") // Hello world
 
 // lang.json
 {

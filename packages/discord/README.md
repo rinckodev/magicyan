@@ -86,7 +86,7 @@ createLinkButton({ url, label: "My github" });
 
 You can create an embed author easily with a User object
 ```ts
-const { user } = interactoion
+const { user } = interaction
 
 new EmbedBuilder({
     author: createEmbedAuthor({ user }),

@@ -1,6 +1,6 @@
 {
   "name": "@magicyan/core",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publishConfig": {
     "access": "public"
   },
@@ -18,8 +18,8 @@
     "typescript": "^5.2.2"
   },
   "bugs": {
-    "url": "https://github.com/rinckodev/magician/issues"
+    "url": "https://github.com/rinckodev/magicyan/issues"
   },
-  "homepage": "https://github.com/rinckodev/magician#readme",
+  "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/core#readme",
   "description": ""
 }
