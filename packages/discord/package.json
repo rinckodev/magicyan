@@ -1,6 +1,6 @@
 {
   "name": "@magicyan/discord",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publishConfig": {
     "access": "public"
   },
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord#readme",
   "description": "imple functions to facilitate discord bot development",
   "dependencies": {
-    "@magicyan/core": "^1.0.5"
+    "@magicyan/core": "^1.0.6"
   },
   "peerDependencies": {
     "discord.js": "^14.13.0"
