@@ -1,6 +1,6 @@
 {
   "name": "@magicyan/core",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publishConfig": {
     "access": "public"
   },
@@ -21,5 +21,5 @@
     "url": "https://github.com/rinckodev/magicyan/issues"
   },
   "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/core#readme",
-  "description": ""
+  "description": "Very simple functions for you to use in your code"
 }
