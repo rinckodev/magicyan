@@ -9,6 +9,11 @@
     "dev": "ts-node dev-only/index.ts",
     "build": "tsc"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rinckodev/magicyan",
+    "directory": "packages/discord-plus"
+  },
   "types": "./types/index.d.ts",
   "keywords": [],
   "author": "Rincko Dev (https://github.com/rinckodev)",
@@ -21,8 +26,8 @@
   "bugs": {
     "url": "https://github.com/rinckodev/magicyan/issues"
   },
-  "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord#readme",
-  "description": "imple functions to facilitate discord bot development",
+  "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord-plus#readme",
+  "description": "Message components for discord",
   "dependencies": {
     "@magicyan/core": "^1.0.6"
   },

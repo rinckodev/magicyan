@@ -9,6 +9,11 @@
     "dev": "ts-node src/index.ts",
     "build": "tsc"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rinckodev/magicyan",
+    "directory": "packages/discord"
+  },
   "types": "./types/index.d.ts",
   "keywords": [],
   "author": "Rincko Dev (https://github.com/rinckodev)",
@@ -21,7 +26,7 @@
     "url": "https://github.com/rinckodev/magicyan/issues"
   },
   "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord#readme",
-  "description": "imple functions to facilitate discord bot development",
+  "description": "Simple functions to facilitate discord bot development",
   "dependencies": {
     "@magicyan/core": "^1.0.6"
   },
