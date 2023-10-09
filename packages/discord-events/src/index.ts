@@ -54,14 +54,14 @@ export function discordEvents(options: DiscordEventsOptions){
         client.on("voiceStateUpdate", async (oldSate, newState) => {
             if (
                 (events?.guildMemberVoiceChannelJoin ?? true) &&
-                newState.member && newState.channel
+                newState.member && newState.channel?.type === ChannelType.GuildVoice
             ){
                 client.emit("guildMemberVoiceChannelJoin", newState.member, newState.channel)
             }
 
             if (
                 (events?.guildMemberVoiceChannelLeave ?? true) &&
-                newState.member && oldSate.channel
+                newState.member && oldSate.channel?.type === ChannelType.GuildVoice
             ){
                 client.emit("guildMemberVoiceChannelLeave", newState.member, oldSate.channel)
             }

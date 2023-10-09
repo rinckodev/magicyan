@@ -44,7 +44,7 @@ client.on("guildMemberVoiceChannelJoin", (member, channel) => {
 
 See below the list of all events and which ones are activated by default
 
-| event | paramters | description | enabled by default |
+| event | parameters | description | enabled by default |
 | ----- | --------- |------------ | ------------------ |
 | webhookMessageCreate | message, webhook | This event will be triggered when a webhook message is created. | ❌ false |
 | guildMemberVoiceChannelJoin | member, voiceChannel | This event is triggered when a member joins a voice channel in a guild. | ✅ true |
