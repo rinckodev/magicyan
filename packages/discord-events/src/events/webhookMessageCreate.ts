@@ -9,5 +9,5 @@ export async function webhookMessageCreate(client: Client, message: Message){
     const webhook = webhooks.get(author.id);
 
     if (!webhook) return;
-    client.emit("webhookMessageCreate", message, webhook)
+    client.emit("webhookMessageCreate", message, webhook);
 }

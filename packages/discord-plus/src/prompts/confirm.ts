@@ -34,14 +34,14 @@ export async function ConfirmPrompt({ render, onConfirm, onCancel, ...options }:
             emoji: buttons?.cancel?.emoji,
             style: buttons?.cancel?.style || ButtonStyle.Danger
         }
-    } satisfies ConfirmPromptOptions["buttons"]
+    } satisfies ConfirmPromptOptions["buttons"];
 
     const components = [
         new ActionRowBuilder<ButtonBuilder>({ components: [
             new ButtonBuilder(buttonData.confirm),
             new ButtonBuilder(buttonData.cancel),
         ]})
-    ]
+    ];
 
     const message = await render(components);
 
@@ -53,13 +53,13 @@ export async function ConfirmPrompt({ render, onConfirm, onCancel, ...options }:
             return isExecutor;
         },
         time: (time && onTimeout) ? time : undefined
-    })
+    });
 
     collector.on("collect", interaction => {
         collector.stop();
         switch (interaction.customId){
             case buttonData.confirm.customId: {
-                onConfirm(interaction)
+                onConfirm(interaction);
                 return;
             }
             case buttonData.cancel.customId: {
@@ -67,8 +67,10 @@ export async function ConfirmPrompt({ render, onConfirm, onCancel, ...options }:
                 return;
             }
         }
-    })
+    });
     if (time && onTimeout){
-        collector.on("end", () => onTimeout())
+        collector.on("end", (_, reason) => {
+            if (reason == "time") onTimeout();
+        });
     }
 }

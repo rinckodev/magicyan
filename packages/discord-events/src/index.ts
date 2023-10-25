@@ -1,7 +1,7 @@
-import { AuditLogEvent, ChannelType, Client } from "discord.js";
-import { webhookMessageCreate } from "./events/webhookMessageCreate";
+import { ChannelType, Client } from "discord.js";
 import { guildMemberVoiceChannelMove } from "./events/guildMemberVoiceChannelMove";
-export * from "./discordjs"
+import { webhookMessageCreate } from "./events/webhookMessageCreate";
+export * from "./discordjs";
 
 interface DiscordEventsOptions {
     /**
@@ -43,7 +43,7 @@ export function discordEvents(options: DiscordEventsOptions){
             if (events?.webhookMessageCreate ?? false){
                 webhookMessageCreate(client, message);
             }
-        })
+        });
     }
 
     // Voice State Update Events
@@ -56,14 +56,14 @@ export function discordEvents(options: DiscordEventsOptions){
                 (events?.guildMemberVoiceChannelJoin ?? true) &&
                 newState.member && newState.channel?.type === ChannelType.GuildVoice
             ){
-                client.emit("guildMemberVoiceChannelJoin", newState.member, newState.channel)
+                client.emit("guildMemberVoiceChannelJoin", newState.member, newState.channel);
             }
 
             if (
                 (events?.guildMemberVoiceChannelLeave ?? true) &&
                 newState.member && oldSate.channel?.type === ChannelType.GuildVoice
             ){
-                client.emit("guildMemberVoiceChannelLeave", newState.member, oldSate.channel)
+                client.emit("guildMemberVoiceChannelLeave", newState.member, oldSate.channel);
             }
             if (
                 (events?.guildMemberVoiceChannelMove ?? false) &&
@@ -71,6 +71,6 @@ export function discordEvents(options: DiscordEventsOptions){
             ){
                 guildMemberVoiceChannelMove(client, oldSate, newState);
             }
-        })
+        });
     }
 }

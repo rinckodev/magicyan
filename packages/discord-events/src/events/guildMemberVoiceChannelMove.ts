@@ -18,5 +18,5 @@ export async function guildMemberVoiceChannelMove(client: Client, oldSate: Voice
     client.emit("guildMemberVoiceChannelMove", 
         newState.member, newState.channel,
         member, oldSate.channel
-    )
+    );
 }

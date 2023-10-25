@@ -6,9 +6,11 @@ interface CreateIntervalOptions {
 }
 export function createInterval({ time, run }: CreateIntervalOptions){
     const timer = setInterval(() => {
-        function stop(){
-            clearInterval(timer)
-        }
-        run(stop);
-    }, time)
+        run(createStopInterval(timer));
+    }, time);
+    return { timer, stop: createStopInterval(timer) };
+}
+
+function createStopInterval(timer: NodeJS.Timeout){
+    return () => clearInterval(timer);
 }

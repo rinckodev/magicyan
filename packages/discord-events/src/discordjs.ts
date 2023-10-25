@@ -1,4 +1,4 @@
-import "discord.js"
+import "discord.js";
 declare module "discord.js" {
 	interface ClientEvents {
 		webhookMessageCreate: [message: Message<true>, webhook: Webhook],
@@ -7,4 +7,4 @@ declare module "discord.js" {
 		guildMemberVoiceChannelMove: [member: GuildMember, newChannel: VoiceChannel, mover: GuildMember, oldChannel: VoiceChannel],
 	}
 }
-export {}
+export {};

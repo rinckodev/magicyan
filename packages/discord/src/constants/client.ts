@@ -8,7 +8,7 @@ const Messages = [
     IntentsBitField.Flags.DirectMessages,
     IntentsBitField.Flags.DirectMessageReactions,
     IntentsBitField.Flags.DirectMessageTyping,
-]
+];
 const Guild = [
     IntentsBitField.Flags.GuildEmojisAndStickers,
     IntentsBitField.Flags.GuildIntegrations,
@@ -23,12 +23,12 @@ const Guild = [
     IntentsBitField.Flags.GuildVoiceStates,
     IntentsBitField.Flags.GuildWebhooks,
     IntentsBitField.Flags.Guilds,
-]
+];
 
 const Other = [
     IntentsBitField.Flags.AutoModerationConfiguration,
     IntentsBitField.Flags.AutoModerationExecution,
-]
+];
 
 export const CustomItents = {
     Messages,
@@ -39,4 +39,4 @@ export const CustomItents = {
         ...Guild,
         ...Other,
     ],
-}
+};

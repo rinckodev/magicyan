@@ -17,7 +17,7 @@ interface QuizPromptOptions {
 export async function QuizPrompt(options: QuizPromptOptions){
     const { render, onEnd, questions, executor } = options;
 
-    const customId = options.customId || "quiz-prompt-select"
+    const customId = options.customId || "quiz-prompt-select";
     let step = 0;
 
     const initial = {
@@ -28,7 +28,7 @@ export async function QuizPrompt(options: QuizPromptOptions){
                 options: questions[step].options
             })
         ]})]
-    }
+    };
 
     const message = await render(initial.embed, initial.components);
 
@@ -60,6 +60,6 @@ export async function QuizPrompt(options: QuizPromptOptions){
                     options: questions[step].options
                 })
             ]})]
-        })
-    })
+        });
+    });
 }

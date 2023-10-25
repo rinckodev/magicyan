@@ -6,7 +6,7 @@ export function createRow<Component extends AnyComponentBuilder>
 }
 
 export function createModalInput(data: Omit<TextInputComponentData, "type">){
-    return createRow(new TextInputBuilder(data))
+    return createRow(new TextInputBuilder(data));
 }
 
 export function createLinkButton(data: Omit<LinkButtonComponentData, "style" | "type">){
