@@ -1,0 +1,8 @@
+{
+    "material-icon-theme.folders.associations": {
+        "canvas": "theme",
+        "discord": "client",
+        "discord-events": "event",
+        "discord-plus": "tools"
+    }
+}

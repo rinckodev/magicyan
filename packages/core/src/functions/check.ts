@@ -1,5 +1,5 @@
 /**
- * This function compares two strings ignoring case sensitivity
+ * Compares two strings ignoring case sensitivity
  * @param text1 Text 1
  * @param text2 Text 2
  * @returns Boolean

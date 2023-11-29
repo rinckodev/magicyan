@@ -13,6 +13,7 @@ export function toNull(){
 export function notFound<T>(value: T): NonNullable<T> | undefined{
     return value ?? undefined;
 }
+
 /**
  * Creates text with a line break
  * @param text String Array
@@ -26,6 +27,21 @@ export function notFound<T>(value: T): NonNullable<T> | undefined{
  */
 export function brBuilder(...text: string[]){
     return text.join("\n");
+}
+
+/**
+ * Creates text with a spaces
+ * @param text String array
+ * @returns string
+ * ```ts
+ * const adm = "Rincko";
+ * const action = "promoted"
+ * const text = spaceBuilder("Administrator", adm, "has been", action)
+ * console.log(text) // Administrator Rincko has been promoted
+ * ```
+ */
+export function spaceBuilder(...text: string[]){
+    return text.join(" ");
 }
 
 /**
@@ -57,6 +73,18 @@ export function textReplacer<R extends Record<string, any>>(text: string, replac
     }
     return result;
 }
-export function captalize(word: string){
+
+/**
+ * Capitalizes the first letter of a word and converts the remaining letters to lowercase.
+ *
+ * @param {string} word - The word to be capitalized.
+ * @returns {string} The capitalized word.
+ *
+ * @example
+ * // Capitalize the word "hello" to get "Hello"
+ * const capitalizedWord = capitalize("hello");
+ * console.log(capitalizedWord); // Output: "Hello"
+ */
+export function captalize(word: string): string {
     return word[0].toUpperCase() + word.slice(1).toLowerCase();
 }

@@ -22,6 +22,18 @@ export declare function notFound<T>(value: T): NonNullable<T> | undefined;
  */
 export declare function brBuilder(...text: string[]): string;
 /**
+ * Creates text with a spaces
+ * @param text String array
+ * @returns string
+ * ```ts
+ * const adm = "Rincko";
+ * const action = "promoted"
+ * const text = spaceBuilder("Administrator", adm, "has been", action)
+ * console.log(text) // Administrator Rincko has been promoted
+ * ```
+ */
+export declare function spaceBuilder(...text: string[]): string;
+/**
  * Replace the text with object variables
  * @param text
  * @param replaces
@@ -44,4 +56,15 @@ export declare function brBuilder(...text: string[]): string;
  * ```
  */
 export declare function textReplacer<R extends Record<string, any>>(text: string, replaces: R): string;
+/**
+ * Capitalizes the first letter of a word and converts the remaining letters to lowercase.
+ *
+ * @param {string} word - The word to be capitalized.
+ * @returns {string} The capitalized word.
+ *
+ * @example
+ * // Capitalize the word "hello" to get "Hello"
+ * const capitalizedWord = capitalize("hello");
+ * console.log(capitalizedWord); // Output: "Hello"
+ */
 export declare function captalize(word: string): string;
