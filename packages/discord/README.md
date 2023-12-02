@@ -93,3 +93,17 @@ new EmbedBuilder({
     description: "My embed description"
 })
 ```
+
+Function to find a channel from the guild cache
+```ts
+const { guild } = interaction
+
+const channel = findChannel(guild, ChannelType.GuildVoice).byName("Lounge 01") // VoiceChannel  | undefined
+```
+
+Function to find a role from the guild cache
+```ts
+const { guild } = interaction
+
+const role = findChannel(guild).byName("Administrator") // Role  | undefined
+```
