@@ -1,10 +1,12 @@
-import { EmbedAuthorData, ImageURLOptions, User } from "discord.js";
-export declare function createEmbedAuthor({ user, property, imageSize: size, iconURL, url, prefix, suffix }: {
+import type { EmbedAuthorData, ImageURLOptions, User } from "discord.js";
+interface CreateEmbedAuthorOptions {
     user: User;
-    property?: keyof Pick<User, "username" | "displayName" | "id">;
+    property?: "username" | "displayName" | "id" | "globalName";
     imageSize?: ImageURLOptions["size"];
     iconURL?: string;
     url?: string;
     prefix?: string;
     suffix?: string;
-}): EmbedAuthorData;
+}
+export declare function createEmbedAuthor(options: CreateEmbedAuthorOptions): EmbedAuthorData;
+export {};
