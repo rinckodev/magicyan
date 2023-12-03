@@ -107,3 +107,22 @@ const { guild } = interaction
 
 const role = findChannel(guild).byName("Administrator") // Role  | undefined
 ```
+
+Function to create embed asset
+If the method used to obtain a url returns null or undefined the function will set undefined in the image property
+```ts
+const embed = new EmbedBuilder({
+    image: createEmbedAsset(guild.iconURL()) // { url: guild.iconUrl() } | undefined
+})
+```
+
+When passing an attachment to the function, it will return the url with local attachments
+```ts
+const image = new AttachmentBuilder(buffer, { name: "myImage.png" });
+
+const embed = new EmbedBuilder({
+    image: createEmbedAsset(image) // { url: attachment://myImage.png }
+});
+
+channel.send({ embeds: [embed], files: [image]})
+```

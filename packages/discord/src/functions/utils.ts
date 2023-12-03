@@ -1,8 +1,7 @@
-import type {  AnyComponentBuilder, LinkButtonComponentData, TextInputComponentData } from "discord.js";
-import { ActionRowBuilder, TextInputBuilder, ButtonBuilder, ButtonStyle, } from "discord.js";
+import type { AnyComponentBuilder, LinkButtonComponentData, TextInputComponentData } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, TextInputBuilder, } from "discord.js";
 
-export function createRow<Component extends AnyComponentBuilder>
-    (...components: Component[]){
+export function createRow<Component extends AnyComponentBuilder>(...components: Component[]){
     return new ActionRowBuilder<Component>({components});
 }
 

@@ -10,10 +10,10 @@ export function findChannel<Type extends Exclude<ChannelType, ChannelType.DM> = 
     const channelType = type || ChannelType.GuildText;
     return {
         byName(name: string): GetChannelType<Type> | undefined {
-            return guild.channels.cache.find(c => c.name === name && c.type === channelType) as GetChannelType<Type>;
+            return guild.channels.cache.find(channel => channel.name === name && channel.type === channelType) as GetChannelType<Type>;
         },
         byId(id: string): GetChannelType<Type> | undefined {
-            return guild.channels.cache.find(c => c.id === id && c.type === channelType) as GetChannelType<Type>;
+            return guild.channels.cache.find(channel => channel.id === id && channel.type === channelType) as GetChannelType<Type>;
         }
     }
 }

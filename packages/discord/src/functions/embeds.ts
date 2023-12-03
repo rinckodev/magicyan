@@ -1,4 +1,4 @@
-import type { EmbedAuthorData, ImageURLOptions, User } from "discord.js";
+import { EmbedAuthorData, ImageURLOptions, User, EmbedAssetData, Attachment, AttachmentBuilder } from "discord.js";
 
 interface CreateEmbedAuthorOptions {
     user: User,
@@ -14,4 +14,13 @@ export function createEmbedAuthor(options: CreateEmbedAuthorOptions): EmbedAutho
         name: `${prefix}${user[property]}${suffix}`, url, 
         iconURL: iconURL || user.displayAvatarURL({ size }) 
     };
+}
+type EmbedAssetOptions = Omit<EmbedAssetData, "url">
+type AssetSource = string | null | Attachment | AttachmentBuilder;
+
+export function createEmbedAsset(source?: AssetSource, options?: EmbedAssetOptions): EmbedAssetData | undefined {
+    if (source instanceof Attachment || source instanceof AttachmentBuilder){
+        return { url: `attachment://${source.name}`, ...options }
+    }
+    return source ? { url: source, ...options } : undefined;
 }
