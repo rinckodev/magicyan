@@ -1,4 +1,5 @@
-import { EmbedAuthorData, ImageURLOptions, User, EmbedAssetData, Attachment, AttachmentBuilder } from "discord.js";
+import { EmbedAuthorData, EmbedBuilder, ImageURLOptions, User, EmbedAssetData, Attachment, AttachmentBuilder, ColorResolvable, EmbedFooterData, Message, APIEmbed, Embed } from "discord.js";
+
 
 interface CreateEmbedAuthorOptions {
     user: User,
@@ -23,4 +24,47 @@ export function createEmbedAsset(source?: AssetSource, options?: EmbedAssetOptio
         return { url: `attachment://${source.name}`, ...options }
     }
     return source ? { url: source, ...options } : undefined;
+}
+
+type EmbedColor = ColorResolvable | (string & {});
+type BaseEmbedField = {
+    name: string;
+    value: string;
+    inline?: boolean
+}
+type BaseEmbedData = { 
+    title?: string;
+    color?: EmbedColor;
+    description?: string;
+    url?: string;
+    timestamp?: string | number | Date;
+    footer?: EmbedFooterData;
+    image?: EmbedAssetData;
+    thumbnail?: EmbedAssetData;
+    author?: EmbedAuthorData;
+    fields?: BaseEmbedField[];
+}
+type CreateEmbedOptions = BaseEmbedData & {
+    extend?: BaseEmbedData;
+    modify?: {
+        fields?(fields: BaseEmbedField[]): BaseEmbedField[];
+    }
+}
+export function createEmbed(options: CreateEmbedOptions){
+    const { extend: extendRaw = {}, ...embedRaw } = options;
+
+    const { color: embedColor, modify, ...embedData } = embedRaw;
+    const { color: extendColor, ...extendData } = extendRaw;
+
+    const data = { ...extendData, ...embedData };
+    const builder = new EmbedBuilder(data);
+    
+    if (extendColor) builder.setColor(extendColor as ColorResolvable);
+    if (embedColor) builder.setColor(embedColor as ColorResolvable);
+
+    if (modify?.fields && typeof modify.fields == "function"){
+        const fields = modify.fields(builder.data.fields || []);
+        builder.setFields(fields);
+    }
+    return builder;
 }
