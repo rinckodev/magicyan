@@ -78,13 +78,22 @@ export function textReplacer<R extends Record<string, any>>(text: string, replac
  * Capitalizes the first letter of a word and converts the remaining letters to lowercase.
  *
  * @param {string} word - The word to be capitalized.
+ * @param {string} allWords - Whether all words should be capitalized
  * @returns {string} The capitalized word.
  *
  * @example
- * // Capitalize the word "hello" to get "Hello"
  * const capitalizedWord = capitalize("hello");
  * console.log(capitalizedWord); // Output: "Hello"
+ * 
+ * const capitalizedText = capitalize("i love brazil", true);
+ * console.log(capitalizedText); // Output: "I Love Brazil"
  */
-export function captalize(word: string): string {
-    return word[0].toUpperCase() + word.slice(1).toLowerCase();
+export function captalize(word: string, allWords: boolean = false): string {
+    return allWords
+    ? word.split(" ").map(word => captalize(word)).join(" ")
+    : word[0].toUpperCase() + word.slice(1).toLowerCase();
+}
+
+export function limitText(text: string, maxLength: number, endText: string = ""){
+    return text.length >= maxLength ? text.slice(0, maxLength) + endText : text;
 }

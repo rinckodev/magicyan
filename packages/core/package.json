@@ -1,13 +1,13 @@
 {
   "name": "@magicyan/core",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "publishConfig": {
     "access": "public"
   },
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node src/index.ts",
-    "build": "tsc"
+    "build": "rm -rf dist & rm -rf types & tsc"
   },
   "repository": {
     "type": "git",
