@@ -1,4 +1,4 @@
-import { EmbedAuthorData, EmbedBuilder, ImageURLOptions, User, EmbedAssetData, Attachment, AttachmentBuilder, ColorResolvable, EmbedFooterData } from "discord.js";
+import { Attachment, AttachmentBuilder, ColorResolvable, EmbedAssetData, EmbedAuthorData, EmbedBuilder, EmbedFooterData, ImageURLOptions, User } from "discord.js";
 interface CreateEmbedAuthorOptions {
     user: User;
     property?: "username" | "displayName" | "id" | "globalName";

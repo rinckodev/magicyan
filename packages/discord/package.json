@@ -1,13 +1,13 @@
 {
   "name": "@magicyan/discord",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "publishConfig": {
     "access": "public"
   },
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node src/index.ts",
-    "build": "tsc"
+    "build": "rm -rf dist & rm -rf types & tsc"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
   "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord#readme",
   "description": "Simple functions to facilitate discord bot development",
   "dependencies": {
-    "@magicyan/core": "^1.0.9"
+    "@magicyan/core": "^1.0.10"
   },
   "peerDependencies": {
     "discord.js": "^14.14.1"

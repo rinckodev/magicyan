@@ -4,8 +4,9 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, TextInputBuilder, } from 
 export function createRow<Component extends AnyComponentBuilder>(...components: Component[]){
     return new ActionRowBuilder<Component>({components});
 }
+type CreateModalInputData = Omit<TextInputComponentData, "type">;
 
-export function createModalInput(data: Omit<TextInputComponentData, "type">){
+export function createModalInput(data: CreateModalInputData){
     return createRow(new TextInputBuilder(data));
 }
 

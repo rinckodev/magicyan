@@ -1,4 +1,4 @@
-import { IntentsBitField } from "discord.js";
+import { IntentsBitField, Partials } from "discord.js";
 
 const Messages = [
     IntentsBitField.Flags.MessageContent,
@@ -40,3 +40,15 @@ export const CustomItents = {
         ...Other,
     ],
 };
+
+export const CustomPartials = {
+    All: [
+        Partials.Channel,
+        Partials.GuildMember,
+        Partials.GuildScheduledEvent,
+        Partials.Message,
+        Partials.Reaction,
+        Partials.ThreadMember,
+        Partials.User,
+    ]
+}
