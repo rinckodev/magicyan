@@ -1,4 +1,12 @@
-# Magicyan Discord
+<div align="center">
+  <img src="../../assets/images/icon.png" alt="Icon" width="100" height="100">
+  <div style="margin-left: 20px;">
+
+  # Magicyan Discord
+  
+  </div>
+</div>
+
 
 Simple functions to facilitate discord bot development
 > Also exports all [@magicyan/core](https://github.com/rinckodev/magicyan/tree/main/packages/core) functions
