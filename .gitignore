@@ -2,6 +2,8 @@
 soon-package
 dev-only
 canvas
+flamestore
+magicdb
 
 .DS_Store
 
@@ -16,6 +18,8 @@ lerna-debug.log*
 
 .env.development
 .env
+firebase.json
+firebase.development.json
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

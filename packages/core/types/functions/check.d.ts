@@ -5,3 +5,4 @@
  * @returns Boolean
  */
 export declare function equalsIgnoreCase(text1: string, text2: string): boolean;
+export declare function includesIgnoreCase(text: string, includeText: string): boolean;

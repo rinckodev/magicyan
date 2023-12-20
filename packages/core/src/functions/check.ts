@@ -7,3 +7,7 @@
 export function equalsIgnoreCase(text1: string, text2: string): boolean {
     return text1.toLowerCase() === text2.toLowerCase();
 }
+
+export function includesIgnoreCase(text: string, includeText: string){   
+    return text.toLowerCase().includes(includeText.toLowerCase())
+}

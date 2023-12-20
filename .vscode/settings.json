@@ -3,6 +3,8 @@
         "canvas": "theme",
         "discord": "client",
         "discord-events": "event",
-        "discord-plus": "tools"
+        "discord-plus": "tools",
+        "flamestore": "firebase",
+        "playground": "typescript"
     }
 }
