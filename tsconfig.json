@@ -2,7 +2,7 @@
     "compilerOptions": {
       "lib": ["ESNext"],
       "target": "ESNext",
-      "module": "CommonJS",
+      "module": "ESNext",
       "moduleResolution": "Node",
       "allowSyntheticDefaultImports": true,
       "esModuleInterop": true,
@@ -14,7 +14,5 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
     },
-    "include": [
-      "packages"
-    ],
+    "include": ["packages"],
   }

@@ -5,6 +5,8 @@ canvas
 flamestore
 magicdb
 
+secret.json
+
 .DS_Store
 
 # Logs
