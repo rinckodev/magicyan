@@ -1,4 +1,4 @@
-import { IntentsBitField, Partials } from "discord.js";
+import { GatewayIntentBits, IntentsBitField, Partials } from "discord.js";
 
 const Messages = [
     IntentsBitField.Flags.MessageContent,
@@ -30,16 +30,13 @@ const Other = [
     IntentsBitField.Flags.AutoModerationExecution,
 ];
 
+
 export const CustomItents = {
     Messages,
     Guild,
     Other,
-    All: [
-        ...Messages,
-        ...Guild,
-        ...Other,
-    ],
-};
+    All: Object.values(IntentsBitField.Flags) as GatewayIntentBits[]
+} as const;
 
 export const CustomPartials = {
     All: [
@@ -51,4 +48,4 @@ export const CustomPartials = {
         Partials.ThreadMember,
         Partials.User,
     ]
-}
+} as const
