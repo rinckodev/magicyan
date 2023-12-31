@@ -21,6 +21,3 @@ console.log(
     isUrl("salve"),
 )
 
-function a(b?: string){
-    b
-}
