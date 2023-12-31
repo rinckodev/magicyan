@@ -4,7 +4,8 @@ interface CreateIntervalOptions {
     time: number,
     run(stop: () => void): void
 }
-export function createInterval({ time, run }: CreateIntervalOptions){
+export function createInterval(options: CreateIntervalOptions){
+    const { time, run } = options;
     const timer = setInterval(() => {
         run(() => clearInterval(timer));
     }, time);

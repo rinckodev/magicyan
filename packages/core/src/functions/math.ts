@@ -8,19 +8,5 @@ export const random = {
     },
     int(min: number, max: number){
         return Math.floor(this.float(min, max));
-    },
-    letter(){
-        const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const lower = "abcdefghijklmnopqrstuvwxyz";
-        const letters = upper + lower;
-        const index = this.int(0, letters.length);
-        return letters.charAt(index);
-    },
-    text(length: number){
-        let result = "";
-        for (let i = 0; i < length; i++) {
-            result += this.letter();
-        }
-        return result;
     }
 }

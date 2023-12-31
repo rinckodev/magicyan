@@ -1,8 +1,3 @@
-/**
- * @param value Initial value
- * @param or Alt value
- * @returns Return alt value if initial value is nullable
- */
-export function orValue<V>(value: V | null | undefined, or: NonNullable<V>): V {
-    return value ?? or;
+export function copyObject<T extends object>(object: T): T{
+    return JSON.parse(JSON.stringify(object))
 }
