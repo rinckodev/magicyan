@@ -1,1 +1,1 @@
-console.log("Hello")
+import { createEmbed, createEmbedFooter } from "../src";

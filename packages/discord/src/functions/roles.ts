@@ -1,12 +1,23 @@
-import type { Guild } from "discord.js";
+import type { Guild, Role } from "discord.js";
+
+type FindRoleFilter = (role: Role) => boolean;
 
 export function findRole(guild: Guild){
     return {
-        byName(name: string){
-            return guild.roles.cache.find(role => role.name == name);
+        byColor(color: number, and: FindRoleFilter = () => true){
+            return guild.roles.cache.find(role => role.color == color && and(role));
+        },
+        byHexColor(hexColor: string, and: FindRoleFilter = () => true){
+            return guild.roles.cache.find(role => role.hexColor == hexColor && and(role));
+        },
+        byName(name: string, and: FindRoleFilter = () => true){
+            return guild.roles.cache.find(role => role.name == name && and(role));
         },
         byId(id: string){
             return guild.roles.cache.get(id); 
+        },
+        byFilter(filter: (role: Role) => boolean){
+            return guild.roles.cache.find(filter);
         }
     }
 }

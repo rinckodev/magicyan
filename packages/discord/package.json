@@ -1,6 +1,6 @@
 {
     "name": "@magicyan/discord",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "description": "Simple functions to facilitate discord bot development",
     "license": "MIT",
     "type": "module",
@@ -39,7 +39,7 @@
       "unbuild": "^2.0.0"
     },
     "dependencies": {
-      "@magicyan/core": "^1.0.13"
+      "@magicyan/core": "^1.0.14"
     },
     "peerDependencies": {
       "discord.js": "^14.14.1"

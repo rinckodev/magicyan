@@ -1,4 +1,5 @@
-import { Attachment, AttachmentBuilder, ColorResolvable, EmbedAssetData, EmbedAuthorData, EmbedBuilder, EmbedFooterData, ImageURLOptions, User } from "discord.js";
+import { notFound } from "@magicyan/core";
+import { Attachment, AttachmentBuilder, ColorResolvable, EmbedAssetData, EmbedAuthorData, EmbedBuilder, EmbedFooterData, Guild, GuildMember, ImageURLOptions, User } from "discord.js";
 
 interface CreateEmbedAuthorOptions {
     user: User,
@@ -15,6 +16,16 @@ export function createEmbedAuthor(options: CreateEmbedAuthorOptions): EmbedAutho
         iconURL: iconURL || user.displayAvatarURL({ size }) 
     };
 }
+
+interface CreateEmbedFooterOptions {
+    text?: string | null;
+    iconURL?: string | null;
+}
+export function createEmbedFooter(options: CreateEmbedFooterOptions): EmbedFooterData {
+    const { text, iconURL } = options;
+    return { text: text ?? "\u200b", iconURL: notFound(iconURL) };
+}
+
 type EmbedAssetOptions = Omit<EmbedAssetData, "url">
 type AssetSource = string | null | Attachment | AttachmentBuilder;
 

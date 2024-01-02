@@ -36,7 +36,7 @@ export const CustomItents = {
     Guild,
     Other,
     All: Object.values(IntentsBitField.Flags) as GatewayIntentBits[]
-} as const;
+};
 
 export const CustomPartials = {
     All: [
@@ -48,4 +48,4 @@ export const CustomPartials = {
         Partials.ThreadMember,
         Partials.User,
     ]
-} as const
+};

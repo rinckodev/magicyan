@@ -7,13 +7,56 @@ type GetChannelType<Type extends ChannelType> = Extract<NonNullable<CommandInter
       : Type;
 }>
 export function findChannel<Type extends Exclude<ChannelType, ChannelType.DM> = ChannelType.GuildText>(guild: Guild, type?: Type){
-    const channelType = type || ChannelType.GuildText;
+    const channelType = type ?? ChannelType.GuildText;
+    const cache = guild.channels.cache;
     return {
         byName(name: string): GetChannelType<Type> | undefined {
-            return guild.channels.cache.find(channel => channel.name === name && channel.type === channelType) as GetChannelType<Type>;
+            return cache.find(c => 
+                c.name === name && 
+                c.type === channelType
+            ) as GetChannelType<Type>;
         },
         byId(id: string): GetChannelType<Type> | undefined {
-            return guild.channels.cache.find(channel => channel.id === id && channel.type === channelType) as GetChannelType<Type>;
+            return cache.find(c => 
+                c.id === id && 
+                c.type === channelType
+            ) as GetChannelType<Type>;
+        },
+        inCategoryId(id: string){
+            return {
+                byName(name: string): GetChannelType<Type> | undefined {
+                    return cache.find(c => 
+                        c.name === name && 
+                        c.type === channelType && 
+                        c.parentId == id
+                    ) as GetChannelType<Type>;
+                },
+                byId(id: string): GetChannelType<Type> | undefined {
+                    return cache.find(c => 
+                        c.id === id && 
+                        c.type === channelType && 
+                        c.parentId == id
+                    ) as GetChannelType<Type>;
+                },
+            };
+        },
+        inCategoryName(name: string){
+            return {
+                byName(name: string): GetChannelType<Type> | undefined {
+                    return cache.find(c => 
+                        c.name === name && 
+                        c.type === channelType  && 
+                        c.parent?.name == name
+                    ) as GetChannelType<Type>;
+                },
+                byId(id: string): GetChannelType<Type> | undefined {
+                    return cache.find(c => 
+                        c.id === id && 
+                        c.type === channelType && 
+                        c.parent?.name == name
+                    ) as GetChannelType<Type>;
+                },
+            };
         }
     }
 }
