@@ -1,6 +1,6 @@
 {
     "name": "@magicyan/discord",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "description": "Simple functions to facilitate discord bot development",
     "license": "MIT",
     "type": "module",
@@ -18,30 +18,30 @@
     },
     "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord#readme",
     "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.cjs"
-      }
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs"
+        }
     },
     "main": "./dist/index.cjs",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "files": [
-      "dist"
+        "dist"
     ],
     "scripts": {
-      "build": "unbuild",
-      "dev": "tsx playground/index.ts"
+        "build": "unbuild",
+        "dev": "tsx playground/index.ts"
     },
     "devDependencies": {
-      "tsx": "^4.7.0",
-      "unbuild": "^2.0.0"
+        "tsx": "^4.7.0",
+        "unbuild": "^2.0.0"
     },
     "dependencies": {
-      "@magicyan/core": "^1.0.14"
+        "@magicyan/core": "^1.0.14"
     },
     "peerDependencies": {
-      "discord.js": "^14.14.1"
+        "discord.js": "^14.14.1"
     }
-  }
+}
