@@ -67,7 +67,7 @@ export function spaceBuilder(...text: string[]){
  * ```
  */
 export function replaceText<R extends Record<string, any>>(text: string, replaces: R){
-    let result = new String(text);
+    let result = String(text);
     for (const prop in replaces){
         result = result.replaceAll(prop, replaces[prop]);
     }
