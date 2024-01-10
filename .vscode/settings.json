@@ -2,9 +2,11 @@
     "material-icon-theme.folders.associations": {
         "canvas": "theme",
         "discord": "client",
+        "discord-elements": "layout",
         "discord-events": "event",
         "discord-plus": "tools",
         "flamestore": "firebase",
-        "playground": "typescript"
+        "playground": "typescript",
+        "magicdb": "database"
     }
 }
