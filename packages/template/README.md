@@ -10,4 +10,7 @@
 Install with
 ```bash
 npm install @magicyan/packageName
+pnpm install @magicyan/packageName
+yarn add @magicyan/packageName
+bun install @magicyan/packageName
 ```
