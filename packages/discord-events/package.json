@@ -1,34 +1,45 @@
 {
-  "name": "@magicyan/discord-events",
-  "version": "1.0.2",
-  "publishConfig": {
-    "access": "public"
-  },
-  "main": "dist/index.js",
-  "scripts": {
-    "dev": "ts-node dev-only/index.ts",
-    "build": "tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/rinckodev/magicyan",
-    "directory": "packages/discord-events"
-  },
-  "types": "./types/index.d.ts",
-  "keywords": [],
-  "author": "Rincko Dev (https://github.com/rinckodev)",
-  "license": "ISC",
-  "devDependencies": {
-    "dotenv": "^16.3.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
-  },
-  "bugs": {
-    "url": "https://github.com/rinckodev/magicyan/issues"
-  },
-  "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord-events#readme",
-  "description": "Extended events of discord.js",
-  "peerDependencies": {
-    "discord.js": "^14.13.0"
+    "name": "@magicyan/discord-events",
+    "version": "1.0.3",
+    "description": "Extended events of discord.js",
+    "license": "MIT",
+    "type": "module",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rinckodev/magicyan",
+        "directory": "packages/core"
+    },
+    "author": "Rincko Dev (https://github.com/rinckodev)",
+    "bugs": {
+        "url": "https://github.com/rinckodev/magicyan/issues"
+    },
+    "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord-events#readme",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.cjs"
+      }
+    },
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "files": [
+      "dist"
+    ],
+    "scripts": {
+      "build": "unbuild",
+      "dev": "tsx playground/index.ts"
+    },
+    "devDependencies": {
+      "tsx": "^4.7.0",
+      "unbuild": "^2.0.0",
+      "dotenv": "^16.3.1"
+    },
+    "peerDependencies": {
+      "discord.js": "^14.13.0"
+    }
   }
-}

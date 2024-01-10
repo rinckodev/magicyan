@@ -1,25 +1,3 @@
 {
-    "compilerOptions": {
-      "lib": ["ESNext"],
-      "target": "ESNext",
-      "module": "CommonJS",
-      "moduleResolution": "Node",
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "strict": true,
-      "skipLibCheck": true,
-      "skipDefaultLibCheck": true,
-      "resolveJsonModule": true,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "rootDir": "src",
-      "outDir": "dist",
-      "declaration": true,
-      "declarationDir": "types"
-    },
-    "include": [
-      "src"
-    ],
-    "exclude": ["node_modules"]
-  }
+  "extends": "../../tsconfig.json"
+}

@@ -1,7 +1,9 @@
 src
 assets
 node_modules
-package-lock.json
-tsconfig.json
-/dev-only
+playground
+
 .env
+tsconfig.json
+package-lock.json
+*.development.json
