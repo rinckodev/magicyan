@@ -16,7 +16,7 @@ export function findRole(guild: Guild){
         byId(id: string){
             return guild.roles.cache.get(id); 
         },
-        byFilter(filter: (role: Role) => boolean){
+        byFilter(filter: FindRoleFilter){
             return guild.roles.cache.find(filter);
         }
     }
