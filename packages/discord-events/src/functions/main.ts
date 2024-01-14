@@ -1,31 +1,25 @@
 import { Client } from "discord.js";
-import { DiscordEvents, DiscordEventsList } from "../types/events";
 import { listeners } from "../events";
 
-type EventsList = Array<keyof DiscordEvents>
-
-interface InitOptions {
-    disable?: EventsList,
-}
-
-export function initDiscordEvents(client: Client, options?: InitOptions){
-    const disable = options?.disable ?? [];
-    const enabled = (Object.keys(listeners) as EventsList)
-    .filter(eventName => !disable.includes(eventName));
+export function initDiscordEvents(client: Client){
 
     client.on("messageCreate", (message) => {
-        if (enabled.includes("webhookMessageCreate")) listeners.webhookMessageCreate(message)
+        listeners.webhookMessageCreate(message)
     })
 
     client.on("voiceStateUpdate", (oldState, newState) => {
-        if (enabled.includes("guildMemberConnect")) listeners.guildMemberConnect(newState);
-        if (enabled.includes("guildMemberDisconnect")) listeners.guildMemberDisconnect(oldState);
-        if (enabled.includes("guildMemberMoved")) listeners.guildMemberMoved(oldState, newState);
+        listeners.guildMemberConnect(newState);
+        listeners.guildMemberDisconnect(oldState);
+        listeners.guildMemberMoved(oldState, newState);
     })
 
     client.on("guildAuditLogEntryCreate", (auditLogEntry, guild) => {
-        if (enabled.includes("guildMemberTimeoutAdd")) listeners.guildMemberTimeoutAdd(auditLogEntry, guild);
-        if (enabled.includes("guildMemberTimeoutRemove")) listeners.guildMemberTimeoutRemove(auditLogEntry, guild);
+        listeners.guildMemberTimeoutAdd(auditLogEntry, guild);
+        listeners.guildMemberTimeoutRemove(auditLogEntry, guild);
+
+        listeners.userKick(auditLogEntry, guild);
+        listeners.userBanAdd(auditLogEntry, guild);
+        listeners.userBanRemove(auditLogEntry, guild);
     })
 
 }

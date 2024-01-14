@@ -15,22 +15,11 @@ import { Client } from "discord.js";
 import { initDiscordEvents } from "@magicyan/discord-events";
 
 const client = new Client({
-    intents: [// add your intents ...]
+    intents: [/* add your intents ... */]
     // set your client options ...
 });
 
 initDiscordEvents(client);
-```
-
-You can disable custom events
-```ts
-initDiscordEvents(client, {
-    disable: [
-        "webhookMessageCreate",
-        "guildMemberMoved",
-        // etc...
-    ]
-})
 ```
 
 ## How to use
@@ -44,7 +33,7 @@ client.on("guildMemberConnect", (member, channel) => {
 
 See below the list of all events
 
-| event | parameters | description |
+| Event | Parameters | Description |
 | ----- | --------- |------------ |
 | webhookMessageCreate | `message`, `webhook` | Triggered when a webhook message is created. | 
 | guildMemberConnect | `member`, `voiceChannel` | Triggered when a member connect to voice channel in a guild. |
@@ -52,3 +41,6 @@ See below the list of all events
 | guildMemberMoved | `member`, `executor`, `oldVoiceChannel`, `newVoiceChannel` | Triggered when a member is moved from one voice channel to another. |
 | guildMemberTimeoutAdd | `member`, `executor`, `expireAt`, `reason` | Triggered when a member gets a timeout |
 | guildMemberTimeoutAdd | `member`, `executor` | Triggered when a member has a timeout removed |
+| userKick | `member`, `executor`, `reason` | Triggered when a user is kicked from the guild |
+| userBanAdd | `member`, `executor`, `reason` | Triggered when a user is banned from the guild |
+| userBanRemove | `member`, `executor`, `reason` | Triggered when a user's ban is removed |
