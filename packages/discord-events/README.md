@@ -8,45 +8,47 @@ npm install @magicyan/discord-events
 This lib adds more discord.js specific events
 
 ## Setup
-Create your bot client normally and pass it to the discordEvents function, so that events can be registered
+Create your bot client normally and pass it to the initDiscordEvents function, so that events can be registered
 
 ```ts
 import { Client } from "discord.js";
-import { discordEvents } from "@magicyan/discord-events";
+import { initDiscordEvents } from "@magicyan/discord-events";
 
 const client = new Client({
     intents: [// add your intents ...]
     // set your client options ...
 });
 
-discordEvents({ client });
+initDiscordEvents(client);
 ```
 
-You can enable or disable custom events
+You can disable custom events
 ```ts
-discordEvents({ client, events: {
-    webhookMessageCreate: true,
-    guildMemberVoiceChannelJoin: true,
-    guildMemberVoiceChannelLeave: false,
-    guildMemberVoiceChannelMove: true,
-    // etc...
-}})
+initDiscordEvents(client, {
+    disable: [
+        "webhookMessageCreate",
+        "guildMemberMoved",
+        // etc...
+    ]
+})
 ```
 
 ## How to use
 You can create a listener for the event in the same way you create it for standard discord.js events
 
 ```ts
-client.on("guildMemberVoiceChannelJoin", (member, channel) => {
+client.on("guildMemberConnect", (member, channel) => {
     console.log(member.displayName, "joined the" channel.name);
 })
 ```
 
-See below the list of all events and which ones are activated by default
+See below the list of all events
 
-| event | parameters | description | enabled by default |
-| ----- | --------- |------------ | ------------------ |
-| webhookMessageCreate | message, webhook | This event will be triggered when a webhook message is created. | ❌ false |
-| guildMemberVoiceChannelJoin | member, voiceChannel | This event is triggered when a member joins a voice channel in a guild. | ✅ true |
-| guildMemberVoiceChannelLeave | member, voiceChannel  | This event is triggered when a member leaves a voice channel in a guild. | ✅ true |
-| guildMemberVoiceChannelMove | member, newVoiceChannel, mover, oldVoiceChannel  | This event is triggered when a member is moved from one voice channel to another. | ❌ false |
+| event | parameters | description |
+| ----- | --------- |------------ |
+| webhookMessageCreate | `message`, `webhook` | Triggered when a webhook message is created. | 
+| guildMemberConnect | `member`, `voiceChannel` | Triggered when a member connect to voice channel in a guild. |
+| guildMemberDisconnect | `member`, `voiceChannel`  | Triggered when a member disconnect from voice channel in a guild. |
+| guildMemberMoved | `member`, `executor`, `oldVoiceChannel`, `newVoiceChannel` | Triggered when a member is moved from one voice channel to another. |
+| guildMemberTimeoutAdd | `member`, `executor`, `expireAt`, `reason` | Triggered when a member gets a timeout |
+| guildMemberTimeoutAdd | `member`, `executor` | Triggered when a member has a timeout removed |

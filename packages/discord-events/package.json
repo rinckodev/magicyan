@@ -1,6 +1,6 @@
 {
     "name": "@magicyan/discord-events",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Extended events of discord.js",
     "license": "MIT",
     "type": "module",
@@ -18,28 +18,28 @@
     },
     "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord-events#readme",
     "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.cjs"
-      }
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs"
+        }
     },
     "main": "./dist/index.cjs",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "files": [
-      "dist"
+        "dist"
     ],
     "scripts": {
-      "build": "unbuild",
-      "dev": "tsx playground/index.ts"
+        "build": "unbuild",
+        "dev": "tsx playground/index.ts"
     },
     "devDependencies": {
-      "tsx": "^4.7.0",
-      "unbuild": "^2.0.0",
-      "dotenv": "^16.3.1"
+        "dotenv": "^16.3.1",
+        "tsx": "^4.7.0",
+        "unbuild": "^2.0.0"
     },
     "peerDependencies": {
-      "discord.js": "^14.13.0"
+        "discord.js": "^14.14.1"
     }
-  }
+}

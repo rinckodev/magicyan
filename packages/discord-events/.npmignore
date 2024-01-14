@@ -7,3 +7,5 @@ playground
 tsconfig.json
 package-lock.json
 *.development.json
+
+deprecated
