@@ -5,5 +5,5 @@ export function userBanRemove(...[auditLogEntry, guild]: ClientEvents["guildAudi
     
     if (action !== AuditLogEvent.MemberBanRemove || !executor || !(target instanceof User)) return;
 
-    guild.client.emit("userBanRemove", target, executor);
+    guild.client.emit("userBanRemove", target, executor, guild);
 }

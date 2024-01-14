@@ -12,13 +12,7 @@ const client = new Client({
     partials: [Partials.Channel, Partials.GuildMember, Partials.User]
 });
 
-initDiscordEvents(client, {
-    disable: [
-        "webhookMessageCreate",
-        "guildMemberMoved",
-        // ...
-    ]
-})
+initDiscordEvents(client)
 
 // client.on("guildMemberVoiceChannelMove", (member, newChannel, mover, oldChannel) => {
 //     console.log(
@@ -52,3 +46,10 @@ interface Evnt<Key extends keyof ClientEvents>{
 function E<Key extends keyof ClientEvents>(data: Evnt<Key>){
 
 }
+
+E({
+    name: "userBanAdd",
+    run(user, executor, reason) {
+        
+    },
+})

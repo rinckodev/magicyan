@@ -5,5 +5,5 @@ export function userKick(...[auditLogEntry, guild]: ClientEvents["guildAuditLogE
     
     if (action !== AuditLogEvent.MemberKick || !executor || !(target instanceof User)) return;
 
-    guild.client.emit("userKick", target, executor, reason);
+    guild.client.emit("userKick", target, executor, reason, guild);
 }

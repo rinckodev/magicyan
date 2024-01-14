@@ -1,4 +1,4 @@
-import type { Message, Webhook, GuildMember, VoiceBasedChannel, User } from "discord.js";
+import type { Message, Webhook, GuildMember, VoiceBasedChannel, User, Guild } from "discord.js";
 
 export interface DiscordEvents {
     webhookMessageCreate: [message: Message<true>, webhook: Webhook],
@@ -9,10 +9,10 @@ export interface DiscordEvents {
     guildMemberTimeoutAdd: [member: GuildMember, executor: GuildMember, expireAt: Date, reason: string | null]
     guildMemberTimeoutRemove: [member: GuildMember, executor: GuildMember]
 
-    userBanAdd: [user: User, executor: User, reason: string | null],
-    userBanRemove: [user: User, executor: User]
+    userBanAdd: [user: User, executor: User, reason: string | null, guild: Guild],
+    userBanRemove: [user: User, executor: User, guild: Guild],
     
-    userKick: [user: User, executor: User, reason: string | null],
+    userKick: [user: User, executor: User, reason: string | null, guild: Guild],
 
 }
 

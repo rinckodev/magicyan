@@ -5,5 +5,6 @@ export function userBanAdd(...[auditLogEntry, guild]: ClientEvents["guildAuditLo
     
     if (action !== AuditLogEvent.MemberBanAdd || !executor || !(target instanceof User)) return;
 
-    guild.client.emit("userBanAdd", target, executor, reason);
+    guild.client.emit("userBanAdd", target, executor, reason, guild);
 }
+

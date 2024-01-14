@@ -41,6 +41,6 @@ See below the list of all events
 | guildMemberMoved | `member`, `executor`, `oldVoiceChannel`, `newVoiceChannel` | Triggered when a member is moved from one voice channel to another. |
 | guildMemberTimeoutAdd | `member`, `executor`, `expireAt`, `reason` | Triggered when a member gets a timeout |
 | guildMemberTimeoutAdd | `member`, `executor` | Triggered when a member has a timeout removed |
-| userKick | `member`, `executor`, `reason` | Triggered when a user is kicked from the guild |
-| userBanAdd | `member`, `executor`, `reason` | Triggered when a user is banned from the guild |
-| userBanRemove | `member`, `executor`, `reason` | Triggered when a user's ban is removed |
+| userKick | `user`, `executor`, `reason`, `guild` | Triggered when a user is kicked from the guild |
+| userBanAdd | `user`, `executor`, `reason`, `guild` | Triggered when a user is banned from the guild |
+| userBanRemove | `user`, `executor`, `reason`, `guild` | Triggered when a user's ban is removed |
