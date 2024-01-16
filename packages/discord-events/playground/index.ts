@@ -14,14 +14,10 @@ const client = new Client({
 
 initDiscordEvents(client)
 
-// client.on("guildMemberVoiceChannelMove", (member, newChannel, mover, oldChannel) => {
-//     console.log(
-//         member.displayName, 
-//         "foi movido de", oldChannel.name, 
-//         "por", mover.displayName, 
-//         "para", newChannel.name
-//     )
-// })
+client.on("extendedRoleUpdate", (role, changes, executor) => {
+    console.log(role);
+    console.log(changes);
+})
 
 client.on("ready", (readyClient) => {
     console.log("Bot online");
@@ -46,10 +42,3 @@ interface Evnt<Key extends keyof ClientEvents>{
 function E<Key extends keyof ClientEvents>(data: Evnt<Key>){
 
 }
-
-E({
-    name: "userBanAdd",
-    run(user, executor, reason) {
-        
-    },
-})

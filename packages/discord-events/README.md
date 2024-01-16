@@ -44,3 +44,6 @@ See below the list of all events
 | userKick | `user`, `executor`, `reason`, `guild` | Triggered when a user is kicked from the guild |
 | userBanAdd | `user`, `executor`, `reason`, `guild` | Triggered when a user is banned from the guild |
 | userBanRemove | `user`, `executor`, `reason`, `guild` | Triggered when a user's ban is removed |
+| extendedRoleCreate | `role`, `executor` | Triggered when a role is created |
+| extendedRoleUpdate | `role`, `changes`, `executor` | Triggered when a role is updated |
+| extendedRoleDelete | `deletedRole`, `executor` | Triggered when a role is deleted |
