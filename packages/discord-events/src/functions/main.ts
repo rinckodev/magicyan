@@ -5,7 +5,6 @@ export function initDiscordEvents(client: Client){
 
     client.on("messageCreate", (message) => {
         listeners.webhookMessageCreate(message)
-        console.log(message);
     })
     
     client.on("voiceStateUpdate", (oldState, newState) => {

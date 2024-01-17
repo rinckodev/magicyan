@@ -19,7 +19,7 @@ export interface DiscordEvents {
     extendedRoleUpdate: [role: Role, changes: RoleChanges, executor: GuildMember];
     extendedRoleDelete: [role: DeletedRole, executor: GuildMember];
     
-    extendedChannelDelete: [role: DeletedChannel, executor: GuildMember];
+    extendedChannelDelete: [channel: DeletedChannel, executor: GuildMember];
 
 }
 
