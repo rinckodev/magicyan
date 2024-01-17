@@ -1,10 +1,11 @@
-import { Client, Role } from "discord.js";
+import { Client } from "discord.js";
 import { listeners } from "../events";
 
 export function initDiscordEvents(client: Client){
 
     client.on("messageCreate", (message) => {
         listeners.webhookMessageCreate(message)
+        console.log(message);
     })
     
     client.on("voiceStateUpdate", (oldState, newState) => {
@@ -24,6 +25,7 @@ export function initDiscordEvents(client: Client){
         listeners.extendedRoleCreate(auditLogEntry, guild);
         listeners.extendedRoleUpdate(auditLogEntry, guild);
         listeners.extendedRoleDelete(auditLogEntry, guild);
-    })
 
+        listeners.extendedChannelDelete(auditLogEntry, guild);
+    })
 }

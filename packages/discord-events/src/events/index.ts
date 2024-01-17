@@ -1,3 +1,4 @@
+import { extendedChannelDelete } from "./channels/extendedChannelDelete";
 import { guildMemberConnect } from "./members/guildMemberConnect";
 import { guildMemberDisconnect } from "./members/guildMemberDisconnect";
 import { guildMemberMoved } from "./members/guildMemberMoved";
@@ -13,15 +14,22 @@ import { userKick } from "./users/userKick";
 
 export const listeners = {
     webhookMessageCreate,
+    
     guildMemberConnect,
     guildMemberDisconnect,
     guildMemberMoved,
+
     guildMemberTimeoutAdd,
     guildMemberTimeoutRemove,
+
     userBanAdd,
     userBanRemove,
+
     userKick,
+
     extendedRoleCreate,
     extendedRoleUpdate,
     extendedRoleDelete,
+
+    extendedChannelDelete,
 } as const;

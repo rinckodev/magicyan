@@ -7,6 +7,7 @@ export * from "./functions/embeds";
 export * from "./functions/emojis";
 export * from "./functions/format";
 export * from "./functions/members";
+export * from "./functions/message";
 export * from "./functions/roles"
 export * from "./functions/utils";
 

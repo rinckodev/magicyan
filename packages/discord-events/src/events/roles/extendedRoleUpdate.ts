@@ -1,4 +1,5 @@
-import { AuditLogEvent, Role, RoleChanges, type ClientEvents } from "discord.js";
+import { AuditLogEvent, Role, type ClientEvents } from "discord.js";
+import { RoleChanges } from "../../types/utils";
 
 export function extendedRoleUpdate(...[auditLogEntry, guild]: ClientEvents["guildAuditLogEntryCreate"]){
     const { executorId, action, target, changes } = auditLogEntry;
@@ -7,12 +8,14 @@ export function extendedRoleUpdate(...[auditLogEntry, guild]: ClientEvents["guil
     const executor = guild.members.cache.get(executorId ?? "");
     if (!executor) return;
 
-    const roleChanges: RoleChanges = {};
-    for(const change of changes){
-        const newChange = change.new as unknown as any;
-        const oldChange = change.old as unknown as any;
-        roleChanges[change.key as keyof RoleChanges] = { new: newChange, old: oldChange }; 
-    }
+    const changeList = Object.values(changes).map(
+        ({ key, new: newChange, old, }) => 
+        ({ [key]: { new: newChange, old }})
+    )
+
+    const roleChanges = changeList.reduce(
+        (prev, current) => ({ ...prev, ...current })
+    ) as RoleChanges;
 
     guild.client.emit("extendedRoleUpdate", target, roleChanges, executor);
 }

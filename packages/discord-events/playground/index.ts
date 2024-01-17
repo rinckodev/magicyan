@@ -14,21 +14,12 @@ const client = new Client({
 
 initDiscordEvents(client)
 
-client.on("extendedRoleUpdate", (role, changes, executor) => {
-    console.log(role);
-    console.log(changes);
+client.on("extendedChannelDelete", (channel, executor) => {
+    console.log(executor.displayName, channel);
 })
 
 client.on("ready", (readyClient) => {
     console.log("Bot online");
-
-    // readyClient.application.commands.set([
-    //     {
-    //         name: "pop",
-    //         description: "pop command",
-    //         type: ApplicationCommandType.ChatInput,
-    //     },
-    // ])
 })
 
 client.login(process.env.BOT_TOKEN);

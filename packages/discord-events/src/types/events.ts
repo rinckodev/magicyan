@@ -1,4 +1,5 @@
-import type { Message, Webhook, GuildMember, VoiceBasedChannel, User, Guild, Role, DeletedRole, RoleChanges } from "discord.js";
+import type { Message, Webhook, GuildMember, VoiceBasedChannel, User, Guild, Role } from "discord.js";
+import { DeletedChannel, DeletedRole, RoleChanges } from "./utils";
 
 export interface DiscordEvents {
     webhookMessageCreate: [message: Message<true>, webhook: Webhook],
@@ -17,6 +18,8 @@ export interface DiscordEvents {
     extendedRoleCreate: [role: Role, executor: GuildMember];
     extendedRoleUpdate: [role: Role, changes: RoleChanges, executor: GuildMember];
     extendedRoleDelete: [role: DeletedRole, executor: GuildMember];
+    
+    extendedChannelDelete: [role: DeletedChannel, executor: GuildMember];
 
 }
 
