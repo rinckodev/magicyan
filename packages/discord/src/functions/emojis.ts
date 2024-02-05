@@ -6,7 +6,7 @@ export function findEmoji(guildOrClient: Guild | Client){
     const emojis = guildOrClient.emojis.cache;
     return {
         byName(name: string, animated?: boolean, and: FindEmojiFilter = () => true){
-            return animated 
+            return animated
             ? emojis.find(emoji => emoji.name == name && emoji.animated == animated  && and(emoji))
             : emojis.find(emoji => emoji.name == name && and(emoji))
         },

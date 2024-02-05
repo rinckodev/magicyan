@@ -21,9 +21,10 @@ interface CreateEmbedFooterOptions {
     text?: string | null;
     iconURL?: string | null;
 }
-export function createEmbedFooter(options: CreateEmbedFooterOptions): EmbedFooterData {
+export function createEmbedFooter(options: CreateEmbedFooterOptions): EmbedFooterData | undefined {
     const { text, iconURL } = options;
-    return { text: text ?? "\u200b", iconURL: notFound(iconURL) };
+    return (!text && !iconURL) ? undefined 
+    : { text: text ?? "\u200b", iconURL: notFound(iconURL) };
 }
 
 type EmbedAssetOptions = Omit<EmbedAssetData, "url">
@@ -37,12 +38,12 @@ export function createEmbedAsset(source?: AssetSource, options?: EmbedAssetOptio
 }
 
 type EmbedColor = ColorResolvable | (string & {});
-type BaseEmbedField = {
+interface BaseEmbedField {
     name: string;
     value: string;
     inline?: boolean
 }
-type BaseEmbedData = { 
+export interface BaseEmbedData { 
     title?: string;
     color?: EmbedColor;
     description?: string;
@@ -54,7 +55,7 @@ type BaseEmbedData = {
     author?: EmbedAuthorData;
     fields?: BaseEmbedField[];
 }
-type CreateEmbedOptions = BaseEmbedData & {
+interface CreateEmbedOptions extends BaseEmbedData {
     extend?: BaseEmbedData;
     modify?: {
         fields?(fields: BaseEmbedField[]): BaseEmbedField[];
@@ -72,7 +73,7 @@ export function createEmbed(options: CreateEmbedOptions){
     if (extendColor) builder.setColor(extendColor as ColorResolvable);
     if (embedColor) builder.setColor(embedColor as ColorResolvable);
 
-    if (modify?.fields && typeof modify.fields == "function"){
+    if (modify?.fields && typeof modify.fields === "function"){
         const fields = modify.fields(builder.data.fields || []);
         builder.setFields(fields);
     }
