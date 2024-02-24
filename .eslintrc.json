@@ -1,0 +1,29 @@
+{
+    "ignorePatterns":["dist", "node_modules"],
+    "env": { "node": true },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": true,
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+        "no-duplicate-imports": "error",
+        "camelcase": "warn",
+        "quotes": [
+            "warn",
+            "double"
+        ],
+        "semi": [
+            "warn",
+            "always"
+        ],
+        "prefer-const":"error",
+        "no-var":"off",
+        "@typescript-eslint/promise-function-async": "warn",
+        "@typescript-eslint/no-require-imports": "error",
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/no-extra-parens": "warn"
+    }
+}
