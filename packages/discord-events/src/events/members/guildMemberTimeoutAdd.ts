@@ -1,4 +1,4 @@
-import { AuditLogEvent, ClientEvents, User } from "discord.js";
+import { AuditLogEvent, type ClientEvents, User } from "discord.js";
 
 export function guildMemberTimeoutAdd(...[auditLogEntry, guild]: ClientEvents["guildAuditLogEntryCreate"]){
     const { action, changes, target, executor: auditExecutor, reason } = auditLogEntry;

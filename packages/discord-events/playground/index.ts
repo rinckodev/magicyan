@@ -12,15 +12,20 @@ const client = new Client({
     partials: [Partials.Channel, Partials.GuildMember, Partials.User]
 });
 
-initDiscordEvents(client)
+initDiscordEvents(client);
 
 client.on("extendedChannelDelete", (channel, executor) => {
     console.log(executor.displayName, channel);
-})
+});
 
 client.on("ready", (readyClient) => {
     console.log("Bot online");
-})
+});
+
+client.on("webhookMessageCreate", (message, webhook) => {
+    console.log(message.content);
+    console.log(webhook.name);
+});
 
 client.login(process.env.BOT_TOKEN);
 
