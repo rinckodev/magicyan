@@ -14,6 +14,6 @@ export function guildMemberTimeoutAdd(...[auditLogEntry, guild]: ClientEvents["g
     const expireAt = new Date(changes?.[0]?.new);
 
     if (!member || !executor) return;
-    guild.client.emit("guildMemberTimeoutAdd", member, executor, expireAt, reason)
+    guild.client.emit("guildMemberTimeoutAdd", member, executor, expireAt, reason);
 }
 

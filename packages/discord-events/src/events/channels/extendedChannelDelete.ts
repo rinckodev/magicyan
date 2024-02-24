@@ -1,4 +1,4 @@
-import { AuditLogEvent, Client, type ClientEvents } from "discord.js";
+import { AuditLogEvent, type ClientEvents } from "discord.js";
 
 export function extendedChannelDelete(...[auditLogEntry, guild]: ClientEvents["guildAuditLogEntryCreate"]){
     const { executorId, action, targetId } = auditLogEntry;

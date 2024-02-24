@@ -2,16 +2,15 @@ import { Client } from "discord.js";
 import { listeners } from "../events";
 
 export function initDiscordEvents(client: Client){
-
     client.on("messageCreate", (message) => {
-        listeners.webhookMessageCreate(message)
-    })
+        listeners.webhookMessageCreate(message);
+    });
     
     client.on("voiceStateUpdate", (oldState, newState) => {
         listeners.guildMemberConnect(newState);
         listeners.guildMemberDisconnect(oldState);
         listeners.guildMemberMoved(oldState, newState);
-    })
+    });
 
     client.on("guildAuditLogEntryCreate", (auditLogEntry, guild) => {
         listeners.guildMemberTimeoutAdd(auditLogEntry, guild);
@@ -26,5 +25,5 @@ export function initDiscordEvents(client: Client){
         listeners.extendedRoleDelete(auditLogEntry, guild);
 
         listeners.extendedChannelDelete(auditLogEntry, guild);
-    })
+    });
 }

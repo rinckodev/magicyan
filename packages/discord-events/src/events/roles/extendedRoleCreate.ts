@@ -8,5 +8,4 @@ export function extendedRoleCreate(...[auditLogEntry, guild]: ClientEvents["guil
     if (!executor) return;
 
     guild.client.emit("extendedRoleCreate", target, executor);
-    
 }

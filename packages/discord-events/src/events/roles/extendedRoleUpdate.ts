@@ -11,7 +11,7 @@ export function extendedRoleUpdate(...[auditLogEntry, guild]: ClientEvents["guil
     const changeList = Object.values(changes).map(
         ({ key, new: newChange, old, }) => 
         ({ [key]: { new: newChange, old }})
-    )
+    );
 
     const roleChanges = changeList.reduce(
         (prev, current) => ({ ...prev, ...current })

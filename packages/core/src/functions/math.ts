@@ -4,12 +4,12 @@ export function randomNumber(min: number, max: number) {
 
 export const random = {
     float(min: number, max: number){
-        return Math.random() * (max - min) + min
+        return Math.random() * (max - min) + min;
     },
     int(min: number, max: number){
         return Math.floor(this.float(min, max + 1));
     }
-}
+};
 
 export function parseIntOr(value: string, orValue: number, radix?: number){
     const parsed = Number.parseInt(value, radix);

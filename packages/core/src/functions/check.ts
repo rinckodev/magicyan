@@ -9,5 +9,5 @@ export function equalsIgnoreCase(text1: string, text2: string): boolean {
 }
 
 export function includesIgnoreCase(text: string, includeText: string){   
-    return text.toLowerCase().includes(includeText.toLowerCase())
+    return text.toLowerCase().includes(includeText.toLowerCase());
 }

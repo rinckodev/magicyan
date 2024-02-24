@@ -1,7 +1,7 @@
 type ObjectRecord = Record<string | number | symbol, any>;
 
 export function copyObject<T extends ObjectRecord>(object: T): T{
-    return JSON.parse(JSON.stringify(object))
+    return JSON.parse(JSON.stringify(object));
 }
 
 type MergedObject<T, U> = {

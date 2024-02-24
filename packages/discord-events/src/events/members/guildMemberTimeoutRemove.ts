@@ -14,6 +14,6 @@ export function guildMemberTimeoutRemove(...[auditLogEntry, guild]: ClientEvents
     const executor = guild.members.cache.get(auditExecutor.id);
 
     if (!member || !executor) return;
-    guild.client.emit("guildMemberTimeoutRemove", member, executor)
+    guild.client.emit("guildMemberTimeoutRemove", member, executor);
 }
 

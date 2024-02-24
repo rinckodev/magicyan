@@ -49,6 +49,8 @@ export function spaceBuilder(...text: string[]){
  * @param text 
  * @param replaces 
  * @returns 
+ * 
+ * @example
  * ```ts
  * // lang.json
  * {
@@ -82,11 +84,13 @@ export function replaceText<R extends Record<string, any>>(text: string, replace
  * @returns {string} The capitalized word.
  *
  * @example
+ * ```ts
  * const capitalizedWord = capitalize("hello");
  * console.log(capitalizedWord); // Output: "Hello"
  * 
  * const capitalizedText = capitalize("i love brazil", true);
  * console.log(capitalizedText); // Output: "I Love Brazil"
+ * ```
  */
 export function captalize(word: string, allWords: boolean = false): string {
     return allWords
