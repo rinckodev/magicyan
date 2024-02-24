@@ -1,0 +1,44 @@
+{
+    "name": "@magicyan/canvas",
+    "version": "0.0.1",
+    "description": "A @napi-rs/canvas wrapper",
+    "license": "MIT",
+    "type": "module",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rinckodev/magicyan",
+        "directory": "packages/core"
+    },
+    "author": "Rincko Dev (https://github.com/rinckodev)",
+    "bugs": {
+        "url": "https://github.com/rinckodev/magicyan/issues"
+    },
+    "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/canvas#readme",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "unbuild",
+        "dev": "tsx playground/index.ts"
+    },
+    "devDependencies": {
+        "ts-node": "^10.9.1",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "@napi-rs/canvas": "^0.1.44"
+    }
+}
