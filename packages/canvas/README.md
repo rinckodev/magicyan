@@ -165,7 +165,7 @@ console.log(context.font.align); // right
 console.log(context.font.kerning); // none
 ```
 
-## Context Gradient 
+### Context Gradient 
 ```ts
 import { Canvas } from "@magicyan/canvas";
 
