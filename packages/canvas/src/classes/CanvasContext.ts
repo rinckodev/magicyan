@@ -1,7 +1,6 @@
 import { ContextAttributes, Canvas as NapiCanvas, SKRSContext2D as NapiContext } from "@napi-rs/canvas";
-import { CanvasFillRule, Path2D } from "../types/Canvas";
-import { CanvasContextCreateGradient, CanvasDirection, CanvasPattern, DrawImageProps, GlobalCompositeOperation, Image } from "../types/CanvasContext";
-import { TextMetrics } from "../types/CanvasFont";
+import { CanvasContextCreateGradient, CanvasDirection, DrawImageProps, GlobalCompositeOperation, Image } from "../types/CanvasContext";
+import { ContextTextMetrics } from "../types/CanvasFont";
 import { CanvasContextFilter } from "./CanvasContextFilter";
 import { CanvasContextFont } from "./CanvasContextFont";
 import { CanvasContextLine } from "./CanvasContextLine";
@@ -9,10 +8,10 @@ import { CanvasContextStyle } from "./CanvasContextStyle";
 
 export class CanvasContext {
     private readonly napiContext: NapiContext;
-    public font: CanvasContextFont;
-    public filter: CanvasContextFilter;
-    public style: CanvasContextStyle;
-    public line: CanvasContextLine;
+    public readonly font: CanvasContextFont;
+    public readonly filter: CanvasContextFilter;
+    public readonly style: CanvasContextStyle;
+    public readonly line: CanvasContextLine;
     constructor(napiCanvas: NapiCanvas, attributes?: ContextAttributes){
         this.napiContext = napiCanvas.getContext("2d", attributes);
         
@@ -23,8 +22,6 @@ export class CanvasContext {
 
         this.clearRect = this.napiContext.clearRect.bind(this.napiContext);
         this.roundRect = this.napiContext.roundRect.bind(this.napiContext);
-
-        
         this.fill = this.napiContext.fill.bind(this.napiContext);
         this.stroke = this.napiContext.stroke.bind(this.napiContext);
         this.beginPath = this.napiContext.beginPath.bind(this.napiContext);
@@ -83,7 +80,7 @@ export class CanvasContext {
     }
     public clearRect;
     public roundRect;
-    public measureText(text: string): TextMetrics {
+    public measureText(text: string): ContextTextMetrics {
         return {
             ...this.napiContext.measureText(text),
             height: this.font.size

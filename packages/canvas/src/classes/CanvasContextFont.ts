@@ -1,25 +1,25 @@
 import { CanvasTextAlign, CanvasTextBaseline } from "../types/CanvasContext";
-import { FontKerning, FontStyle, FontWeight } from "../types/CanvasFont";
+import { ContextFontKerning, ContextFontStyle, ContextFontWeight } from "../types/CanvasFont";
 import { CanvasContext } from "./CanvasContext";
 
 interface CanvasContextFontProps {
     family?: string;
-    style?: FontStyle;
-    weight?: FontWeight;
+    style?: ContextFontStyle;
+    weight?: ContextFontWeight;
     size?: number;
     align?: CanvasTextAlign;
     baseline?: CanvasTextBaseline;
-    kerning?: FontKerning;
+    kerning?: ContextFontKerning;
 }
 
 export class CanvasContextFont {
     private fontFamily: string = "Arial";
-    private fontStyle?: FontStyle;
-    private fontWeight?: FontWeight;
+    private fontStyle?: ContextFontStyle;
+    private fontWeight?: ContextFontWeight;
     private fontSize: number = 12;
     private textAlign: CanvasTextAlign = "start";
     private textBaseline: CanvasTextBaseline = "top";
-    private fontKerning: FontKerning = "auto";
+    private fontKerning: ContextFontKerning = "auto";
 
     public get family(){
         return this.fontFamily;
@@ -56,7 +56,7 @@ export class CanvasContextFont {
         this.fontFamily = family;
         this.context.applyFont();
     }
-    public setStyle(style: FontStyle){
+    public setStyle(style: ContextFontStyle){
         this.fontStyle = style;
         this.context.applyFont();
     }
@@ -64,7 +64,7 @@ export class CanvasContextFont {
         this.fontSize = size;
         this.context.applyFont();
     }
-    public setWeight(weight: FontWeight){
+    public setWeight(weight: ContextFontWeight){
         this.fontWeight = weight;
         this.context.applyFont();
     }
@@ -76,7 +76,7 @@ export class CanvasContextFont {
         this.textBaseline = baseline;
         this.context.applyFont();
     }
-    public setKerning(kerning: FontKerning){
+    public setKerning(kerning: ContextFontKerning){
         this.fontKerning = kerning;
         this.context.applyFont();
     }

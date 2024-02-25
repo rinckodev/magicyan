@@ -1,5 +1,4 @@
-
-import { ApplicationCommandType, AuditLogEvent, Client, ClientEvents, Partials, time } from "discord.js";
+import { Client, ClientEvents, Partials } from "discord.js";
 import "dotenv/config";
 import { initDiscordEvents } from "../src/index";
 
@@ -18,7 +17,7 @@ client.on("extendedChannelDelete", (channel, executor) => {
     console.log(executor.displayName, channel);
 });
 
-client.on("ready", (readyClient) => {
+client.on("ready", () => {
     console.log("Bot online");
 });
 
@@ -28,6 +27,8 @@ client.on("webhookMessageCreate", (message, webhook) => {
 });
 
 client.login(process.env.BOT_TOKEN);
+
+process.on("SIGINT", () => process.exit(0));
 
 
 interface Evnt<Key extends keyof ClientEvents>{

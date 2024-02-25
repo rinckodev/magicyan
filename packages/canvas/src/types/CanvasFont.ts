@@ -1,9 +1,9 @@
-export type FontWeight = 
+export type ContextFontWeight = 
 | "thin" | "extralight" | "light" | "regular" 
 | "medium" | "semibold" | "bold" | "extrabold" | "black"
 | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
 
-export type FontStyle = 
+export type ContextFontStyle = 
 | "italic" 
 | "italic underline" 
 | "italic strikethrough"
@@ -16,7 +16,7 @@ export type FontStyle =
 // | "underline" | "underline italic" | "underline italic strikethrough"
 // | "regular";
 
-export interface TextMetrics {
+export interface ContextTextMetrics {
     readonly actualBoundingBoxAscent: number;
     readonly actualBoundingBoxDescent: number;
     readonly actualBoundingBoxLeft: number;
@@ -27,4 +27,4 @@ export interface TextMetrics {
     readonly height: number;
 }
 
-export type FontKerning = "auto" | "none" | "normal";
+export type ContextFontKerning = "auto" | "none" | "normal";
