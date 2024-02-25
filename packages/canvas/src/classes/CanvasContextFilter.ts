@@ -1,7 +1,6 @@
-import { canvasFilter, CanvasFilters } from "../types/CanvasFilter";
+import { canvasFilter, CanvasContextFilters } from "../types/CanvasFilter";
 import { CanvasContext } from "./CanvasContext";
 
-type CanvasContextFilters = CanvasFilters | string;
 type CanvasFilterKeys = keyof typeof canvasFilter
 export class CanvasContextFilter {
     private currentFilter: CanvasContextFilters[] = ["none"];
@@ -9,11 +8,11 @@ export class CanvasContextFilter {
         return this.currentFilter;
     }
     constructor(private readonly context: CanvasContext){}
-    public set(...filters: CanvasFilters[]): void{
+    public set(...filters: CanvasContextFilters[]): void{
         this.currentFilter = filters;
         this.context.applyFilters();
     }
-    public add(...filters: CanvasFilters[]): void{
+    public add(...filters: CanvasContextFilters[]): void{
         this.currentFilter.push(...filters);
         this.context.applyFilters();
     }

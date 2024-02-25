@@ -1,4 +1,4 @@
-import { CanvasTextAlign, CanvasTextBaseline } from "../types/CanvasContext";
+import { CanvasContextTextAlign, CanvasContextTextBaseline } from "../types/CanvasContext";
 import { ContextFontKerning, ContextFontStyle, ContextFontWeight } from "../types/CanvasFont";
 import { CanvasContext } from "./CanvasContext";
 
@@ -7,8 +7,8 @@ interface CanvasContextFontProps {
     style?: ContextFontStyle;
     weight?: ContextFontWeight;
     size?: number;
-    align?: CanvasTextAlign;
-    baseline?: CanvasTextBaseline;
+    align?: CanvasContextTextAlign;
+    baseline?: CanvasContextTextBaseline;
     kerning?: ContextFontKerning;
 }
 
@@ -17,8 +17,8 @@ export class CanvasContextFont {
     private fontStyle?: ContextFontStyle;
     private fontWeight?: ContextFontWeight;
     private fontSize: number = 12;
-    private textAlign: CanvasTextAlign = "start";
-    private textBaseline: CanvasTextBaseline = "top";
+    private textAlign: CanvasContextTextAlign = "start";
+    private textBaseline: CanvasContextTextBaseline = "top";
     private fontKerning: ContextFontKerning = "auto";
 
     public get family(){
@@ -68,11 +68,11 @@ export class CanvasContextFont {
         this.fontWeight = weight;
         this.context.applyFont();
     }
-    public setAlign(align: CanvasTextAlign){
+    public setAlign(align: CanvasContextTextAlign){
         this.textAlign = align;
         this.context.applyFont();
     }
-    public setBaseline(baseline: CanvasTextBaseline){
+    public setBaseline(baseline: CanvasContextTextBaseline){
         this.textBaseline = baseline;
         this.context.applyFont();
     }

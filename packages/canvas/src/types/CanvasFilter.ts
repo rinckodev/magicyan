@@ -1,4 +1,4 @@
-import { Color } from "./CanvasContext";
+import { ContextColor } from "./CanvasContext";
 
 export type BlurFilter = `blur(${number}px)`;
 export type OpacityFilter = `opacity(${number}%)`;
@@ -8,7 +8,7 @@ export type BrightnessFilter = `brightness(${number}%)`;
 export type ContrastFilter = `contrast(${number}%)`;
 export type InvertFilter = `invert(${number}%)`;
 export type GrayscaleFilter = `grayscale(${number}%)`;
-export type DropShadowFilter = `drop-shadow(${number}px ${number}px ${number}px ${Color})`;
+export type DropShadowFilter = `drop-shadow(${number}px ${number}px ${number}px ${ContextColor})`;
 export type NoneFilter = "none";
 
 export const canvasFilter = {
@@ -22,7 +22,7 @@ export const canvasFilter = {
     DropShadow: "drop-shadow"
 } as const;
 
-export type CanvasFilters = 
+export type CanvasContextFilters = 
 | BlurFilter
 | OpacityFilter
 | HueRotateFilter

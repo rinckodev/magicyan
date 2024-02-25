@@ -1,5 +1,5 @@
 import { BlurFilter, BrightnessFilter, ContrastFilter, DropShadowFilter, GrayscaleFilter, HueRotateFilter, InvertFilter, OpacityFilter, SepiaFilter } from "../types/CanvasFilter";
-import { Color } from "../types/CanvasContext";
+import { ContextColor } from "../types/CanvasContext";
 
 export function blurFilter(amount: number): BlurFilter {
     return `blur(${amount}px)`;
@@ -25,7 +25,7 @@ export function invertFilter(percentage: number): InvertFilter {
 export function grayscaleFilter(percentage: number): GrayscaleFilter {
     return `grayscale(${percentage}%)`;
 }
-export function dropShadowFilter(x: number, y: number, blur: number, color: Color = "black"): DropShadowFilter {
+export function dropShadowFilter(x: number, y: number, blur: number, color: ContextColor = "black"): DropShadowFilter {
     return `drop-shadow(${x}px ${y}px ${blur}px ${color})`;
 }
 

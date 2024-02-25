@@ -1,5 +1,5 @@
 import { ContextAttributes, Canvas as NapiCanvas, SKRSContext2D as NapiContext } from "@napi-rs/canvas";
-import { CanvasContextCreateGradient, CanvasDirection, DrawImageProps, GlobalCompositeOperation, Image } from "../types/CanvasContext";
+import { CanvasContextCreateGradient, CanvasContextDirection, ContextDrawImageProps, ContextGlobalCompositeOperation, Image } from "../types/CanvasContext";
 import { ContextTextMetrics } from "../types/CanvasFont";
 import { CanvasContextFilter } from "./CanvasContextFilter";
 import { CanvasContextFont } from "./CanvasContextFont";
@@ -107,11 +107,11 @@ export class CanvasContext {
     public get direction(){
         return this.napiContext.direction;
     }
-    public setDirection(direction: CanvasDirection){
+    public setDirection(direction: CanvasContextDirection){
         this.napiContext.direction = direction;
     }
 
-    public setGlobalCompositeOperation(option: GlobalCompositeOperation){
+    public setGlobalCompositeOperation(option: ContextGlobalCompositeOperation){
         this.napiContext.globalCompositeOperation = option;
     }
     public get globalCompositeOperation(){
@@ -187,7 +187,7 @@ export class CanvasContext {
     };
 
     public createPattern;
-    public drawImage(image: Image, props: DrawImageProps){
+    public drawImage(image: Image, props: ContextDrawImageProps){
         const { dx, dy, dimensions, sub, roundRadius } = props;
 
         if (roundRadius) this.save();

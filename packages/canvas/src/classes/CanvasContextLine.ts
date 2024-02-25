@@ -1,18 +1,18 @@
-import { CanvasLineCap, CanvasLineJoin } from "../types/CanvasLine";
+import { CanvasContextLineCap, CanvasContextLineJoin } from "../types/CanvasLine";
 import { CanvasContext } from "./CanvasContext";
 
 interface CanvasContextLineProps {
     width?: number;
-    cap?: CanvasLineCap;
-    join?: CanvasLineJoin;
+    cap?: CanvasContextLineCap;
+    join?: CanvasContextLineJoin;
     dashOffset?: number;
     dash?: number[]
 }
 
 export class CanvasContextLine {
     private lineWidth: number = 1;
-    private lineCap: CanvasLineCap = "square";
-    private lineJoin: CanvasLineJoin = "miter";
+    private lineCap: CanvasContextLineCap = "square";
+    private lineJoin: CanvasContextLineJoin = "miter";
     private lineDashOffset: number = 0;
     private lineDash: number[] = [];
     public get width(){
@@ -43,11 +43,11 @@ export class CanvasContextLine {
         this.lineWidth = width;
         this.context.applyLine();
     }
-    public setCap(cap: CanvasLineCap){
+    public setCap(cap: CanvasContextLineCap){
         this.lineCap = cap;
         this.context.applyLine();
     }
-    public setJoin(join: CanvasLineJoin){
+    public setJoin(join: CanvasContextLineJoin){
         this.lineJoin = join;
         this.context.applyLine();
     }

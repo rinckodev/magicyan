@@ -1,7 +1,7 @@
 import { DOMMatrix2DInit, Image as NapiImage } from "@napi-rs/canvas";
 import { CssColors } from "./Colors";
 
-export type Color = (string&{}) | `#${string}` | CssColors; 
+export type ContextColor = (string&{}) | `#${string}` | CssColors; 
 
 export interface ContextAttributes {
     alpha?: boolean
@@ -10,80 +10,80 @@ export interface ContextAttributes {
 
 export type ColorSpace = "srgb" | "display-p3";
 
-export interface CanvasPointInit {
+export interface CanvasContextPointInit {
     w?: number;
     x?: number;
     y?: number;
     z?: number;
 }
 
-export type CanvasTextAlign = "center" | "end" | "left" | "right" | "start";
-export type CanvasTextBaseline = "alphabetic" | "bottom" | "hanging" | "ideographic" | "middle" | "top";
+export type CanvasContextTextAlign = "center" | "end" | "left" | "right" | "start";
+export type CanvasContextTextBaseline = "alphabetic" | "bottom" | "hanging" | "ideographic" | "middle" | "top";
 
-export interface CanvasGradient {
-    addColorStop(offset: number, color: Color): void;
+export interface CanvasContextGradient {
+    addColorStop(offset: number, color: ContextColor): void;
 }
 
-interface ColorStop {
-    [pos: number]: Color;
+interface ContextColorStop {
+    [pos: number]: ContextColor;
 }
 
-interface GradientProps {
+interface ContextGradientProps {
     x0: number;
     y0: number;
     x1: number;
     y1: number;
 }
 
-interface LinearGradientProps extends GradientProps {
+interface ContextLinearGradientProps extends ContextGradientProps {
     type: "linear"
-    colorStop?: ColorStop;
+    colorStop?: ContextColorStop;
 }
-interface RadialGradientProps extends GradientProps {
+interface ContextRadialGradientProps extends ContextGradientProps {
     type: "radial";
     r0: number;
     r1: number;
-    colorStop?: ColorStop;
+    colorStop?: ContextColorStop;
 }
 
-interface ConicGradientProps {
+interface ContextConicGradientProps {
     type: "conic";
     startAngle: number, 
     x: number, 
     y: number,
-    colorStop?: ColorStop;
+    colorStop?: ContextColorStop;
 }
 
 export interface CanvasContextCreateGradient {
-    (props: LinearGradientProps): CanvasGradient;
-    (props: RadialGradientProps): CanvasGradient;
-    (props: ConicGradientProps): CanvasGradient;
+    (props: ContextLinearGradientProps): CanvasContextGradient;
+    (props: ContextRadialGradientProps): CanvasContextGradient;
+    (props: ContextConicGradientProps): CanvasContextGradient;
 }
 
 export type Image = NapiImage;
 
-export interface CanvasPattern {
+export interface CanvasContextPattern {
     setTransform(transform?: DOMMatrix2DInit): void;
 }
 
-type DrawImageCoords = {
+type ContextDrawImageCoords = {
     dx: number; dy: number;
 };
-type DrawImageDimensions = {
+type ContextDrawImageDimensions = {
     width: number, heigth: number;
 }
-type DrawImageSub = {
+type ContextDrawImageSub = {
     sx: number,
     sy: number,
     sWidth: number,
     sHeigth: number,
 };
 
-export type DrawImageProps = DrawImageCoords & {
-    dimensions?: DrawImageDimensions
-    sub?: DrawImageSub;
+export type ContextDrawImageProps = ContextDrawImageCoords & {
+    dimensions?: ContextDrawImageDimensions
+    sub?: ContextDrawImageSub;
     roundRadius?: number | number[];
 }
 
-export type CanvasDirection = "inherit" | "ltr" | "rtl";
-export type GlobalCompositeOperation = "color" | "color-burn" | "color-dodge" | "copy" | "darken" | "destination-atop" | "destination-in" | "destination-out" | "destination-over" | "difference" | "exclusion" | "hard-light" | "hue" | "lighten" | "lighter" | "luminosity" | "multiply" | "overlay" | "saturation" | "screen" | "soft-light" | "source-atop" | "source-in" | "source-out" | "source-over" | "xor";
+export type CanvasContextDirection = "inherit" | "ltr" | "rtl";
+export type ContextGlobalCompositeOperation = "color" | "color-burn" | "color-dodge" | "copy" | "darken" | "destination-atop" | "destination-in" | "destination-out" | "destination-over" | "difference" | "exclusion" | "hard-light" | "hue" | "lighten" | "lighter" | "luminosity" | "multiply" | "overlay" | "saturation" | "screen" | "soft-light" | "source-atop" | "source-in" | "source-out" | "source-over" | "xor";

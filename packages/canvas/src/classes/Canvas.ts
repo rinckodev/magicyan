@@ -1,4 +1,4 @@
-import { AvifConfig, ContextAttributes, Canvas as NapiCanvas } from "@napi-rs/canvas";
+import { AvifConfig, ContextAttributes, Image, Canvas as NapiCanvas } from "@napi-rs/canvas";
 import { PathLike } from "node:fs";
 import fs, { FileHandle } from "node:fs/promises";
 import { loadImage } from "../functions/images";
@@ -36,7 +36,7 @@ export class Canvas {
         const buffer = await this.encode(format, other);
         return fs.writeFile(file, buffer);
     }
-    public async toImage(){
+    public async toImage(): Promise<Image> {
         return loadImage(this.napiCanvas.toDataURL());
     }
 }

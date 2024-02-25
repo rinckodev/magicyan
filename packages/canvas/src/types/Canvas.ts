@@ -1,6 +1,6 @@
 export { Path2D } from "@napi-rs/canvas";
 
-export type CanvasFillRule = "evenodd" | "nonzero";
+export type CanvasContextFillRule = "evenodd" | "nonzero";
 export type AviConfig = {    
   quality?: number
   alphaQuality?: number

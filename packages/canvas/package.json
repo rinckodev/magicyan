@@ -1,6 +1,6 @@
 {
     "name": "@magicyan/canvas",
-    "version": "0.0.7",
+    "version": "0.0.9",
     "description": "A @napi-rs/canvas wrapper",
     "license": "MIT",
     "type": "module",
