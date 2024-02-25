@@ -10,6 +10,7 @@ export class Canvas {
     public readonly width: number;
     public readonly height: number;
     private napiCanvas: NapiCanvas;
+    private context?: CanvasContext;
     constructor(width: number, height: number, flag?: SvgExportFlag){
         this.napiCanvas = new NapiCanvas(width, height, flag);
         this.width = width;
@@ -21,7 +22,12 @@ export class Canvas {
     public encode;
     public toDataURL;
     public getContext(attributes?: ContextAttributes){
-        return new CanvasContext(this.napiCanvas, attributes);
+        this.context = new CanvasContext({
+            napiCanvas: this.napiCanvas, attributes,
+            context: this.context, 
+        });
+        return this.context;
+        
     }
     public async writeFile(file: PathLike | FileHandle, format: "png"): Promise<void>
     public async writeFile(file: PathLike | FileHandle, format: "webp" | "jpeg", quality?: number): Promise<void>

@@ -12,13 +12,13 @@ export class CanvasContext {
     public readonly filter: CanvasContextFilter;
     public readonly style: CanvasContextStyle;
     public readonly line: CanvasContextLine;
-    constructor(napiCanvas: NapiCanvas, attributes?: ContextAttributes){
-        this.napiContext = napiCanvas.getContext("2d", attributes);
+    constructor(options: { napiCanvas: NapiCanvas, attributes?: ContextAttributes, context?: CanvasContext }){
+        this.napiContext = options.napiCanvas.getContext("2d", options.attributes);
         
-        this.font = new CanvasContextFont(this);
-        this.filter = new CanvasContextFilter(this);
-        this.style = new CanvasContextStyle(this);
-        this.line = new CanvasContextLine(this);
+        this.font = options.context?.font ?? new CanvasContextFont(this);
+        this.filter = options.context?.filter ?? new CanvasContextFilter(this);
+        this.style = options.context?.style ?? new CanvasContextStyle(this);
+        this.line = options.context?.line ?? new CanvasContextLine(this);
 
         this.clearRect = this.napiContext.clearRect.bind(this.napiContext);
         this.roundRect = this.napiContext.roundRect.bind(this.napiContext);
