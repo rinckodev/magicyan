@@ -5,6 +5,7 @@ import { CanvasContextFilter } from "./CanvasContextFilter";
 import { CanvasContextFont } from "./CanvasContextFont";
 import { CanvasContextLine } from "./CanvasContextLine";
 import { CanvasContextStyle } from "./CanvasContextStyle";
+import { Canvas } from "./Canvas";
 
 export class CanvasContext {
     private readonly napiContext: NapiContext;
@@ -187,7 +188,7 @@ export class CanvasContext {
     };
 
     public createPattern;
-    public drawImage(image: Image, props: ContextDrawImageProps){
+    public drawImage(image: Image | Canvas, props: ContextDrawImageProps){
         const { dx, dy, dimensions, sub, roundRadius } = props;
 
         if (roundRadius) this.save();
@@ -201,7 +202,16 @@ export class CanvasContext {
                 this.clip();
             }
 
-            this.napiContext.drawImage(image, sx, sy, sw, sh, dx, dy, width, heigth);
+            const params = [sx, sy, sw, sh, dx, dy, width, heigth] as const;
+            
+            if (image instanceof Canvas) {
+                image.pass((napiCanvas: NapiCanvas) => {
+                    this.napiContext.drawImage(napiCanvas, ...params);
+                });
+            } else {
+                this.napiContext.drawImage(image, ...params);
+            }
+
             return;
         }
         if (dimensions){
@@ -212,7 +222,15 @@ export class CanvasContext {
                 this.clip();
             }
 
-            this.napiContext.drawImage(image, dx, dy, width, heigth);
+            const params = [dx, dy, width, heigth] as const;
+
+            if (image instanceof Canvas) {
+                image.pass((napiCanvas: NapiCanvas) => {
+                    this.napiContext.drawImage(napiCanvas, ...params);
+                });
+            } else {
+                this.napiContext.drawImage(image, ...params);
+            }
             return;
         }
 
@@ -221,7 +239,13 @@ export class CanvasContext {
             this.clip();
         }
 
-        this.napiContext.drawImage(image, dx, dy);
+        if (image instanceof Canvas) {
+            image.pass((napiCanvas: NapiCanvas) => {
+                this.napiContext.drawImage(napiCanvas, dx, dy);
+            });
+        } else {
+            this.napiContext.drawImage(image, dx, dy);
+        }
         if (roundRadius) this.restore();
         return;
     }

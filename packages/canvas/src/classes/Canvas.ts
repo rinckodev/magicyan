@@ -9,7 +9,7 @@ export class Canvas {
     public static loadImage = loadImage;
     public readonly width: number;
     public readonly height: number;
-    private napiCanvas: NapiCanvas;
+    private readonly napiCanvas: NapiCanvas;
     private context?: CanvasContext;
     constructor(width: number, height: number, flag?: SvgExportFlag){
         this.napiCanvas = new NapiCanvas(width, height, flag);
@@ -17,10 +17,13 @@ export class Canvas {
         this.height = height;
 
         this.encode = this.napiCanvas.encode.bind(this.napiCanvas);
-        this.toDataURL = this.napiCanvas.toDataURLAsync.bind(this.napiCanvas);
+        this.toDataURLAsync = this.napiCanvas.toDataURLAsync.bind(this.napiCanvas);
+        this.toDataURL = this.napiCanvas.toDataURL.bind(this.napiCanvas);
     }
     public encode;
     public toDataURL;
+    public toDataURLAsync;
+    
     public getContext(attributes?: ContextAttributes){
         this.context = new CanvasContext({
             napiCanvas: this.napiCanvas, attributes,
@@ -38,5 +41,8 @@ export class Canvas {
     }
     public async toImage(): Promise<Image> {
         return loadImage(this.napiCanvas.toDataURL());
+    }
+    public pass(callback: Function){
+        callback(this.napiCanvas);
     }
 }
