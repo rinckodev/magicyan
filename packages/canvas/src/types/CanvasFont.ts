@@ -11,10 +11,6 @@ export type ContextFontStyle =
 | "strikethrough" 
 | "strikethrough underline"
 | "underline"
-// | "italic" | "italic strikethrough" | "italic strikethrough underline"
-// | "strikethrough" | "strikethrough underline" | "strikethrough underline italic"
-// | "underline" | "underline italic" | "underline italic strikethrough"
-// | "regular";
 
 export interface ContextTextMetrics {
     readonly actualBoundingBoxAscent: number;

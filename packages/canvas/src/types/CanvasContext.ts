@@ -8,7 +8,7 @@ export interface ContextAttributes {
     colorSpace?: ColorSpace
 }
 
-export type ColorSpace = "srgb" | "display-p3"
+export type ColorSpace = "srgb" | "display-p3";
 
 export interface CanvasPointInit {
     w?: number;
