@@ -26,6 +26,7 @@ export class CanvasContext {
         this.stroke = this.napiContext.stroke.bind(this.napiContext);
         this.beginPath = this.napiContext.beginPath.bind(this.napiContext);
         this.closePath = this.napiContext.closePath.bind(this.napiContext);
+        this.clip = this.napiContext.clip.bind(this.napiContext);
         this.save = this.napiContext.save.bind(this.napiContext);
         this.restore = this.napiContext.restore.bind(this.napiContext);
         this.moveTo = this.napiContext.moveTo.bind(this.napiContext);
@@ -88,6 +89,7 @@ export class CanvasContext {
     }
     public beginPath;
     public closePath;
+    public clip;
     public save;
     public restore;
     public moveTo;
@@ -195,8 +197,8 @@ export class CanvasContext {
             const { sx, sy, sWidth: sw, sHeigth: sh } = sub;
 
             if (roundRadius){
-                this.napiContext.roundRect(dx, dy, width, heigth, roundRadius);
-                this.napiContext.clip();
+                this.roundRect(dx, dy, width, heigth, roundRadius);
+                this.clip();
             }
 
             this.napiContext.drawImage(image, sx, sy, sw, sh, dx, dy, width, heigth);
@@ -206,8 +208,8 @@ export class CanvasContext {
             const { width, heigth } = dimensions;
 
             if (roundRadius){
-                this.napiContext.roundRect(dx, dy, width, heigth, roundRadius);
-                this.napiContext.clip();
+                this.roundRect(dx, dy, width, heigth, roundRadius);
+                this.clip();
             }
 
             this.napiContext.drawImage(image, dx, dy, width, heigth);
@@ -215,8 +217,8 @@ export class CanvasContext {
         }
 
         if (roundRadius){
-            this.napiContext.roundRect(dx, dy, image.width, image.height, roundRadius);
-            this.napiContext.clip();
+            this.roundRect(dx, dy, image.width, image.height, roundRadius);
+            this.clip();
         }
 
         this.napiContext.drawImage(image, dx, dy);
