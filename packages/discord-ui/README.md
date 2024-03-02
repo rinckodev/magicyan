@@ -175,7 +175,7 @@ pagination({
 });
 ```
 
-<img src="../../../../assets/images/discord-ui/images/discord-ui/pagination-menu-action.png" alt="Confirm prompt customize" width="340">
+<img src="../../assets/images/discord-ui/pagination-menu-action.png" alt="Confirm prompt customize" width="340">
 
 - The close button causes the message to be deleted, but you can do whatever you want by defining the onClose method
 ```ts
