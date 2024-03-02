@@ -1,8 +1,9 @@
 {
     "material-icon-theme.folders.associations": {
         "canvas": "theme",
+        "canvas-ui": "layout",
         "discord": "client",
-        "discord-elements": "layout",
+        "discord-ui": "layout",
         "discord-events": "event",
         "discord-plus": "tools",
         "flamestore": "firebase",

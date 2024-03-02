@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../../assets/images/icon.png" alt="Icon" width="100" height="100">
+  <img src="../../../../assets/images/discord-ui/images/icon.png" alt="Icon" width="100" height="100">
   <div style="margin-left: 20px;">
 
   # Magicyan Discord Ui
@@ -73,7 +73,7 @@ confirm({
   },
 });
 ```
-<img src="assets/confirm-prompt.png" alt="Confirm prompt" width="340">
+<img src="../../assets/images/discord-ui/confirm-prompt.png" alt="Confirm prompt" width="340">
 
 - You can customize the buttons
 ```ts
@@ -89,7 +89,7 @@ confirm({
   })
 });
 ```
-<img src="assets/confirm-prompt-customize.png" alt="Confirm prompt customize" width="340">
+<img src="../../assets/images/discord-ui/confirm-prompt-customize.png" alt="Confirm prompt customize" width="340">
 
 - You can specify a timeout and a function that will run when the time is up
 ```ts
@@ -148,7 +148,7 @@ pagination({
 });
 ```
 
-<img src="assets/pagination-menu.png" alt="Confirm prompt customize" width="340">
+<img src="../../assets/images/discord-ui/pagination-menu.png" alt="Confirm prompt customize" width="340">
 
 - Use the buttons to move forward and backward through the pages
 - You can customize each individual button using the buttons property
@@ -175,7 +175,7 @@ pagination({
 });
 ```
 
-<img src="assets/pagination-menu-action.png" alt="Confirm prompt customize" width="340">
+<img src="../../../../assets/images/discord-ui/images/discord-ui/pagination-menu-action.png" alt="Confirm prompt customize" width="340">
 
 - The close button causes the message to be deleted, but you can do whatever you want by defining the onClose method
 ```ts
