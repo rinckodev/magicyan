@@ -1,6 +1,6 @@
-import { notFound } from "@magicyan/core";
 import { APIEmbed, Attachment, AttachmentBuilder, ColorResolvable, Embed, EmbedAssetData, EmbedAuthorData, EmbedBuilder, EmbedData, EmbedFooterData, ImageURLOptions, User } from "discord.js";
 import { chars } from "../constants/chars";
+import { notFound } from "@magicyan/core";
 
 interface CreateEmbedAuthorOptions {
     user: User,
@@ -70,7 +70,7 @@ export class EmbedBuilderPlus extends EmbedBuilder {
 
         const fields = (data.mergeFields 
             ? [data.extend?.fields??[], data.fields??[]].flat() 
-            : data.fields??[]
+            : data.fields??data.extend?.fields??[]
         )
         .map(({ name=chars.invisible, value=chars.invisible, inline }) => ({
             name, value, inline
