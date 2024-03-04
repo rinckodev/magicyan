@@ -90,5 +90,5 @@ export function createComponentsManager(components: ActionRow<MessageActionRowCo
             roleSelects,
             mentionableSelects,
         }
-    }
+    };
 }

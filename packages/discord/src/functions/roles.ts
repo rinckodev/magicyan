@@ -19,5 +19,5 @@ export function findRole(guild: Guild){
         byFilter(filter: FindRoleFilter){
             return guild.roles.cache.find(filter);
         }
-    }
+    };
 }

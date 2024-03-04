@@ -9,13 +9,13 @@ export function findCommand(guildOrClient: Guild | Client<true>){
 
     return {
         byName(name: string, and: FindCommandFilter = () => true){
-            return commands.find(command => command.name === name && and(command))
+            return commands.find(command => command.name === name && and(command));
         },
         byId(id: string){
-            return commands.get(id)
+            return commands.get(id);
         },
         byFilter(filter: FindCommandFilter){
             return commands.find(filter);
         }
-    }
+    };
 }

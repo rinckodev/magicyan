@@ -22,5 +22,5 @@ export function findMember(guild: Guild){
         byFilter(filter: FindMemberFilter){
             return guild.members.cache.find(filter);
         }
-    }
+    };
 }
