@@ -5,15 +5,15 @@
 export function toNull(){
     return null;
 }
+
 /**
  * Receives a possibly null value and returns the value or undefined if falsy
  * @param value Any value
  * @returns 
  */
-export function notFound<T>(value: T): NonNullable<T> | undefined{
-    return value ?? undefined;
+export function notFound<T>(value: T): T & {} | undefined {
+    return value !== null ? value : undefined;
 }
-
 /**
  * Creates text with a line break
  * @param text String Array
@@ -25,8 +25,8 @@ export function notFound<T>(value: T): NonNullable<T> | undefined{
  * // This is javascript
  * ```
  */
-export function brBuilder(...text: string[]){
-    return text.join("\n");
+export function brBuilder(...text: (string | string[])[]){
+    return text.flat().join("\n");
 }
 
 /**
@@ -40,8 +40,8 @@ export function brBuilder(...text: string[]){
  * console.log(text) // Administrator Rincko has been promoted
  * ```
  */
-export function spaceBuilder(...text: string[]){
-    return text.join(" ");
+export function spaceBuilder(...text: (string | string[])[]){
+    return text.flat().join(" ");
 }
 
 /**
@@ -62,7 +62,7 @@ export function spaceBuilder(...text: string[]){
  * // command.ts
  * import lang from "./lang"
  * // ...
- * textReplacer(lang.welcome[locale], {
+ * replaceText(lang.welcome[locale], {
  *     "var(name)": user.displayName,
  *     "var(libname)": lib.getName()
  * })

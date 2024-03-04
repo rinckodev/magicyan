@@ -11,8 +11,9 @@
       "skipLibCheck": true,
       "skipDefaultLibCheck": true,
       "resolveJsonModule": true,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
+      
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
     },
     "include": ["packages"],
   }
