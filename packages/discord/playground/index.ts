@@ -12,7 +12,7 @@ const embed = createEmbed({
         { name: "2", value: "b", inline: true },
         { name: "3", value: "b", inline: true },
         {},
-    ]
+    ],
 });
 
-console.log(embed.toString());
+console.log(embed.length);

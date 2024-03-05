@@ -104,7 +104,7 @@ export class EmbedBuilderPlus extends EmbedBuilder {
         super(embed.data);
     }
     public has(property: keyof Omit<EmbedBuilderPlusData, keyof EmbedBuilderPlusOptions>){
-        return Object.hasOwn(this, property);
+        return Boolean(this.data[property]);
     }
     public toArray(){
         return [this];
@@ -122,7 +122,7 @@ export class EmbedBuilderPlus extends EmbedBuilder {
         }
         return this;
     }
-    public deleteField(index: number){
+    public deleteField(index: number): this{
         if (this.fields.at(index)){
             this.setFields(this.fields.toSpliced(index, 1));
         }
