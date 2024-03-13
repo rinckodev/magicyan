@@ -10,5 +10,6 @@ export * from "./functions/format";
 export * from "./functions/members";
 export * from "./functions/message";
 export * from "./functions/roles";
+export * from "./functions/regex";
 
 export * from "@magicyan/core";

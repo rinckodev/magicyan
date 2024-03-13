@@ -1,18 +1,9 @@
-import { createEmbed } from "../src";
+import { extractMentionId } from "../src";
 
-const embed = createEmbed({
-    description: "test",
-    fields: [
-        { name: "2", value: "b", inline: true },
-        { name: "3", value: "b", inline: true },
-        {},
-        { name: "2", value: "b", inline: true },
-        { name: "3", value: "b", inline: true },
-        {},
-        { name: "2", value: "b", inline: true },
-        { name: "3", value: "b", inline: true },
-        {},
-    ],
-});
+const user = "<@264620632644255745>";
+const channel = "<#1068689068256403457>";
+const role = "<@&929925182796226632>";
 
-console.log(embed.length);
+console.log(extractMentionId(user));
+console.log(extractMentionId(channel));
+console.log(extractMentionId(role));
