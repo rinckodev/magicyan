@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../../../../assets/images/discord-ui/images/icon.png" alt="Icon" width="100" height="100">
+  <img src="../../assets/images/icon.png" alt="Icon" width="100" height="100">
   <div style="margin-left: 20px;">
 
   # Magicyan Discord Ui
@@ -47,9 +47,7 @@ discordUi({
 - This is applied to all components, but is overridden by customization in the component function itself if defined
 
 ## Prompts
-
 ### Confirm prompt
-
 - Easily create a component that waits for user confirmation
 
 ```ts
@@ -110,9 +108,7 @@ confirm({
 -You can use the filter method if you are not sending ephemeral messages (it is the same as the discord component collector)
 
 ## Menus
-
 ### Pagination menu
-
 - This is a menu of embeds with pages, you just need to pass an array of embeds that you want to display
 
 ```ts

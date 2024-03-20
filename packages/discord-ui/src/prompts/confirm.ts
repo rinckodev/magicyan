@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ComponentType } from "discord.js";
+import { ButtonBuilder, ComponentType } from "discord.js";
 import { toMergeObject } from "../helpers/utils";
 import { ConfirmPrompt, ConfirmPromptButtons, ConfirmPromptOptions, ConfirmPromptResult } from "./confirmManager";
 

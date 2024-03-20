@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CacheType, type ButtonInteraction, type ComponentEmojiResolvable, type Interaction, type InteractionResponse, type Message } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CacheType, type ButtonInteraction, type ComponentEmojiResolvable, type Message } from "discord.js";
 import { toMergeObject } from "../helpers/utils";
 
 interface PromptButton {

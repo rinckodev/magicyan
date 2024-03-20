@@ -1,5 +1,5 @@
-import { ActionRowBuilder, ApplicationCommandType, ButtonBuilder, Client, EmbedBuilder, Partials } from "discord.js";
-import { pagination } from "../src";
+import { ActionRowBuilder, ApplicationCommandType, ButtonBuilder, ButtonStyle, Client, EmbedBuilder, Message, Partials, StringSelectMenuBuilder } from "discord.js";
+import { discordUi, multimenu } from "../src";
 
 const client = new Client({
     intents: [
@@ -10,26 +10,26 @@ const client = new Client({
     partials: [Partials.Channel, Partials.GuildMember, Partials.User]
 });
 
-// discordUi({
-//     prompts: {
-//         confirm: {
-//             buttons: {
-//                 confirm: { label: "Confirm", style: ButtonStyle.Success },
-//                 cancel: { label: "Cancel", style: ButtonStyle.Secondary }
-//             }
-//         }
-//     },
-//     menus: {
-//         pagination: {
-//             buttons: {
-//                 previous: { style: ButtonStyle.Danger },
-//                 home: { label: "Home", emoji: "🏠" },
-//                 next: { label: "Next", style: ButtonStyle.Success },
-//                 close: { emoji: "❌" }
-//             }
-//         }
-//     }
-// });
+discordUi({
+    prompts: {
+        confirm: {
+            buttons: {
+                confirm: { label: "Confirm", style: ButtonStyle.Success },
+                cancel: { label: "Cancel", style: ButtonStyle.Secondary }
+            }
+        }
+    },
+    menus: {
+        pagination: {
+            buttons: {
+                previous: { style: ButtonStyle.Danger },
+                home: { label: "Home", emoji: "🏠" },
+                next: { label: "Next", style: ButtonStyle.Success },
+                close: { emoji: "❌" }
+            }
+        }
+    }
+});
 
 client.on("ready", (client) => {
     console.log("Bot online");
@@ -38,38 +38,68 @@ client.on("ready", (client) => {
         {
             name: "ping",
             description: "ping command",
-            type: ApplicationCommandType.ChatInput,
+            type: ApplicationCommandType.ChatInput
         } 
     ]);
 });
 
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.inCachedGuild() || !interaction.isChatInputCommand()) return;
+    const { channel, guild } = interaction;
+    if (!channel) return;
 
-    const roles = interaction.member.roles.cache;
+    await interaction.deferReply({ ephemeral: true });
 
-    pagination({
-        embeds: Array.from(roles.values()).map((role, index) => new EmbedBuilder({
-            description: `${role} ${role.name}`,
-            color: role.color,
-            footer: {
-                text: `${index+1}/${roles.size}`
-            }
-        })),
-        components: ({ action, close, ...buttons }) => [
+    const limit = Infinity;
+
+    const messages: Message[] = [];
+    let lastMessageId: string | undefined;
+
+    while(true){
+        const fetched = await channel.messages.fetch({ limit: 100, before: lastMessageId });
+        
+        messages.push(...fetched.values());
+        lastMessageId = fetched.lastKey();
+        if (fetched.size < 100 || messages.length >= limit) break;
+    }
+
+    if (limit < messages.length) {
+        const sliced = messages.slice(0, limit);
+        messages.length = 0;
+        messages.push(...sliced);
+    }
+    // return messages.reverse();
+
+    multimenu({
+        embed: new EmbedBuilder({
+            title: "test",
+            description: "test2",
+            color: 302010,
+        }),
+        components: (buttons, selectMenu) => [
             new ActionRowBuilder<ButtonBuilder>({
-                components: [...Object.values(buttons)]
+                components: [
+                    buttons.previous, buttons.home,
+                    buttons.next, buttons.view, buttons.close
+                ],
             }),
-            new ActionRowBuilder<ButtonBuilder>({
-                components: [action, close]
+            new ActionRowBuilder<StringSelectMenuBuilder>({
+                components: [selectMenu],
             })
         ],
-        render: (embed, components) => interaction.reply({ 
-            fetchReply: true, ephemeral: true, embeds:[embed], components 
+        render: (embed, components) => interaction.editReply({
+            embeds: [embed], components
         }),
-        onClick(interaction, embed) {
-            interaction.reply({ ephemeral: true, embeds: [embed] });
-        }
+        items: guild.members.cache.map(m => ({
+            title: m.displayName,
+            description: `${m}`,
+            value: m.id,
+            color: "Aqua",
+            thumbnail: m.displayAvatarURL()
+        })),
+        onSelect(interaction, item) {
+            interaction.reply({ ephemeral: true, content: JSON.stringify(item, null, 2) });
+        },
     });
 });
 
