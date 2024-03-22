@@ -33,6 +33,8 @@ export async function pagination<T extends boolean>(options: PaginationMenutOpti
     let index = 0;
 
     collector.on("collect", async interaction => {
+        if (!Object.values(buttonsData).some(d => d.customId === interaction.customId)) return;
+        
         paginationButtons.home.setDisabled(false);
         paginationButtons.previous.setDisabled(false);
         paginationButtons.next.setDisabled(false);

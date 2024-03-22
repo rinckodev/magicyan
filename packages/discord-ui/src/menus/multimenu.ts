@@ -1,6 +1,6 @@
 import { ButtonBuilder, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuComponentData } from "discord.js";
 import { toMergeObject } from "../helpers/utils";
-import { MultimenuMenu, MultimenuMenuButtons, MultimenuMenutOptions } from "./multimenuManager";
+import { MultimenuMenu, MultimenuMenuButtons, MultimenuMenuItem, MultimenuMenutOptions } from "./multimenuManager";
 
 export async function multimenu<T extends boolean>(options: MultimenuMenutOptions<T>){
     const { 
@@ -26,12 +26,13 @@ export async function multimenu<T extends boolean>(options: MultimenuMenutOption
         view: new ButtonBuilder(buttonsData.view), 
     };
 
-    const selectMenu = new StringSelectMenuBuilder({
+    const stringSelectMenuData = {
         customId: selectMenuData?.customId 
         ? `[discord-ui/multimenu/${selectMenuData?.customId??"select"}]`
         : defaultSelectMenu.customId,
         placeholder: selectMenuData?.placeholder ?? defaultSelectMenu.placeholder,
-    });
+    };
+    const selectMenu = new StringSelectMenuBuilder(stringSelectMenuData);
     
     let { viewType="grid" } = options;
     let page = 0;
@@ -115,6 +116,8 @@ export async function multimenu<T extends boolean>(options: MultimenuMenutOption
     
     collector.on("collect", async interaction => {
         if (interaction.isButton()){
+            if (!Object.values(buttonsData).some(d => d.customId === interaction.customId)) return;
+            
             multimenuButtons.home.setDisabled(false);
             multimenuButtons.previous.setDisabled(false);
             multimenuButtons.next.setDisabled(false);
@@ -162,10 +165,13 @@ export async function multimenu<T extends boolean>(options: MultimenuMenutOption
             });
             return;
         }
-        if (!interaction.isStringSelectMenu() || !onSelect) return;
+        if (
+            !interaction.isStringSelectMenu() || !onSelect || 
+            interaction.customId !== stringSelectMenuData.customId
+        ) return;
         
         const item = items.find(item => item.option?.value === interaction.values[0]);
-        if (item) onSelect(interaction, item);
+        if (item) onSelect(interaction, item as MultimenuMenuItem<true>);
     });
     collector.on("end", (_, reason) => {
         if (reason === "time" && time && onTimeout) {

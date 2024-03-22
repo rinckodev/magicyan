@@ -20,13 +20,14 @@ export interface MultimenuMenuSelect {
     placeholder?: string;
 }
 
-interface MultimenuMenuItem {
+export type MultimenuMenuItem<S = false> = {
     title?: string;
     description: string;
-    option?: SelectMenuComponentOptionData
     color?: ColorResolvable,
     thumbnail?: string
-}
+} & (S extends true 
+    ? { option: SelectMenuComponentOptionData }
+    : { option?: SelectMenuComponentOptionData })
 
 export type MultiMenuViewType = "list" | "items" | "grid" | "blocks";
 
@@ -42,7 +43,7 @@ export interface MultimenuMenutOptions<T extends boolean> {
     items: MultimenuMenuItem[];
     components(buttons: Record<keyof MultimenuMenuButtons, ButtonBuilder>, selectMenu: StringSelectMenuBuilder): Components
     render(embed: EmbedBuilder, components: Components): Promise<Message<T>>;
-    onSelect?(interaction: StringSelectMenuInteraction<Cache<T>>, item: MultimenuMenuItem): void;
+    onSelect?(interaction: StringSelectMenuInteraction<Cache<T>>, item: MultimenuMenuItem<true>): void;
     onClose?(interaction: ButtonInteraction<Cache<T>>): void;
     filter?(interaction: MessageComponentInteraction<Cache<T>>): boolean
     time?: number;

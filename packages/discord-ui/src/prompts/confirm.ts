@@ -26,6 +26,7 @@ export async function confirm<T extends boolean>(options: ConfirmPromptOptions<T
 
     return new Promise<ConfirmPromptResult<T>>(resolve => {
         collector.on("collect", interaction => {
+            if (!Object.values(buttonsData).some(d => d.customId === interaction.customId)) return;
             collector.stop("clicked");
             const isCancel = interaction.customId === buttonsData.cancel.customId;
             if (onClick) onClick(interaction, isCancel);
