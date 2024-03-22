@@ -32,9 +32,6 @@ export async function multimenu<T extends boolean>(options: MultimenuMenutOption
         : defaultSelectMenu.customId,
         placeholder: selectMenuData?.placeholder ?? defaultSelectMenu.placeholder,
     });
-
-    multimenuButtons.previous.setDisabled(true);
-    multimenuButtons.home.setDisabled(true);
     
     let { viewType="grid" } = options;
     let page = 0;
@@ -56,21 +53,21 @@ export async function multimenu<T extends boolean>(options: MultimenuMenutOption
             const index = itemsPerPage * page + i;
             const item = items[index];
 
-            if (!item) break;
+            if (!item || !item.option) break;
 
             itemsPushed++;
 
             const field = {
-                name: item.title,
+                name: item.title??"\u200b",
                 value: item.description,
                 inline: true,
             };
 
             options.push({
-                label: item.title,
-                value: item.value,
-                description: item.description.slice(0, 100),
-                emoji: item.emoji,
+                label: item.option.label,
+                value: item.option.value,
+                description: item.option.description,
+                emoji: item.option.emoji,
             });
 
             switch(viewType){
@@ -111,6 +108,10 @@ export async function multimenu<T extends boolean>(options: MultimenuMenutOption
     const collector = message.createMessageComponentCollector({ time, filter });
 
     const maxPages = Math.ceil(items.length / itemsPerPage);
+
+    multimenuButtons.previous.setDisabled(true);
+    multimenuButtons.home.setDisabled(true);
+    if (page+1 >= maxPages) multimenuButtons.next.setDisabled(true);
     
     collector.on("collect", async interaction => {
         if (interaction.isButton()){
@@ -163,8 +164,8 @@ export async function multimenu<T extends boolean>(options: MultimenuMenutOption
         }
         if (!interaction.isStringSelectMenu() || !onSelect) return;
         
-        const item = items.find(item => item.value === interaction.values[0])!;
-        onSelect(interaction, item);
+        const item = items.find(item => item.option?.value === interaction.values[0]);
+        if (item) onSelect(interaction, item);
     });
     collector.on("end", (_, reason) => {
         if (reason === "time" && time && onTimeout) {

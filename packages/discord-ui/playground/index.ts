@@ -93,7 +93,11 @@ client.on("interactionCreate", async (interaction) => {
         items: guild.members.cache.map(m => ({
             title: m.displayName,
             description: `${m}`,
-            value: m.id,
+            option: {
+                label: m.displayName,
+                value: m.id,
+                emoji: "✅"
+            },
             color: "Aqua",
             thumbnail: m.displayAvatarURL()
         })),

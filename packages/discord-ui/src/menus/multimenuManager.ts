@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CacheType, ColorResolvable, EmbedBuilder, MessageComponentInteraction, StringSelectMenuBuilder, StringSelectMenuInteraction, type ButtonInteraction, type ComponentEmojiResolvable, type Message } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CacheType, ColorResolvable, EmbedBuilder, MessageComponentInteraction, SelectMenuComponentOptionData, StringSelectMenuBuilder, StringSelectMenuInteraction, type ButtonInteraction, type ComponentEmojiResolvable, type Message } from "discord.js";
 import { toMergeObject } from "../helpers/utils";
 
 interface MultimenuMenuButton {
@@ -21,10 +21,9 @@ export interface MultimenuMenuSelect {
 }
 
 interface MultimenuMenuItem {
-    title: string;
+    title?: string;
     description: string;
-    value: string;
-    emoji?: ComponentEmojiResolvable,
+    option?: SelectMenuComponentOptionData
     color?: ColorResolvable,
     thumbnail?: string
 }
