@@ -104,14 +104,14 @@ export async function multimenu<T extends boolean>(options: MultimenuMenutOption
         return embeds;
     };
 
-    const message = await render(refreshItems()[0], components(multimenuButtons, selectMenu));
-    const collector = message.createMessageComponentCollector({ time, filter });
-
     const maxPages = Math.ceil(items.length / itemsPerPage);
 
     multimenuButtons.previous.setDisabled(true);
     multimenuButtons.home.setDisabled(true);
     if (page+1 >= maxPages) multimenuButtons.next.setDisabled(true);
+
+    const message = await render(refreshItems()[0], components(multimenuButtons, selectMenu));
+    const collector = message.createMessageComponentCollector({ time, filter });
     
     collector.on("collect", async interaction => {
         if (interaction.isButton()){
