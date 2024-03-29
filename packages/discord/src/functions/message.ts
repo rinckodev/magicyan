@@ -47,3 +47,12 @@ export function findMessage(channel: GuildTextBasedChannel){
         }
     };   
 }
+interface MessageUrlInfo {
+    messageId?: string; 
+    channelId?: string;
+    guildId?: string;
+}
+export function getMessageUrlInfo(url: string): MessageUrlInfo{
+    const [messageId, channelId, guildId] = url.split("/").reverse();
+    return { messageId, channelId, guildId };
+}

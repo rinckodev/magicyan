@@ -1,9 +1,11 @@
-import { extractMentionId } from "../src";
+import { Client } from "discord.js";
 
-const user = "<@264620632644255745>";
-const channel = "<#1068689068256403457>";
-const role = "<@&929925182796226632>";
+const client = new Client({
+    intents: ["Guilds"]
+});
 
-console.log(extractMentionId(user));
-console.log(extractMentionId(channel));
-console.log(extractMentionId(role));
+client.login(process.env.BOT_TOKEN);
+
+client.on("ready", () => console.log("ready"));
+
+process.on("SIGINT", () => process.exit(0));
