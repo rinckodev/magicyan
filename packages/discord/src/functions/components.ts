@@ -1,12 +1,7 @@
-import { ActionRow, ActionRowBuilder, AnyComponentBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, ChannelSelectMenuComponent, ComponentType, LinkButtonComponentData, MentionableSelectMenuComponent, MessageActionRowComponent, RoleSelectMenuComponent, StringSelectMenuComponent, TextInputBuilder, TextInputComponentData, UserSelectMenuComponent } from "discord.js";
+import { ActionRow, ActionRowBuilder, AnyComponentBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, ChannelSelectMenuComponent, ComponentType, LinkButtonComponentData, MentionableSelectMenuComponent, MessageActionRowComponent, RoleSelectMenuComponent, StringSelectMenuComponent, UserSelectMenuComponent } from "discord.js";
 
 export function createRow<Component extends AnyComponentBuilder>(...components: Component[]){
     return new ActionRowBuilder<Component>({components});
-}
-
-interface CreateModalInputData extends Omit<TextInputComponentData, "type"> {}
-export function createModalInput(data: CreateModalInputData){
-    return createRow(new TextInputBuilder(data));
 }
 
 interface CreateLinkButtonData extends Omit<LinkButtonComponentData, "style" | "type"> {}

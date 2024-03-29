@@ -6,6 +6,7 @@ export * from "./functions/misc";
 export * from "./functions/channels";
 export * from "./functions/commands";
 export * from "./functions/components";
+export * from "./functions/modals";
 export * from "./functions/emojis";
 export * from "./functions/format";
 export * from "./functions/members";

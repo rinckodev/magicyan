@@ -112,7 +112,7 @@ export class EmbedPlusBuilder extends EmbedBuilder {
     }
 }
 
-export type EmbedPlusPropery<P extends keyof EmbedPlusData> = EmbedPlusData[P];
+export type EmbedPlusProperty<P extends keyof EmbedPlusData> = EmbedPlusData[P];
 
 interface CreateEmbedOptions<B extends boolean> extends EmbedPlusOptions {
     array?: B 
