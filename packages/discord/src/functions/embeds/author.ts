@@ -13,9 +13,10 @@ type CreateEmbedAuthorOptions = AuthorOption & ImageURLOptions & {
     iconURL?: string; url?: string; prefix?: string; suffix?: string;
 }
 export function createEmbedAuthor(options: CreateEmbedAuthorOptions): EmbedAuthorData {
-    const { prefix, suffix, url, iconURL } = options;
+    const { prefix="", suffix="", url, iconURL } = options;
     const { size=512, extension, forceStatic } = options;
     const avatarOptions = { size, extension, forceStatic };
+    
     if ("member" in options){
         const { member, property="displayName" } = options;
         const name = {

@@ -1,9 +1,9 @@
 import { EmbedAssetData, Attachment, AttachmentBuilder } from "discord.js";
 
-type EmbedAssetOptions = Omit<EmbedAssetData, "url">
-export type AssetSource = string | Attachment | AttachmentBuilder | EmbedAssetData | undefined | null;
+export type EmbedPlusAssetData = string | Attachment | AttachmentBuilder | EmbedAssetData | undefined | null;
 
-export function createEmbedAsset(source: AssetSource, options?: EmbedAssetOptions): EmbedAssetData | undefined {
+type EmbedAssetOptions = Omit<EmbedAssetData, "url">
+export function createEmbedAsset(source: EmbedPlusAssetData, options?: EmbedAssetOptions): EmbedAssetData | undefined {
     if (source instanceof Attachment || source instanceof AttachmentBuilder){
         return { url: `attachment://${source.name}`, ...options };
     }

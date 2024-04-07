@@ -11,6 +11,6 @@ export function createModalInput(data: CreateModalInputData): ActionRowBuilder<T
 type ModalFieldsData = Record<string, Omit<TextInputData, "customId">>;
 export function createModalFields(data: ModalFieldsData): ActionRowBuilder<TextInputBuilder>[]{
     return Object.entries(data).map(
-        ([customId, data]) => createModalInput({ customId, ...data })
+        ([customId, data]) => createModalInput(Object.assign({ customId }, data))
     );
 }

@@ -55,7 +55,7 @@ export function createComponentsManager(components: ActionRow<MessageActionRowCo
         row.components.filter(c => c.type === ComponentType.RoleSelect)    
     ) as RoleSelectMenuComponent[];
     const mentionableSelects = components.flatMap(row => 
-        row.components.filter(c => c.type === ComponentType.Button)    
+        row.components.filter(c => c.type === ComponentType.MentionableSelect)    
     ) as MentionableSelectMenuComponent[];
 
     return {

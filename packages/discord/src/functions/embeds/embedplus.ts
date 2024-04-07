@@ -1,33 +1,41 @@
 import { APIEmbed, ColorResolvable, Embed, EmbedBuilder, EmbedData } from "discord.js";
 import { chars } from "../../constants/chars";
-import { AssetSource, createEmbedAsset } from "./assets";
-import { createEmbedFooter } from "./footer";
+import { createEmbedAsset, EmbedPlusAssetData } from "./assets";
+import { createEmbedFooter, EmbedPlusFooterData } from "./footer";
+import { EmbedPlusField, EmbedPlusFieldData } from "./fields";
 
-type EmbedPlusAssetData = AssetSource;
 type EmbedPlusColorData = string&{} | ColorResolvable | null;
-type EmbedPlusFieldData = { name: string; value: string; inline?: boolean }
-type EmbedPlusFooterData = { text?: string | null; iconURL?: string | null; }
 type EmbedPlusAuthorData = { name: string, url?: string, iconURL?: string }
 
-interface EmbedPlusData {
+export interface EmbedPlusData {
     title?: string | null;
     color?: EmbedPlusColorData | null;
     description?: string | null;
     url?: string | null;
-    thumbnail?: EmbedPlusAssetData | null;
-    image?: EmbedPlusAssetData | null;
+    thumbnail?: EmbedPlusAssetData;
+    image?: EmbedPlusAssetData;
     fields?: Partial<EmbedPlusFieldData>[] | null
     timestamp?: string | number | Date | null;
     footer?: EmbedPlusFooterData;
     author?: EmbedPlusAuthorData
 }
 
+export type AnyEmbed = APIEmbed | Embed | EmbedBuilder | EmbedData;
+
+interface MessageWithEmbeds {
+    embeds: Array<Embed>
+}
+interface InteractionWithEmbeds {
+    message: MessageWithEmbeds
+}
+
 interface EmbedPlusOptions extends EmbedPlusData {
-    extends?: Omit<EmbedPlusData, keyof EmbedPlusOptions> | EmbedData | APIEmbed | Embed;
+    extends?: Omit<EmbedPlusData, keyof EmbedPlusOptions> | AnyEmbed;
     mergeFields?: boolean;
 }
 
 export class EmbedPlusBuilder extends EmbedBuilder {
+    public fields: EmbedPlusField;
     constructor(data: EmbedPlusOptions){
         
         const extendsEmbed = data.extends ? new EmbedPlusBuilder(
@@ -35,64 +43,42 @@ export class EmbedPlusBuilder extends EmbedBuilder {
             ? data.extends.data : data.extends
         ).data : {};
         
-        const { fields: extendsFields, ...exetendData } = extendsEmbed;
+        const { fields: extendsFields, ...extendData } = extendsEmbed;
 
-        const fields = (data.mergeFields 
+        const { mergeFields=true } = data;
+
+        const fields = (mergeFields
             ? [extendsFields??[], data.fields??[]].flat() 
             : data.fields??extendsFields??[]
         ).map(({ name=chars.invisible, value=chars.invisible, inline }) => ({
             name, value, inline
         }));
 
-        const embed = new EmbedBuilder({
-            ...exetendData,
-            ...data.title ? { title: data.title } : {},
-            ...data.description ? { description: data.description } : {},
-            ...data.url ? { url: data.url } : {},
-            ...data.footer ? { footer: createEmbedFooter(data.footer) } : {},
-            ...data.author ? { author: data.author } : {},
-            ...data.image ? { image: createEmbedAsset(data.image) } : {},
-            ...data.thumbnail ? { thumbnail: createEmbedAsset(data.thumbnail) } : {},
-            ...fields.length > 0 ? { fields } : {}
-        });
-        if (data.timestamp) embed.setTimestamp(
-            typeof data.timestamp === "string" 
-            ? new Date(data.timestamp)
-            : data.timestamp
+        const builderData = Object.assign({}, extendData, data, { fields }) as EmbedData;
+
+        const { color, footer, image, thumbnail, timestamp } = data;
+        if (footer) Object.assign(builderData, { footer: createEmbedFooter(footer) });
+        if (image) Object.assign(builderData, { image: createEmbedAsset(image) });
+        if (thumbnail) Object.assign(builderData, { thumbnail: createEmbedAsset(thumbnail) });
+
+        const embed = new EmbedBuilder(builderData);
+        if (timestamp) embed.setTimestamp(
+            typeof timestamp === "string" 
+            ? new Date(timestamp)
+            : timestamp
         );
-        if (data.color) embed.setColor(data.color as ColorResolvable);
+        if (color) embed.setColor(color as ColorResolvable);
         super(embed.data);
+        this.fields = new EmbedPlusField(this);
     }
     public has(property: keyof Omit<EmbedPlusData, keyof EmbedPlusOptions>){
         return Boolean(this.data[property]);
     }
-    public toArray(){
+    public toArray(): EmbedPlusBuilder[]{
         return Array.from([this]);
     }
     public toString(space = 2){
         return JSON.stringify(this, null, space);
-    }
-    public updateField(index: number, field: Partial<EmbedPlusFieldData>){
-        if (this.fields.at(index)) {
-            const fields = Array.from(this.fields);
-            if (field.name) fields[index].name = field.name;
-            if (field.value) fields[index].value = field.value;
-            if (field.inline) fields[index].inline = field.inline;
-            this.setFields(fields);
-        }
-        return this;
-    }
-    public deleteField(index: number): this{
-        if (this.fields.at(index)){
-            this.setFields(this.fields.toSpliced(index, 1));
-        }
-        return this;
-    }
-    public popField(){
-        const fields = Array.from(this.fields);
-        const field = fields.pop();
-        this.setFields(fields);
-        return field;
     }
     public setAsset(asset: "thumbnail" | "image", source: EmbedPlusAssetData){
         const assetData = createEmbedAsset(source);
@@ -104,22 +90,24 @@ export class EmbedPlusBuilder extends EmbedBuilder {
         : this.setThumbnail(assetData.url);
         return this;
     }
-    public get fieldsLength(){
-        return this.data.fields?.length ?? 0;
+    public static fromInteraction(interaction: InteractionWithEmbeds, index=0, data: EmbedPlusData = {}){
+        return EmbedPlusBuilder.fromMessage(interaction.message, index, data);
     }
-    public get fields() {
-        return this.data.fields ?? [];
+    public static fromMessage(message: MessageWithEmbeds, index=0, data: EmbedPlusData = {}){
+        return new EmbedPlusBuilder(Object.assign({ extends: message.embeds[index] }, data));
     }
 }
 
 export type EmbedPlusProperty<P extends keyof EmbedPlusData> = EmbedPlusData[P];
 
 interface CreateEmbedOptions<B extends boolean> extends EmbedPlusOptions {
-    array?: B 
+    array?: B, interaction?: InteractionWithEmbeds;
 }
 type CreateEmbedReturn<B> = undefined extends B ? EmbedPlusBuilder : false extends B ? EmbedPlusBuilder : EmbedPlusBuilder[];
 export function createEmbed<B extends boolean>(options: CreateEmbedOptions<B>): CreateEmbedReturn<B>{
-    const { array=false, ...data } = options;
-    const embed = new EmbedPlusBuilder(data);
+    const { array=false, interaction, ...data } = options;
+    const embed = interaction 
+    ? EmbedPlusBuilder.fromInteraction(interaction, 0, data) 
+    : new EmbedPlusBuilder(data);
     return (array ? [embed] : embed) as CreateEmbedReturn<B>; 
 }
