@@ -2,21 +2,22 @@ export function randomNumber(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+
 export const random = {
-    float(min: number, max: number){
-        return Math.random() * (max - min) + min;
-    },
     int(min: number, max: number){
         return Math.floor(this.float(min, max + 1));
+    },
+    float(min: number, max: number){
+        return Math.random() * (max - min) + min;
     }
 };
 
-export function parseIntOr(value: string, orValue: number, radix?: number){
+export function parseIntOrDefault(value: string, defaultValue: number, radix?: number){
     const parsed = Number.parseInt(value, radix);
-    return Number.isNaN(parsed) ? orValue : parsed;
+    return Number.isNaN(parsed) ? defaultValue : parsed;
 }
 
-export function parseFloatOr(value: string, orValue: number){
+export function parseFloatOrDefault(value: string, defaultValue: number){
     const parsed = Number.parseFloat(value);
-    return Number.isNaN(parsed) ? orValue : parsed;
+    return Number.isNaN(parsed) ? defaultValue : parsed;
 }

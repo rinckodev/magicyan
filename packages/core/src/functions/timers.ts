@@ -1,4 +1,6 @@
-export { setTimeout as sleep } from "node:timers/promises";
+import { setTimeout as sleep } from "node:timers/promises";
+
+export { sleep };
 
 interface CreateIntervalOptions {
     time: number;
@@ -6,18 +8,20 @@ interface CreateIntervalOptions {
 }
 export function createInterval(options: CreateIntervalOptions){
     const { time, run } = options;
+
     const timer = setInterval(() => {
         run(() => clearInterval(timer));
     }, time);
+
     return { timer, stop: () => clearInterval(timer) };
 }
 
 interface CreateTimeoutOptions {
-    time: number;
+    delay: number;
     run(): void;
 }
 export function createTimeout(options: CreateTimeoutOptions){
-    const { time, run } = options;
+    const { delay: time, run } = options;
     const timer = setTimeout(() => run(), time);
     return { timer, stop: () => clearTimeout(timer) };
 }

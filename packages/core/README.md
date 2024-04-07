@@ -61,22 +61,23 @@ console.log(text); // Administrator Rincko has been promoted
     }
 }
 // command.ts
+import { replaceText } from "@magicyan/discord";
 import lang from "./lang"
 // ...
 
 const locale = "en-US";
 
-const text = textReplacer(lang.welcome[locale], {
+const text = replaceText(lang.welcome[locale], {
     "var(name)": user.displayName // "Rincko Dev",
     "var(libname)": lib.getName() // "@magicyan/core"
 })
 
 console.log(text) // Hi Rincko Dev, welcome to @magicyan/core lib
 
-const capitalizedWord = capitalize("hello world");
+const captalizedWord = captalize("hello world");
 console.log(capitalizedWord); // Output: "Hello world"
 
-const capitalizedText = capitalize("i love brazil", true);
+const captalizedText = captalize("i love brazil", true);
 console.log(capitalizedText); // Output: "I Love Brazil"
 
 const bigText = "Introduction to magicyan/core lib! A lib with many useful functions";

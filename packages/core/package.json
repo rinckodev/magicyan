@@ -1,6 +1,6 @@
 {
     "name": "@magicyan/core",
-    "version": "1.0.17",
+    "version": "1.0.18",
     "description": "Very simple functions for you to use in your code",
     "license": "MIT",
     "type": "module",
