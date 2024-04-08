@@ -2,7 +2,7 @@ import { APIEmbed, ColorResolvable, Embed, EmbedBuilder, EmbedData } from "disco
 import { chars } from "../../constants/chars";
 import { createEmbedAsset, EmbedPlusAssetData } from "./assets";
 import { createEmbedFooter, EmbedPlusFooterData } from "./footer";
-import { EmbedPlusField, EmbedPlusFieldData } from "./fields";
+import { EmbedPlusFields, EmbedPlusFieldData } from "./fields";
 
 type EmbedPlusColorData = string&{} | ColorResolvable | null;
 type EmbedPlusAuthorData = { name: string, url?: string, iconURL?: string }
@@ -35,28 +35,27 @@ interface EmbedPlusOptions extends EmbedPlusData {
 }
 
 export class EmbedPlusBuilder extends EmbedBuilder {
-    public fields: EmbedPlusField;
+    public fields: EmbedPlusFields;
     constructor(data: EmbedPlusOptions){
+        const { mergeFields=false, extends: extendsEmbed, ...embedData } = data;
         
-        const extendsEmbed = data.extends ? new EmbedPlusBuilder(
-            data.extends instanceof Embed || data.extends instanceof EmbedBuilder
-            ? data.extends.data : data.extends
-        ).data : {};
-        
-        const { fields: extendsFields, ...extendData } = extendsEmbed;
+        const extendsEmbedData = extendsEmbed
+        ? "data" in extendsEmbed ? extendsEmbed.data : data
+        : {};
 
-        const { mergeFields=true } = data;
+        const { fields: extendsFields, ...extendsData } = extendsEmbedData;
 
         const fields = (mergeFields
             ? [extendsFields??[], data.fields??[]].flat() 
             : data.fields??extendsFields??[]
-        ).map(({ name=chars.invisible, value=chars.invisible, inline }) => ({
-            name, value, inline
-        }));
+        )
+        .map(field => Object.assign(
+            { name: field.name??chars.invisible, value: field.name??chars.invisible },
+            field.inline !== undefined ? { inline: field.inline } : {}, 
+        ));
+        const builderData = Object.assign({}, extendsData, embedData, { fields }) as EmbedData;
 
-        const builderData = Object.assign({}, extendData, data, { fields }) as EmbedData;
-
-        const { color, footer, image, thumbnail, timestamp } = data;
+        const { color, footer, image, thumbnail, timestamp } = embedData;
         if (footer) Object.assign(builderData, { footer: createEmbedFooter(footer) });
         if (image) Object.assign(builderData, { image: createEmbedAsset(image) });
         if (thumbnail) Object.assign(builderData, { thumbnail: createEmbedAsset(thumbnail) });
@@ -69,7 +68,12 @@ export class EmbedPlusBuilder extends EmbedBuilder {
         );
         if (color) embed.setColor(color as ColorResolvable);
         super(embed.data);
-        this.fields = new EmbedPlusField(this);
+        this.fields = new EmbedPlusFields(this);
+    }
+    public update(data: EmbedPlusData): this {
+        const updated = createEmbed({ mergeFields: true, extends: this, ...data });
+        Object.assign(this.data, updated.data);
+        return this;
     }
     public has(property: keyof Omit<EmbedPlusData, keyof EmbedPlusOptions>){
         return Boolean(this.data[property]);
@@ -79,6 +83,14 @@ export class EmbedPlusBuilder extends EmbedBuilder {
     }
     public toString(space = 2){
         return JSON.stringify(this, null, space);
+    }
+    public setBorderColor(color: EmbedPlusColorData | null): this {
+        if (color === null){
+            this.setColor("#2B2D31");
+        } else {
+            this.setColor(color as ColorResolvable);
+        }
+        return this;
     }
     public setAsset(asset: "thumbnail" | "image", source: EmbedPlusAssetData){
         const assetData = createEmbedAsset(source);

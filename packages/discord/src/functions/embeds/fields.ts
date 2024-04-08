@@ -4,7 +4,7 @@ export type EmbedPlusFieldData = { name: string; value: string; inline?: boolean
 
 type FieldPredicate = (field: EmbedPlusFieldData, index: number, obj: EmbedPlusFieldData[]) => boolean;
 
-export class EmbedPlusField {
+export class EmbedPlusFields {
     private embed: EmbedPlusBuilder;
     private set fields(fields: EmbedPlusFieldData[]){
         this.embed.setFields(fields);
@@ -13,6 +13,10 @@ export class EmbedPlusField {
         return this.embed.data.fields ?? [];
     }
     constructor(embed: EmbedPlusBuilder){
+        Object.defineProperty(this, "embed", {
+            enumerable: false,
+            value: embed
+        });
         this.embed = embed;
     }
     [Symbol.iterator](){
@@ -31,7 +35,7 @@ export class EmbedPlusField {
     public get length(){
         return this.fields.length;
     }
-    public get record(): Record<string, string> {
+    public get record(): Record<string, string | undefined> {
         return this.fields.reduce(
             (record, { name, value }) => Object.assign(record, { [name]: value }), {}
         );
@@ -68,7 +72,7 @@ export class EmbedPlusField {
         this.embed.spliceFields(index, 1, Object.assign(embedField, field));
         return true;
     }
-    public delete(predicate: number | FieldPredicate): boolean {
+    public delete(predicate: string | number | FieldPredicate): boolean {
         const index = this.getPredicateIndex(predicate);
         if (index == -1) return false;
         const embedField = this.get(index);

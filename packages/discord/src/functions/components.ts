@@ -1,7 +1,7 @@
 import { ActionRow, ActionRowBuilder, AnyComponentBuilder, ButtonBuilder, ButtonComponent, ButtonStyle, ChannelSelectMenuComponent, ComponentType, LinkButtonComponentData, MentionableSelectMenuComponent, MessageActionRowComponent, RoleSelectMenuComponent, StringSelectMenuComponent, UserSelectMenuComponent } from "discord.js";
 
 export function createRow<Component extends AnyComponentBuilder>(...components: Component[]){
-    return new ActionRowBuilder<Component>({components});
+    return new ActionRowBuilder<Component>({ components });
 }
 
 interface CreateLinkButtonData extends Omit<LinkButtonComponentData, "style" | "type"> {}
