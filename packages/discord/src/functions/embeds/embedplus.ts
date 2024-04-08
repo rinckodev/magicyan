@@ -50,7 +50,7 @@ export class EmbedPlusBuilder extends EmbedBuilder {
             : data.fields??extendsFields??[]
         )
         .map(field => Object.assign(
-            { name: field.name??chars.invisible, value: field.name??chars.invisible },
+            { name: field.name??chars.invisible, value: field.value??chars.invisible },
             field.inline !== undefined ? { inline: field.inline } : {}, 
         ));
         const builderData = Object.assign({}, extendsData, embedData, { fields }) as EmbedData;
