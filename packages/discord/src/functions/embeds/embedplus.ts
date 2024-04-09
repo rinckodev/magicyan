@@ -1,8 +1,8 @@
 import { APIEmbed, ColorResolvable, Embed, EmbedBuilder, EmbedData } from "discord.js";
 import { chars } from "../../constants/chars";
 import { createEmbedAsset, EmbedPlusAssetData } from "./assets";
+import { EmbedPlusFieldData, EmbedPlusFields } from "./fields";
 import { createEmbedFooter, EmbedPlusFooterData } from "./footer";
-import { EmbedPlusFields, EmbedPlusFieldData } from "./fields";
 
 type EmbedPlusColorData = string&{} | ColorResolvable | null;
 type EmbedPlusAuthorData = { name: string, url?: string, iconURL?: string }

@@ -15,11 +15,11 @@ export function createModalFields(data: ModalFieldsData): ActionRowBuilder<TextI
     );
 }
 
-type ModalFieldsRecord = Record<string, string>;
-export function modalFieldsToRecord(fields: ModalSubmitFields | Collection<string, TextInputComponent>): ModalFieldsRecord {
-    const reduceFunction = (data: ModalFieldsRecord, { customId, value }: TextInputComponent) => 
+type ModalFieldsRecord<K extends string> = Record<K, string>;
+export function modalFieldsToRecord<K extends string = string>(fields: ModalSubmitFields | Collection<string, TextInputComponent>): ModalFieldsRecord<K> {
+    const reduceFunction = (data: ModalFieldsRecord<K>, { customId, value }: TextInputComponent) => 
         Object.assign(data, { [customId]: value }
     );
     const modalFields = "fields" in fields ? fields.fields : fields;
-    return modalFields.reduce(reduceFunction, {});
+    return modalFields.reduce(reduceFunction, {} as ModalFieldsRecord<K>);
 }

@@ -52,7 +52,9 @@ interface MessageUrlInfo {
     channelId?: string;
     guildId?: string;
 }
-export function getMessageUrlInfo(url: string): MessageUrlInfo{
+export function getMessageUrlInfo(url: string): MessageUrlInfo {
+    const regex = new RegExp(/^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/);
+    if (!regex.test(url)) return { };
     const [messageId, channelId, guildId] = url.split("/").reverse();
     return { messageId, channelId, guildId };
 }

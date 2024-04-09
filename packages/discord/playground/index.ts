@@ -53,23 +53,3 @@ client.on("interactionCreate", interaction => {
 });
 
 process.on("SIGINT", () => process.exit(0));
-
-const embed = createEmbed({
-    fields: [
-        { name: "a", inline: true },
-        { name: "b" },
-        { name: "c", inline: false },
-    ]
-});
-
-const ohterembed = createEmbed({
-    extends: embed,
-    mergeFields: true,
-    fields: [
-        { name: "d" }
-    ]
-});
-
-ohterembed.fields.push({ name: "test", value: "test" });
-
-console.log(ohterembed.fields.toArray());
