@@ -114,8 +114,37 @@ function run(interaction: ModalSubmitInteraction){
     console.log(fields.bio);
 }
 ```
+
 ## Embeds
-> soon
+Easily create embeds with this function
+```ts
+const embed = createEmbed({
+    title: "Welcome",
+    description: "Hello world",
+    color: "Random"
+});
+```
+You can set the thumbnail and image in a simple way
+```ts
+const embed = createEmbed({
+    // ...
+    thumbnail: "https://github.com/rinckodev.png",
+    image: guild.iconURL()
+});
+
+// Or passing an options object
+const embed = createEmbed({
+    // ...
+    image: { url: "imageurl", width: 400, height: 100 }
+});
+
+//Or passing an attachment
+const attachment = new AttachmentBuilder(buffer, { name: "myimage.png" });
+const embed = createEmbed({
+    // ...
+    image: attachment // attachment://myimage.png
+});
+```
 
 ## Channels
 You can try to get information from a channel url

@@ -8,7 +8,7 @@ export function createEmbedAsset(source: EmbedPlusAssetData, options?: EmbedAsse
         return { url: `attachment://${source.name}`, ...options };
     }
     if (source && typeof source === "object" && "url" in source){
-        return source;
+        return Object.assign(source, options??={});
     }
-    return source ? { url: source, ...options } : undefined;
+    return source ? Object.assign({ url: source }, options) : undefined;
 }

@@ -1,39 +1,53 @@
-import { EmbedAuthorData, GuildMember, ImageURLOptions, User } from "discord.js";
+import { Guild, GuildMember, ImageURLOptions, User } from "discord.js";
 
-interface UserAuthorOption {
-    user: User,
-    property?: "username" | "displayName" | "id" | "globalName"
-}
-interface MemberAuthorOption {
-    member: GuildMember,
+interface MemberAuthor {
     property?: "username" | "displayName" | "id" | "globalName" | "nickname"
 }
-type AuthorOption = UserAuthorOption | MemberAuthorOption;
-type CreateEmbedAuthorOptions = AuthorOption & ImageURLOptions & {
-    iconURL?: string; url?: string; prefix?: string; suffix?: string;
+interface UserAuthor {
+    property?: "username" | "displayName" | "id" | "globalName"
 }
-export function createEmbedAuthor(options: CreateEmbedAuthorOptions): EmbedAuthorData {
-    const { prefix="", suffix="", url, iconURL } = options;
-    const { size=512, extension, forceStatic } = options;
-    const avatarOptions = { size, extension, forceStatic };
-    
-    if ("member" in options){
-        const { member, property="displayName" } = options;
-        const name = {
-            id: member.id,
-            username: member.user.username,
-            displayName: member.displayName,
-            globalName: member.user.globalName,
-            nickname: member.nickname
-        }[property] ?? member.displayName;
+interface GuildAuthor {
+    property?: "name" | "id"
+}
+type AuthorType = Guild | GuildMember | User;
 
-        return { name: `${prefix}${name}${suffix}`, url,
-            iconURL: iconURL || member.displayAvatarURL(avatarOptions)
-        };
+type CreateEmbedAuthorOptions<T extends AuthorType> = {
+    iconURL?: string; url?: string | null; prefix?: string; suffix?: string;
+} & ImageURLOptions & (
+    T extends User 
+        ? UserAuthor :
+    T extends GuildMember
+        ? MemberAuthor :
+    T extends Guild
+        ? GuildAuthor :
+    never
+)
+
+export function createEmbedAuthor<T extends AuthorType>(type: T, options?: CreateEmbedAuthorOptions<T>){
+    const { prefix="", suffix="", url, iconURL: icon, extension, forceStatic, size=1024 } = options??{};
+    let name = "";
+    let iconURL = icon;
+    const imageOptions = { extension, forceStatic, size };
+    switch(true){
+        case type instanceof User:{
+            const { property="displayName" } = (options??{}) as CreateEmbedAuthorOptions<User>;
+            name = type[property] ?? type.displayName;
+            iconURL = type.displayAvatarURL(imageOptions);
+            break;
+        }
+        case type instanceof GuildMember:{
+            const { property="displayName" } = (options??{}) as CreateEmbedAuthorOptions<GuildMember>;
+            name = (property == "username" || property == "globalName" 
+            ? type.user[property] : type[property]) ?? type.displayName;
+            iconURL = type.displayAvatarURL(imageOptions);
+            break;
+        }
+        case type instanceof Guild:{
+            const { property="name" } = (options??{}) as CreateEmbedAuthorOptions<Guild>;
+            name = type[property];
+            iconURL = type.iconURL(imageOptions) ?? undefined;
+            break;
+        }
     }
-    const { property="displayName", user } = options;
-    return {
-        name: `${prefix}${options.user[property]}${suffix}`, url, 
-        iconURL: iconURL || user.displayAvatarURL(avatarOptions) 
-    };
+    return { name: `${prefix}${name}${suffix}`, url: url??undefined, iconURL };
 }

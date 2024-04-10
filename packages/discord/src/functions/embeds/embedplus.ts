@@ -1,4 +1,4 @@
-import { APIEmbed, ColorResolvable, Embed, EmbedBuilder, EmbedData } from "discord.js";
+import { APIEmbed, AttachmentBuilder, AttachmentData, ColorResolvable, Embed, EmbedBuilder, EmbedData } from "discord.js";
 import { chars } from "../../constants/chars";
 import { createEmbedAsset, EmbedPlusAssetData } from "./assets";
 import { EmbedPlusFieldData, EmbedPlusFields } from "./fields";
@@ -20,7 +20,7 @@ export interface EmbedPlusData {
     author?: EmbedPlusAuthorData
 }
 
-export type AnyEmbed = APIEmbed | Embed | EmbedBuilder | EmbedData;
+export type AnyEmbedData = APIEmbed | Embed | EmbedData;
 
 interface MessageWithEmbeds {
     embeds: Array<Embed>
@@ -30,7 +30,7 @@ interface InteractionWithEmbeds {
 }
 
 interface EmbedPlusOptions extends EmbedPlusData {
-    extends?: Omit<EmbedPlusData, keyof EmbedPlusOptions> | AnyEmbed;
+    extends?: EmbedPlusData | AnyEmbedData | EmbedBuilder;
     mergeFields?: boolean;
 }
 
@@ -40,7 +40,7 @@ export class EmbedPlusBuilder extends EmbedBuilder {
         const { mergeFields=false, extends: extendsEmbed, ...embedData } = data;
         
         const extendsEmbedData = extendsEmbed
-        ? "data" in extendsEmbed ? extendsEmbed.data : data
+        ? "data" in extendsEmbed ? extendsEmbed.data : extendsEmbed
         : {};
 
         const { fields: extendsFields, ...extendsData } = extendsEmbedData;
@@ -61,6 +61,7 @@ export class EmbedPlusBuilder extends EmbedBuilder {
         if (thumbnail) Object.assign(builderData, { thumbnail: createEmbedAsset(thumbnail) });
 
         const embed = new EmbedBuilder(builderData);
+        
         if (timestamp) embed.setTimestamp(
             typeof timestamp === "string" 
             ? new Date(timestamp)
@@ -75,11 +76,25 @@ export class EmbedPlusBuilder extends EmbedBuilder {
         Object.assign(this.data, updated.data);
         return this;
     }
-    public has(property: keyof Omit<EmbedPlusData, keyof EmbedPlusOptions>){
+    public has(property: keyof EmbedPlusData){
         return Boolean(this.data[property]);
     }
     public toArray(): EmbedPlusBuilder[]{
         return Array.from([this]);
+    }
+    /**
+     * 
+     * @param data 
+     * @param space  Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
+     * @returns AttachmentBuilder
+     * 
+     * Create a json attachment file from this embed
+     */
+    public toAttachment(data?: AttachmentData, space = 2){
+        return new AttachmentBuilder(
+            Buffer.from(this.toString(space), "utf-8"), 
+            data??={ name: "embed.json" }
+        );
     }
     public toString(space = 2){
         return JSON.stringify(this, null, space);
@@ -87,19 +102,21 @@ export class EmbedPlusBuilder extends EmbedBuilder {
     public setBorderColor(color: EmbedPlusColorData | null): this {
         if (color === null){
             this.setColor("#2B2D31");
+        } else if (typeof color === "number"){
+            this.update({ color });
         } else {
             this.setColor(color as ColorResolvable);
         }
         return this;
     }
     public setAsset(asset: "thumbnail" | "image", source: EmbedPlusAssetData){
-        const assetData = createEmbedAsset(source);
-        
-        if (!assetData?.url) return this;
-
-        asset === "image" 
-        ? this.setImage(assetData.url)
-        : this.setThumbnail(assetData.url);
+        if (source === null){
+            asset === "image" 
+            ? this.setImage(source)
+            : this.setThumbnail(source);
+        } else {
+            this.update({ [asset]: source });
+        }
         return this;
     }
     public static fromInteraction(interaction: InteractionWithEmbeds, index=0, data: EmbedPlusData = {}){

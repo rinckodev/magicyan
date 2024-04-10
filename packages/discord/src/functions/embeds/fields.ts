@@ -50,7 +50,7 @@ export class EmbedPlusFields {
      * @param index Field index
      */
     public get(index: number): EmbedPlusFieldData | undefined 
-    public get(query: string | number): EmbedPlusFieldData | undefined {
+    public get(query: unknown): EmbedPlusFieldData | undefined {
         const isIndex = typeof query == "number";
         if (isIndex) return this.fields[query];
         return this.fields.find(f => f.name === query);
@@ -63,6 +63,9 @@ export class EmbedPlusFields {
     }
     public set(...fields: EmbedPlusFieldData[]){
         this.embed.setFields(fields);
+    }
+    public map<U>(callback: (value: EmbedPlusFieldData, index: number, array: EmbedPlusFieldData[]) => U): U[] {
+        return this.toArray().map(callback);
     }
     public update(predicate: string | number | FieldPredicate, field: Partial<EmbedPlusFieldData>): boolean {
         const index = this.getPredicateIndex(predicate);
@@ -79,6 +82,13 @@ export class EmbedPlusFields {
         if (!embedField) return false;
         this.embed.spliceFields(index, 1);
         return true;
+    }
+    /**
+     * Remove all fields
+     */
+    public clear(): this {
+        this.fields = [];
+        return this;
     }
     public toArray(){
         return Array.from(this);

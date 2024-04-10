@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ApplicationCommandType, ButtonBuilder, ButtonStyle, Client } from "discord.js";
-import { createEmbed } from "../src";
+import { createEmbed, createEmbedAuthor } from "../src";
 
 const client = new Client({
     intents: ["Guilds"]
@@ -23,10 +23,7 @@ client.on("interactionCreate", interaction => {
     if (!interaction.inCachedGuild()) return;
     if (interaction.isChatInputCommand()){
         const embed = createEmbed({
-            extends: {
-                title: "testando"
-            },
-            color: "Random",
+            author: createEmbedAuthor(interaction.user,{ url: interaction.guild.iconURL() }),
             description: "Eae",
         });
         const row = new ActionRowBuilder<ButtonBuilder>({components: [
@@ -36,7 +33,8 @@ client.on("interactionCreate", interaction => {
                 style: ButtonStyle.Success
             })
         ]});
-        interaction.reply({ embeds: [embed], components: [row] });
+
+        interaction.reply({ embeds: [embed], components: [row], files: [embed.toAttachment()] });
 
         embed.fields.get(1);
         return;
