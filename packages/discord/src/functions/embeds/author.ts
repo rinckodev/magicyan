@@ -1,27 +1,23 @@
-import { Guild, GuildMember, ImageURLOptions, User } from "discord.js";
+import { ClientUser, Guild, GuildMember, ImageURLOptions, User } from "discord.js";
 
 interface MemberAuthor {
+    type: GuildMember;
     property?: "username" | "displayName" | "id" | "globalName" | "nickname"
 }
 interface UserAuthor {
+    type: User | ClientUser;
     property?: "username" | "displayName" | "id" | "globalName"
 }
 interface GuildAuthor {
+    type: Guild;
     property?: "name" | "id"
 }
-type AuthorType = Guild | GuildMember | User;
+type AuthorOption = MemberAuthor | UserAuthor | GuildAuthor;
+type AuthorType = Guild | GuildMember | User | ClientUser;
 
 type CreateEmbedAuthorOptions<T extends AuthorType> = {
     iconURL?: string; url?: string | null; prefix?: string; suffix?: string;
-} & ImageURLOptions & (
-    T extends User 
-        ? UserAuthor :
-    T extends GuildMember
-        ? MemberAuthor :
-    T extends Guild
-        ? GuildAuthor :
-    never
-)
+} & ImageURLOptions & Omit<Extract<AuthorOption, { type: T }>, "type">
 
 export function createEmbedAuthor<T extends AuthorType>(type: T, options?: CreateEmbedAuthorOptions<T>){
     const { prefix="", suffix="", url, iconURL: icon, extension, forceStatic, size=1024 } = options??{};

@@ -1,4 +1,4 @@
-import { APIEmbed, AttachmentBuilder, AttachmentData, ColorResolvable, Embed, EmbedBuilder, EmbedData } from "discord.js";
+import { APIEmbed, ColorResolvable, Embed, EmbedBuilder, EmbedData } from "discord.js";
 import { chars } from "../../constants/chars";
 import { createEmbedAsset, EmbedPlusAssetData } from "./assets";
 import { EmbedPlusFieldData, EmbedPlusFields } from "./fields";
@@ -81,20 +81,6 @@ export class EmbedPlusBuilder extends EmbedBuilder {
     }
     public toArray(): EmbedPlusBuilder[]{
         return Array.from([this]);
-    }
-    /**
-     * 
-     * @param data 
-     * @param space  Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
-     * @returns AttachmentBuilder
-     * 
-     * Create a json attachment file from this embed
-     */
-    public toAttachment(data?: AttachmentData, space = 2){
-        return new AttachmentBuilder(
-            Buffer.from(this.toString(space), "utf-8"), 
-            data??={ name: "embed.json" }
-        );
     }
     public toString(space = 2){
         return JSON.stringify(this, null, space);

@@ -22,8 +22,11 @@ client.on("ready", (c) => {
 client.on("interactionCreate", interaction => {
     if (!interaction.inCachedGuild()) return;
     if (interaction.isChatInputCommand()){
+
+        const clientUser = interaction.guild.members.me!;
+
         const embed = createEmbed({
-            author: createEmbedAuthor(interaction.user,{ url: interaction.guild.iconURL() }),
+            author: createEmbedAuthor(clientUser, { url: interaction.guild.iconURL() }),
             description: "Eae",
         });
         const row = new ActionRowBuilder<ButtonBuilder>({components: [
@@ -34,7 +37,7 @@ client.on("interactionCreate", interaction => {
             })
         ]});
 
-        interaction.reply({ embeds: [embed], components: [row], files: [embed.toAttachment()] });
+        interaction.reply({ embeds: [embed], components: [row], files: [] });
 
         embed.fields.get(1);
         return;
@@ -45,9 +48,7 @@ client.on("interactionCreate", interaction => {
         embed.setDescription("testando2");
         
         interaction.update({ embeds: [embed] });
-    }
-
-    
+    }    
 });
 
 process.on("SIGINT", () => process.exit(0));
