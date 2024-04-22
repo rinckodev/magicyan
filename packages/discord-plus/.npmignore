@@ -1,7 +1,0 @@
-src
-assets
-node_modules
-package-lock.json
-tsconfig.json
-/dev-only
-.env

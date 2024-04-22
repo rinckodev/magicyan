@@ -37,5 +37,5 @@ interface Evnt<Key extends keyof ClientEvents>{
 }
 
 function E<Key extends keyof ClientEvents>(data: Evnt<Key>){
-
+    
 }
