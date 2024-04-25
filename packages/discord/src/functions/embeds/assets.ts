@@ -1,4 +1,4 @@
-import { EmbedAssetData, Attachment, AttachmentBuilder } from "discord.js";
+import { type EmbedAssetData, Attachment, AttachmentBuilder } from "discord.js";
 
 export type EmbedPlusAssetData = string | Attachment | AttachmentBuilder | EmbedAssetData | undefined | null;
 

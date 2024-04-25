@@ -1,4 +1,4 @@
-import { ClientUser, Guild, GuildMember, ImageURLOptions, User } from "discord.js";
+import { type ImageURLOptions, type ClientUser, Guild, GuildMember, User } from "discord.js";
 
 interface MemberAuthor {
     type: GuildMember;

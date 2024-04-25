@@ -3,11 +3,12 @@ export * from "./constants/client";
 
 export * from "./functions/misc";
 
-
 export * from "./functions/embeds/assets";
 export * from "./functions/embeds/author";
 export * from "./functions/embeds/embedplus";
 export * from "./functions/embeds/footer";
+export * from "./functions/embeds/files";
+
 export * from "./functions/components";
 
 export * from "./functions/channels";

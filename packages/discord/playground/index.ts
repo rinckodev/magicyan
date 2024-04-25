@@ -43,8 +43,15 @@ client.on("interactionCreate", interaction => {
         return;
     }
     if (interaction.isMessageComponent()){
-        const embed = createEmbed({ interaction });
+        const imageurl = "https://cdn.discordapp.com/avatars/264620632644255745/accca9cbaef6f1914cac640d3017c803.webp?size=1024";
+        const embed = createEmbed({ from: interaction });
 
+        console.log(new URL(imageurl));
+
+        embed.setElementImageURL("author", null);
+        embed.setElementImageURL("thumbnail", null);
+        embed.setElementImageURL("image", null);
+        embed.setElementImageURL("footer", null);
         embed.setDescription("testando2");
         
         interaction.update({ embeds: [embed] });

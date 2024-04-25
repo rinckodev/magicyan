@@ -1,11 +1,11 @@
-import { APIEmbed, ColorResolvable, Embed, EmbedBuilder, EmbedData } from "discord.js";
+import { type APIEmbed, type ColorResolvable, type Embed, type EmbedData, AttachmentBuilder, AttachmentData, EmbedBuilder } from "discord.js";
+import { type EmbedPlusAssetData, createEmbedAsset } from "./assets";
+import { type EmbedPlusFieldData, EmbedPlusFields } from "./fields";
+import { type EmbedPlusFooterData, createEmbedFooter } from "./footer";
 import { chars } from "../../constants/chars";
-import { createEmbedAsset, EmbedPlusAssetData } from "./assets";
-import { EmbedPlusFieldData, EmbedPlusFields } from "./fields";
-import { createEmbedFooter, EmbedPlusFooterData } from "./footer";
 
-type EmbedPlusColorData = string&{} | ColorResolvable | null;
-type EmbedPlusAuthorData = { name: string, url?: string, iconURL?: string }
+export type EmbedPlusColorData = string&{} | ColorResolvable | null;
+export type EmbedPlusAuthorData = { name: string, url?: string, iconURL?: string }
 
 export interface EmbedPlusData {
     title?: string | null;
@@ -33,7 +33,6 @@ interface EmbedPlusOptions extends EmbedPlusData {
     extends?: EmbedPlusData | AnyEmbedData | EmbedBuilder;
     mergeFields?: boolean;
 }
-
 export class EmbedPlusBuilder extends EmbedBuilder {
     public fields: EmbedPlusFields;
     constructor(data: EmbedPlusOptions){
@@ -85,6 +84,10 @@ export class EmbedPlusBuilder extends EmbedBuilder {
     public toString(space = 2){
         return JSON.stringify(this, null, space);
     }
+    public toAttachment(data: AttachmentData = { name: "embed.png" }, space = 2){
+        const buffer = Buffer.from(this.toString(space), "utf-8");
+        return new AttachmentBuilder(buffer, data);
+    }
     public setBorderColor(color: EmbedPlusColorData | null): this {
         if (color === null){
             this.setColor("#2B2D31");
@@ -96,12 +99,32 @@ export class EmbedPlusBuilder extends EmbedBuilder {
         return this;
     }
     public setAsset(asset: "thumbnail" | "image", source: EmbedPlusAssetData){
-        if (source === null){
-            asset === "image" 
-            ? this.setImage(source)
-            : this.setThumbnail(source);
-        } else {
-            this.update({ [asset]: source });
+        this.update({ [asset]: source });
+        return this;
+    }
+    public setElementImageURL(element: "thumbnail" | "image" | "author" | "footer", url: string | null){
+        switch(element){
+            case "thumbnail":
+            case "image":{
+                this.setAsset(element, url);
+                break;
+            }
+            case "author":{
+                const author = this.data.author;
+                this.setAuthor({
+                    name: author?.name??chars.invisible,
+                    iconURL: url??undefined,
+                });
+                break;
+            }
+            case "footer":{
+                const footer = this.data.footer;
+                this.setFooter({
+                    text: footer?.text??chars.invisible,
+                    iconURL: url??undefined,
+                });
+                break;
+            }
         }
         return this;
     }
@@ -116,13 +139,18 @@ export class EmbedPlusBuilder extends EmbedBuilder {
 export type EmbedPlusProperty<P extends keyof EmbedPlusData> = EmbedPlusData[P];
 
 interface CreateEmbedOptions<B extends boolean> extends EmbedPlusOptions {
-    array?: B, interaction?: InteractionWithEmbeds;
+    array?: B, 
+    from?: InteractionWithEmbeds | MessageWithEmbeds;
+    fromIndex?: number;
 }
 type CreateEmbedReturn<B> = undefined extends B ? EmbedPlusBuilder : false extends B ? EmbedPlusBuilder : EmbedPlusBuilder[];
 export function createEmbed<B extends boolean>(options: CreateEmbedOptions<B>): CreateEmbedReturn<B>{
-    const { array=false, interaction, ...data } = options;
-    const embed = interaction 
-    ? EmbedPlusBuilder.fromInteraction(interaction, 0, data) 
+    const { array=false, from, fromIndex=0, ...data } = options;
+
+    const embed = from
+        ? "message" in from ? EmbedPlusBuilder.fromInteraction(from, fromIndex, data) 
+        : EmbedPlusBuilder.fromMessage(from, fromIndex, data)
     : new EmbedPlusBuilder(data);
+
     return (array ? [embed] : embed) as CreateEmbedReturn<B>; 
 }

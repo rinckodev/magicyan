@@ -1,4 +1,4 @@
-import { ChannelType, type CommandInteractionOption, type Guild } from "discord.js";
+import { type CommandInteractionOption, type Guild, ChannelType } from "discord.js";
 
 type GuildChannelType = Exclude<ChannelType, ChannelType.DM>;
 type FindChannelFilter<T extends GuildChannelType> = (channel: GetChannelType<T>) => boolean;

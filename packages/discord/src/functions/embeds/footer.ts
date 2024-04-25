@@ -1,5 +1,5 @@
+import { type EmbedFooterData } from "discord.js";
 import { notFound } from "@magicyan/core";
-import { EmbedFooterData } from "discord.js";
 import { chars } from "../../constants/chars";
 
 export type EmbedPlusFooterData = { text?: string | null; iconURL?: string | null; }

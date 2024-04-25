@@ -1,4 +1,4 @@
-import { ApplicationCommand, Client, Guild } from "discord.js";
+import { type ApplicationCommand, type Guild, Client } from "discord.js";
 
 type FindCommandFilter = (command: ApplicationCommand) => boolean
 

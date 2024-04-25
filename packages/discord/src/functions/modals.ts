@@ -1,4 +1,4 @@
-import { ActionRowBuilder, Collection, ModalSubmitFields, TextInputBuilder, TextInputComponent, TextInputComponentData } from "discord.js";
+import { type Collection, type ModalSubmitFields, type TextInputComponent, type TextInputComponentData, ActionRowBuilder, TextInputBuilder } from "discord.js";
 import { createRow } from "./components";
 
 type TextInputData = Omit<TextInputComponentData, "type">;
