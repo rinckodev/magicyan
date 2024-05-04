@@ -13,17 +13,18 @@ const client = new Client({
 
 initDiscordEvents(client);
 
-client.on("extendedChannelDelete", (channel, executor) => {
-    console.log(executor.displayName, channel);
-});
+// client.on("extendedRoleCreate", (role, executor) => {
+//     console.log(role);
+//     console.log(executor.displayName);
+// });
 
 client.on("ready", () => {
     console.log("Bot online");
 });
 
-client.on("webhookMessageCreate", (message, webhook) => {
-    console.log(message.content);
-    console.log(webhook.name);
+client.on("messageCreate", a => {
+    const g = a.guild?.members.fetch("test");
+    console.log(g);
 });
 
 client.login(process.env.BOT_TOKEN);
@@ -37,5 +38,7 @@ interface Evnt<Key extends keyof ClientEvents>{
 }
 
 function E<Key extends keyof ClientEvents>(data: Evnt<Key>){
-    
+    data;
 }
+
+E;

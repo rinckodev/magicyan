@@ -1,11 +1,15 @@
-import { AuditLogEvent, Role, type ClientEvents } from "discord.js";
+import { type GuildMember, AuditLogEvent, ClientEvents, Role} from "discord.js";
 
-export function extendedRoleCreate(...[auditLogEntry, guild]: ClientEvents["guildAuditLogEntryCreate"]){
-    const { executorId, action, target } = auditLogEntry;
-    if (action !== AuditLogEvent.RoleCreate || !(target instanceof Role)) return;    
+export type ExtendedRoleCreateEvent = [role: Role, executor: GuildMember]
+
+export function extendedRoleCreate([auditLogEntry, guild]: ClientEvents["guildAuditLogEntryCreate"]) {
+    const { executorId, action, target, targetType } = auditLogEntry;
+    if (action !== AuditLogEvent.RoleCreate) return;
+    if (targetType !== "Role") return;
+    if (!executorId) return;
     
-    const executor = guild.members.cache.get(executorId ?? "");
-    if (!executor) return;
+    const member = guild.members.cache.get(executorId);
+    if (!member) return;
 
-    guild.client.emit("extendedRoleCreate", target, executor);
+    guild.client.emit("extendedRoleCreate", target as Role, member);
 }

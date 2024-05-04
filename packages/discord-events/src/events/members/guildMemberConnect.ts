@@ -1,8 +1,12 @@
-import type { VoiceState } from "discord.js";
+import type { GuildMember, VoiceBasedChannel, VoiceState } from "discord.js";
 
-export function guildMemberConnect(newState: VoiceState){
-    const { client, member, channel } = newState;
-    if (member && channel){
-        client.emit("guildMemberConnect", member, channel);
-    }
+export type GuildMemberConnectEvent = [member: GuildMember, channel: VoiceBasedChannel];
+
+export function guildMemberConnect(oldState: VoiceState, newState: VoiceState){
+    if (oldState.channel !== null) return;
+    if (newState.channel === null) return;
+
+    if (!newState.member) return;
+
+    newState.client.emit("guildMemberConnect", newState.member, newState.channel);
 }

@@ -1,9 +1,15 @@
-import type { Message } from "discord.js";
+import { Message, Webhook } from "discord.js";
+
+export type WebhookMessageCreate = [message: Message<true>, webhook: Webhook];
 
 export async function webhookMessageCreate(message: Message){
-    if (!message.inGuild() || !message.webhookId) return;
-    
+    if (!message.webhookId) return;
+    if (!message.inGuild()) return;
+
+    const { client } = message;
+
     const webhook = await message.fetchWebhook().catch(() => null);
     if (!webhook) return;
-    message.client.emit("webhookMessageCreate", message, webhook);
+
+    client.emit("webhookMessageCreate", message, webhook);
 }

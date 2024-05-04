@@ -1,23 +1,32 @@
-import { AuditLogEvent, type VoiceState } from "discord.js";
+import { AuditLogEvent, type GuildMember, type VoiceBasedChannel, type VoiceState } from "discord.js";
+
+export type GuildMemberMovedEvent = [
+    member: GuildMember, executor: GuildMember, 
+    oldChannel: VoiceBasedChannel, newChannel: VoiceBasedChannel,
+];
 
 export function guildMemberMoved(oldState: VoiceState, newState: VoiceState){
-    if (!oldState.channel || !newState.channel) return;
-    if (!newState.member || !newState.guild) return;
+    if (!oldState.channel) return;
+    if (!newState.channel) return;
+    if (oldState.channelId === newState.channelId) return;
+    
+    const { member, guild, client } = newState;
 
-    const { member, guild, client, channel: newStateChannel } = newState;
-    const oldStateChannel = oldState.channel;
+    if (!member) return;
 
-    guild.fetchAuditLogs({ type: AuditLogEvent.MemberMove, limit: 1 })
+    const newChannel = newState.channel;
+    const oldChannel = oldState.channel;
+
+    guild.fetchAuditLogs({ type: AuditLogEvent.MemberMove })
     .then(({ entries }) => {
-        const entry = entries.first();
-        if (!entries.size || !entry) return;
-        if (!entry.executor) return;
+        const entry = entries.find(entry => entry.targetId === member.id);
+
+        if (!entry || !entry.executor) return;
     
-        const whoMoved = guild.members.cache.get(entry.executor.id);
-        if (!whoMoved) return;
+        const executor = guild.members.cache.get(entry.executor.id);
+        if (!executor) return;
     
-    
-        client.emit("guildMemberMoved", member, whoMoved, oldStateChannel, newStateChannel);
+        client.emit("guildMemberMoved", member, executor, oldChannel, newChannel);
     })
     .catch(() => null);
 }

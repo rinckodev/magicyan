@@ -35,15 +35,15 @@ See below the list of all events
 
 | Event | Parameters | Description |
 | ----- | --------- |------------ |
-| webhookMessageCreate | `message`, `webhook` | Triggered when a webhook message is created. | 
-| guildMemberConnect | `member`, `voiceChannel` | Triggered when a member connect to voice channel in a guild. |
-| guildMemberDisconnect | `member`, `voiceChannel`  | Triggered when a member disconnect from voice channel in a guild. |
-| guildMemberMoved | `member`, `executor`, `oldVoiceChannel`, `newVoiceChannel` | Triggered when a member is moved from one voice channel to another. |
-| guildMemberTimeoutAdd | `member`, `executor`, `expireAt`, `reason` | Triggered when a member gets a timeout |
-| guildMemberTimeoutAdd | `member`, `executor` | Triggered when a member has a timeout removed |
-| userKick | `user`, `executor`, `reason`, `guild` | Triggered when a user is kicked from the guild |
-| userBanAdd | `user`, `executor`, `reason`, `guild` | Triggered when a user is banned from the guild |
-| userBanRemove | `user`, `executor`, `reason`, `guild` | Triggered when a user's ban is removed |
-| extendedRoleCreate | `role`, `executor` | Triggered when a role is created |
-| extendedRoleUpdate | `role`, `changes`, `executor` | Triggered when a role is updated |
-| extendedRoleDelete | `deletedRole`, `executor` | Triggered when a role is deleted |
+| webhookMessageCreate | `message`, `webhook` | Emitted when a webhook message is created. | 
+| guildMemberConnect | `member`, `voiceChannel` | Emitted when a member connect to voice channel in a guild. |
+| guildMemberDisconnect | `member`, `voiceChannel`  | Emitted when a member disconnect from voice channel in a guild. |
+| guildMemberMoved | `member`, `executor`, `oldVoiceChannel`, `newVoiceChannel` | Emitted when a member is moved from one voice channel to another. |
+| guildMemberTimeoutAdd | `member`, `executor`, `expireAt`, `reason` | Emitted when a member gets a timeout |
+| guildMemberTimeoutAdd | `member`, `executor` | Emitted when a member has a timeout removed |
+| userKick | `user`, `executor`, `reason`, `guild` | Emitted when a user is kicked from the guild |
+| userBanAdd | `user`, `executor`, `reason`, `guild` | Emitted when a user is banned from the guild |
+| userBanRemove | `user`, `executor`, `reason`, `guild` | Emitted when a user's ban is removed |
+| extendedRoleCreate | `role`, `executor` | Emitted when a role is created |
+| extendedRoleUpdate | `role`, `changes`, `executor` | Emitted when a role is updated |
+| extendedRoleDelete | `deletedRole`, `executor` | Emitted when a role is deleted |

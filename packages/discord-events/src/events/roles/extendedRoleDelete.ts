@@ -1,11 +1,20 @@
-import { AuditLogEvent, type ClientEvents } from "discord.js";
+import { type GuildMember, type Role, AuditLogEvent } from "discord.js";
 
-export function extendedRoleDelete(...[auditLogEntry, guild]: ClientEvents["guildAuditLogEntryCreate"]){
-    const { executorId, action, targetId } = auditLogEntry;
-    if (action !== AuditLogEvent.RoleDelete || !targetId) return;    
-    
-    const executor = guild.members.cache.get(executorId ?? "");
-    if (!executor) return;
+export type ExtendedRoleDeleteEvent = [role: Role, executor: GuildMember]
 
-    guild.client.emit("extendedRoleDelete", { id: targetId }, executor);
+export function extendedRoleDelete(role: Role) {
+    const { guild } = role;
+
+    guild.fetchAuditLogs({ type: AuditLogEvent.RoleDelete })
+    .then(({ entries }) => {
+        const auditLogEntry = entries.find(entry => entry.targetId === role.id);
+
+        if (!auditLogEntry || !auditLogEntry.executorId) return;
+
+        const member = guild.members.cache.get(auditLogEntry.executorId);
+        if (!member) return;
+
+        guild.client.emit("extendedRoleCreate", role, member);
+    })
+    .catch(() => {});
 }
