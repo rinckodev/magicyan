@@ -1,6 +1,6 @@
 {
   "name": "@magicyan/discord",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Simple functions to facilitate discord bot development",
   "license": "MIT",
   "type": "module",
@@ -35,13 +35,13 @@
     "dev": "tsx --env-file .env playground/index.ts"
   },
   "devDependencies": {
-    "tsx": "^4.9.1",
+    "tsx": "^4.10.0",
     "unbuild": "^2.0.0"
   },
   "dependencies": {
-    "@magicyan/core": "^1.0.18"
+    "@magicyan/core": "^1.0.19"
   },
   "peerDependencies": {
-    "discord.js": "^14.15.1"
+    "discord.js": "^14.15.2"
   }
 }

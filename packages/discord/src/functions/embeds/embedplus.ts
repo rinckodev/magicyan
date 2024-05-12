@@ -139,7 +139,7 @@ export class EmbedPlusBuilder extends EmbedBuilder {
 export type EmbedPlusProperty<P extends keyof EmbedPlusData> = EmbedPlusData[P];
 
 interface CreateEmbedOptions<B extends boolean> extends EmbedPlusOptions {
-    array?: B, 
+    array?: B,
     from?: InteractionWithEmbeds | MessageWithEmbeds;
     fromIndex?: number;
 }

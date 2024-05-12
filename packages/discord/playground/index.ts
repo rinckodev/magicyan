@@ -1,8 +1,28 @@
-import { ActionRowBuilder, ApplicationCommandType, ButtonBuilder, ButtonStyle, Client } from "discord.js";
-import { createEmbed, createEmbedAuthor } from "../src";
+import { ActionRowBuilder, ApplicationCommandOptionType, ApplicationCommandType, ButtonBuilder, ButtonStyle, Client } from "discord.js";
+import { createEmbed, createEmbedAuthor, createSubCommandsGroups } from "../src";
 
 const client = new Client({
     intents: ["Guilds"]
+});
+
+const a = createSubCommandsGroups({
+    manage: {
+        description: "test",
+        subcommands: {
+            nicks: {
+                description: "test",
+            },
+            coins: {
+                description: "salve",
+                options: {
+                    player: {
+                        type: ApplicationCommandOptionType.User,
+                        description: "test",
+                    }
+                }
+            }
+        }
+    }
 });
 
 client.login(process.env.BOT_TOKEN);
@@ -15,6 +35,7 @@ client.on("ready", (c) => {
             name: "test",
             description: "test",
             type: ApplicationCommandType.ChatInput,
+            options: a,
         }
     ]);
 });

@@ -13,10 +13,6 @@ export class EmbedPlusFields {
         return this.embed.data.fields ?? [];
     }
     constructor(embed: EmbedPlusBuilder){
-        Object.defineProperty(this, "embed", {
-            enumerable: false,
-            value: embed
-        });
         this.embed = embed;
     }
     [Symbol.iterator](){
