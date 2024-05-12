@@ -13,7 +13,6 @@ export function hexToRgb(color: Color): number{
     }
     return parseInt(color, 16);
 }
-
 /**
  * Converts an RGB number to a hexadecimal color string.
  *

@@ -1,3 +1,4 @@
+type MaybeString = string | null | undefined;
 /**
  * Just returns null
  * @returns null
@@ -5,7 +6,6 @@
 export function toNull(){
     return null;
 }
-
 /**
  * Receives a possibly null value and returns the value or undefined if falsy
  * @param value Any value
@@ -25,8 +25,8 @@ export function notFound<T>(value: T): T & {} | undefined {
  * // This is javascript
  * ```
  */
-export function brBuilder(...text: (string | string[])[]){
-    return text.flat().join("\n");
+export function brBuilder(...text: (MaybeString | MaybeString[])[]): string {
+    return text.flat().filter(nonnullish).join("\n");
 }
 
 /**
@@ -40,10 +40,9 @@ export function brBuilder(...text: (string | string[])[]){
  * console.log(text) // Administrator Rincko has been promoted
  * ```
  */
-export function spaceBuilder(...text: (string | string[])[]){
-    return text.flat().join(" ");
+export function spaceBuilder(...text: (MaybeString | MaybeString[])[]): string {
+    return text.flat().filter(nonnullish).join(" ");
 }
-
 /**
  * Replace the text with object variables
  * @param text 
@@ -75,7 +74,6 @@ export function replaceText<R extends Record<string, any>>(text: string, replace
     }
     return result;
 }
-
 /**
  * Capitalizes the first letter of a word and converts the remaining letters to lowercase.
  *
@@ -100,4 +98,8 @@ export function captalize(word: string, allWords: boolean = false): string {
 
 export function limitText(text: string, maxLength: number, endText: string = ""){
     return text.length >= maxLength ? text.slice(0, maxLength) + endText : text;
+}
+
+function nonnullish(v: unknown): boolean {
+    return v !== null && v !== undefined;
 }
