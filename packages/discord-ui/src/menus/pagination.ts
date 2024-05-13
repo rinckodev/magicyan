@@ -1,82 +1,123 @@
-import { ButtonBuilder, ComponentType } from "discord.js";
-import { toMergeObject } from "../helpers/utils";
-import { PaginationMenu, PaginationMenuButtons, PaginationMenutOptions } from "./paginationManager";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, EmbedBuilder, InteractionButtonComponentData, Message } from "discord.js";
 
-export async function pagination<T extends boolean>(options: PaginationMenutOptions<T>){
-    const { render, embeds, components, buttons, onClick, filter, onClose, onTimeout, time } = options;
+type PaginationMenuButtons = Record<"next" | "home" | "previous" | "close" | "action", InteractionButtonComponentData>;
+const originalButtons: PaginationMenuButtons = {
+    next: {
+        type: ComponentType.Button,
+        customId: "[discordui/menu/pagination/next]",
+        label: ">", style: ButtonStyle.Primary
+    },
+    home: {
+        type: ComponentType.Button,
+        customId: "[discordui/menu/pagination/home]",
+        label: ".", style: ButtonStyle.Secondary
+    },
+    previous: {
+        type: ComponentType.Button,
+        customId: "[discordui/menu/pagination/previous]",
+        label: "<", style: ButtonStyle.Secondary
+    },
+    close: {
+        type: ComponentType.Button,
+        customId: "[discordui/menu/pagination/close]",
+        label: "✖", style: ButtonStyle.Danger
+    },
+    action: {
+        type: ComponentType.Button,
+        customId: "[discordui/menu/pagination/action]",
+        label: "!", style: ButtonStyle.Success
+    }
+};
+export interface CustomizePaginationMenuButtons {
+    next?: Partial<Omit<InteractionButtonComponentData, "disabled" | "customId" | "type">>;
+    home?: Partial<Omit<InteractionButtonComponentData, "disabled" | "customId" | "type">>;
+    previous?: Partial<Omit<InteractionButtonComponentData, "disabled" | "customId" | "type">>;
+    close?: Partial<Omit<InteractionButtonComponentData, "disabled" | "customId" | "type">>;
+    action?: Partial<Omit<InteractionButtonComponentData, "disabled" | "customId" | "type">>;
+}
+export function customizePaginationMenu(customizedButtons: CustomizePaginationMenuButtons, buttons = originalButtons){
+    const { previous, home, next, close, action } = customizedButtons;
+    if (previous) Object.assign(buttons.previous, previous);
+    if (home) Object.assign(buttons.home, home);
+    if (next) Object.assign(buttons.next, next);
+    if (close) Object.assign(buttons.close, close);
+    if (action) Object.assign(buttons.action, action);
+}
 
-    const defaultButtons = PaginationMenu.defaultButtons;
+interface PaginationMenuOptions {
+    buttons?: CustomizePaginationMenuButtons;
+    embeds: EmbedBuilder[];
+    components?(buttons: PaginationMenuButtons): ActionRowBuilder<ButtonBuilder>[]
+    render(embeds: EmbedBuilder[], components: ActionRowBuilder<ButtonBuilder>[]): PromiseLike<Message>;
+    onClick?(interaction: ButtonInteraction, embed: EmbedBuilder): void;
+    onClose?(interaction: ButtonInteraction): void;
+    filter?(interaction: ButtonInteraction): boolean;
+    time?: number;
+    onTimeout?(): void;
+}
+export async function pagination(options: PaginationMenuOptions){
+    const { embeds, components: componentsRender, filter, time } = options;
 
-    const buttonsData = Object.entries(toMergeObject(defaultButtons, buttons??{})).reduce(
-        (prev, [key, data]) => Object.assign(prev, { [key]: { ...data,
-            customId: `[discord-ui/${key}/${data.customId}]`
-        } }), {}
-    ) as Required<PaginationMenuButtons>;
+    const localButtons: PaginationMenuButtons = Object.create(originalButtons);
+    if (options.buttons) customizePaginationMenu(options.buttons, localButtons);
 
-    const paginationButtons = {
-        previous: new ButtonBuilder(buttonsData.previous),
-        home: new ButtonBuilder(buttonsData.home),
-        next: new ButtonBuilder(buttonsData.next),
-        close: new ButtonBuilder(buttonsData.close),
-        action: new ButtonBuilder(buttonsData.action), 
+    localButtons.previous.disabled = true;
+    localButtons.home.disabled = true;
+    if (embeds.length <= 1) localButtons.next.disabled = true;
+
+    const getComponents: () => ActionRowBuilder<ButtonBuilder>[] = () => {
+        return componentsRender 
+        ? componentsRender(localButtons)
+        : [new ActionRowBuilder({ components: [
+            localButtons.previous,
+            localButtons.home,
+            localButtons.next,
+            localButtons.close,
+        ]})]; 
     };
+    
+    const components: ActionRowBuilder<ButtonBuilder>[] = getComponents();
 
-    paginationButtons.previous.setDisabled(true);
-    paginationButtons.home.setDisabled(true);
-
-    const message = await render(embeds[0], components(paginationButtons));
-
+    const message = await options.render([embeds[0]], components);
     const collector = message.createMessageComponentCollector({
-        componentType: ComponentType.Button, time, filter,
+        componentType: ComponentType.Button, time, filter
     });
-
     let index = 0;
-
     collector.on("collect", async interaction => {
-        if (!Object.values(buttonsData).some(d => d.customId === interaction.customId)) return;
-        
-        paginationButtons.home.setDisabled(false);
-        paginationButtons.previous.setDisabled(false);
-        paginationButtons.next.setDisabled(false);
+        localButtons.home.disabled = false;
+        localButtons.previous.disabled = false;
+        localButtons.next.disabled = false;
 
         switch(interaction.customId){
-            case buttonsData.previous.customId: index--; break;
-            case buttonsData.home.customId: index=0; break;
-            case buttonsData.next.customId: {
-                if (index+1 >= embeds.length) break;
-                index++; break;
-            }
-            case buttonsData.close.customId:{
-                collector.stop("close");
-                if (onClose){
-                    onClose(interaction);
+            case localButtons.previous.customId: index--; break;
+            case localButtons.home.customId: index = 0; break;
+            case localButtons.next.customId: index++; break;
+            case localButtons.close.customId: {
+                collector.stop("closed");
+                if (options.onClose){
+                    options.onClose(interaction);
                     return;
                 }
-                await interaction.deferUpdate();
+                await interaction.deferUpdate({ fetchReply: true });
                 await interaction.deleteReply();
                 return;
             }
-            case buttonsData.action.customId:{
-                if (onClick) onClick(interaction, embeds[index]);
+            case localButtons.action.customId: {
+                if (options.onClick) options.onClick(interaction, embeds[index]);
                 return;
             }
         }
 
         if (index === 0){
-            paginationButtons.home.setDisabled(true);
-            paginationButtons.previous.setDisabled(true);
+            localButtons.home.disabled = true;
+            localButtons.previous.disabled = true;
         }
         if (index+1 >= embeds.length){
-            paginationButtons.next.setDisabled(true);
+            localButtons.next.disabled = true;
         }
-        interaction.update({ 
-            embeds: [embeds[index]], 
-            components: components(paginationButtons) 
-        });
+        interaction.update({ embeds: [embeds[index]], components: getComponents() });
     });
     collector.on("end", (_, reason) => {
-        if (reason === "time" && time && onTimeout) {
-            onTimeout();
-        }
+        if (reason === "time" && options.onTimeout) options.onTimeout();
     });
 }

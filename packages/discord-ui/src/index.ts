@@ -1,5 +1,5 @@
-export * from "./main";
+export { discordUI } from "./main";
 
-export * from "./prompts/confirm";
-export * from "./menus/pagination";
-export * from "./menus/multimenu";
+export { confirm } from "./prompts/confirm";
+export { pagination } from "./menus/pagination";
+export { multimenu } from "./menus/multimenu";

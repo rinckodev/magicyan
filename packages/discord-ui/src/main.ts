@@ -1,30 +1,36 @@
-import { MultimenuMenu, MultimenuMenuButtons, MultimenuMenuSelect, MultiMenuViewType } from "./menus/multimenuManager";
-import { PaginationMenu, PaginationMenuButtons } from "./menus/paginationManager";
-import { ConfirmPrompt, ConfirmPromptButtons } from "./prompts/confirmManager";
+import { customizeMultimenuMenuButtons, customizeMultimenuMenuOptions, type CustomizeMultimenuMenuButtons, type MultiMenuViewType } from "./menus/multimenu";
+import { customizePaginationMenu, type CustomizePaginationMenuButtons } from "./menus/pagination";
+import { customizeConfirmPrompt, type CustomizeConfirmPromptButtons } from "./prompts/confirm";
 
-interface DiscordUiDefaults {
+interface DiscordUIDefaults {
     prompts?: {
         confirm?: {
-            buttons?: ConfirmPromptButtons
+            buttons?: CustomizeConfirmPromptButtons
         }
     },
     menus?: {
         pagination?: {
-            buttons?: PaginationMenuButtons
+            buttons?: CustomizePaginationMenuButtons
         },
         multimenu?: {
             viewType?: MultiMenuViewType
-            buttons?: MultimenuMenuButtons,
-            selectMenu?: MultimenuMenuSelect
+            buttons?: CustomizeMultimenuMenuButtons,
+            placeholder?: string
         }
     }
 }
 
-export function discordUi(defaults?: DiscordUiDefaults){
-    ConfirmPrompt.setDefaultButtons(defaults?.prompts?.confirm?.buttons);
-    PaginationMenu.setDefaultButtons(defaults?.menus?.pagination?.buttons);
-
-    MultimenuMenu.setDefaultButtons(defaults?.menus?.multimenu?.buttons);
-    MultimenuMenu.setDefaultViewType(defaults?.menus?.multimenu?.viewType);
-    MultimenuMenu.setDefaultSelectMenu(defaults?.menus?.multimenu?.selectMenu);
-}
+export function discordUI(defaults: DiscordUIDefaults){
+    if (defaults.prompts?.confirm?.buttons){
+        customizeConfirmPrompt(defaults.prompts.confirm.buttons);
+    }
+    if (defaults.menus?.pagination?.buttons){
+        customizePaginationMenu(defaults.menus.pagination.buttons);
+    }
+    if (defaults.menus?.multimenu){
+        if (defaults.menus.multimenu.buttons){
+            customizeMultimenuMenuButtons(defaults.menus.multimenu.buttons);
+        }
+        customizeMultimenuMenuOptions(defaults.menus.multimenu);
+    }
+};

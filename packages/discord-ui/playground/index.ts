@@ -1,5 +1,5 @@
-import { ActionRowBuilder, ApplicationCommandType, ButtonBuilder, ButtonStyle, Client, EmbedBuilder, Message, Partials, StringSelectMenuBuilder } from "discord.js";
-import { discordUi, multimenu } from "../src";
+import { ApplicationCommandType, ButtonStyle, Client, EmbedBuilder, Message, Partials } from "discord.js";
+import { discordUI, multimenu } from "../src";
 
 const client = new Client({
     intents: [
@@ -10,12 +10,12 @@ const client = new Client({
     partials: [Partials.Channel, Partials.GuildMember, Partials.User]
 });
 
-discordUi({
+discordUI({
     prompts: {
         confirm: {
             buttons: {
                 confirm: { label: "Confirm", style: ButtonStyle.Success },
-                cancel: { label: "Cancel", style: ButtonStyle.Secondary }
+                cancel: { label: "Cancel", style: ButtonStyle.Danger }
             }
         }
     },
@@ -27,6 +27,10 @@ discordUi({
                 next: { label: "Next", style: ButtonStyle.Success },
                 close: { emoji: "❌" }
             }
+        },
+        multimenu: {
+            placeholder: "Select any item",
+            viewType: "blocks"
         }
     }
 });
@@ -43,6 +47,28 @@ client.on("ready", (client) => {
     ]);
 });
 
+// client.on("interactionCreate", async (interaction) => {
+//     if (!interaction.inCachedGuild() || !interaction.isChatInputCommand()) return;
+//     const { channel } = interaction;
+//     if (!channel) return;
+
+//     confirm({
+//         buttons: {
+//             cancel: {
+//                 emoji: "✏️"
+//             }
+//         },
+//         time: 1000,
+//         // components: buttons => [new ActionRowBuilder({ components: [buttons.confirm, buttons.cancel] })],
+//         render: (components) => interaction.reply({
+//             components, fetchReply: true, content: "test"
+//         }),
+//         async onClick(interaction, isCancel) {
+//             interaction.update({ components: [] });
+//             console.log(isCancel);
+//         },
+//     });
+// });
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.inCachedGuild() || !interaction.isChatInputCommand()) return;
     const { channel, guild } = interaction;
@@ -68,6 +94,28 @@ client.on("interactionCreate", async (interaction) => {
         messages.length = 0;
         messages.push(...sliced);
     }
+
+    // pagination({
+    //     components: ({ previous, home, next, action }) => [
+    //         new ActionRowBuilder<ButtonBuilder>({ 
+    //             components: [previous, home, next, action] 
+    //         })
+    //     ],
+    //     embeds: messages.map((m, index, { length }) => new EmbedBuilder({
+    //         title: m.id,
+    //         description: m.content.slice(0, 3000),
+    //         author: { name: m.author.username, iconURL: m.author.displayAvatarURL() },
+    //         color: m.member?.displayColor,
+    //         footer: {
+    //             text: `${index+1}/${length}`,
+    //         }
+    //     })),
+    //     async onClick(interaction, embed) {
+    //         interaction.reply({ ephemeral: true, embeds: [embed] });
+    //     },
+    //     render: (embeds, components) => interaction.editReply({ embeds, components }),
+    // });
+    
     // return messages.reverse();
 
     multimenu({
@@ -76,22 +124,9 @@ client.on("interactionCreate", async (interaction) => {
             description: "test2",
             color: 302010,
         }),
-        components: (buttons, selectMenu) => [
-            new ActionRowBuilder<ButtonBuilder>({
-                components: [
-                    buttons.previous, buttons.home,
-                    buttons.next, buttons.view, buttons.close
-                ],
-            }),
-            new ActionRowBuilder<StringSelectMenuBuilder>({
-                components: [selectMenu],
-            })
-        ],
-        render: (embed, components) => interaction.editReply({
-            embeds: [embed], components
-        }),
+        render: (embeds, components) => interaction.editReply({ embeds, components }),
         items: guild.members.cache.map(m => ({
-            title: m.displayName,
+            // title: m.displayName,
             description: `${m}`,
             option: {
                 label: m.displayName,
