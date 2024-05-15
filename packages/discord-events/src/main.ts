@@ -1,5 +1,5 @@
 import { type Client } from "discord.js";
-import { guildChannelDelete, type GuildChannelDeleteEvent } from "./events/channels/extendedChannelDelete";
+import { extendedChannelDelete, type ExtendedChannelDeleteEvent } from "./events/channels/extendedChannelDelete";
 import { guildMemberConnect, type GuildMemberConnectEvent } from "./events/members/guildMemberConnect";
 import { guildMemberDisconnect, type GuildMemberDisconnectEvent } from "./events/members/guildMemberDisconnect";
 import { guildMemberMoved, type GuildMemberMovedEvent } from "./events/members/guildMemberMoved";
@@ -32,7 +32,7 @@ export function initDiscordEvents(client: Client){
     });
 
     client.on("channelDelete", function(channel){
-        guildChannelDelete(channel);
+        extendedChannelDelete(channel);
     });
 
     client.on("voiceStateUpdate", function(oldState, newState){
@@ -50,7 +50,9 @@ interface MagicyanEvents {
     extendedRoleDelete: ExtendedRoleDeleteEvent;   
     extendedRoleUpdate: ExtendedRoleUpdateEvent;
 
-    guildChannelDelete: GuildChannelDeleteEvent;
+    extendedChannelDelete: ExtendedChannelDeleteEvent;
+
+    guildChannelDelete: ExtendedChannelDeleteEvent;
 
     guildMemberConnect: GuildMemberConnectEvent;
     guildMemberDisconnect: GuildMemberDisconnectEvent;

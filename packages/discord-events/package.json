@@ -1,6 +1,6 @@
 {
     "name": "@magicyan/discord-events",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "description": "Extended events of discord.js",
     "license": "MIT",
     "type": "module",
