@@ -1,3 +1,4 @@
+import { chars } from "../../constants/chars";
 import { EmbedPlusBuilder } from "./embedplus";
 
 export type EmbedPlusFieldData = { name: string; value: string; inline?: boolean }
@@ -54,11 +55,11 @@ export class EmbedPlusFields {
     public find(predicate: FieldPredicate): EmbedPlusFieldData | undefined {
         return this.fields.find(predicate);
     }
-    public push(...fields: EmbedPlusFieldData[]){
-        this.embed.addFields(fields);
+    public push(...fields: Partial<EmbedPlusFieldData>[]){
+        this.embed.addFields(fields.map(this.fieldFormat));
     }
-    public set(...fields: EmbedPlusFieldData[]){
-        this.embed.setFields(fields);
+    public set(...fields: Partial<EmbedPlusFieldData>[]){
+        this.embed.setFields(fields.map(this.fieldFormat));
     }
     public map<U>(callback: (value: EmbedPlusFieldData, index: number, array: EmbedPlusFieldData[]) => U): U[] {
         return this.toArray().map(callback);
@@ -97,4 +98,10 @@ export class EmbedPlusFields {
             default: return -1;
         }
     }
+    private fieldFormat(field: Partial<EmbedPlusFieldData>){
+        return Object.assign(
+            { name: field.name??chars.invisible, value: field.value??chars.invisible },
+            field.inline !== undefined ? { inline: field.inline } : {}, 
+        );
+    } 
 }

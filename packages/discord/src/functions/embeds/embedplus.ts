@@ -11,7 +11,7 @@ export interface EmbedPlusData {
     title?: string | null;
     color?: EmbedPlusColorData | null;
     description?: string | null;
-    url?: string | null;
+    url?: string | null | { toString(): string };
     thumbnail?: EmbedPlusAssetData;
     image?: EmbedPlusAssetData;
     fields?: Partial<EmbedPlusFieldData>[] | null
@@ -53,6 +53,8 @@ export class EmbedPlusBuilder extends EmbedBuilder {
             field.inline !== undefined ? { inline: field.inline } : {}, 
         ));
         const builderData = Object.assign({}, extendsData, embedData, { fields }) as EmbedData;
+
+        if (builderData.url) builderData.url = builderData.url.toString();
 
         const { color, footer, image, thumbnail, timestamp } = embedData;
         if (footer) Object.assign(builderData, { footer: createEmbedFooter(footer) });

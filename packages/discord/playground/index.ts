@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Client } from "discord.js";
-import { createSubCommandsGroups } from "../src";
+import { createEmbed, createSubCommandsGroups } from "../src";
 
 const client = new Client({
     intents: ["Guilds"]
@@ -43,6 +43,17 @@ client.on("ready", (c) => {
 client.on("interactionCreate", interaction => {
     if (!interaction.inCachedGuild()) return;
     if (!interaction.isChatInputCommand()) return;
+
+    const url = new URL("https://discord.com");
+    const embed = createEmbed({
+        url, description: "test",
+        title: "testando"
+    });
+
+    embed.fields.push({ name: "test" });
+
+
+    interaction.reply({ embeds: [embed] });
     // if (interaction.isChatInputCommand()){
 
     //     const clientUser = interaction.guild.members.me!;
