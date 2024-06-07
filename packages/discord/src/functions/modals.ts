@@ -1,14 +1,16 @@
-import { type Collection, type ModalSubmitFields, type TextInputComponent, type TextInputComponentData, ActionRowBuilder, TextInputBuilder } from "discord.js";
+import { type Collection, type ModalSubmitFields, type TextInputComponent, type TextInputComponentData, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { createRow } from "./components";
 
 type TextInputData = Omit<TextInputComponentData, "type">;
 
-type CreateModalInputData = TextInputData;
-export function createModalInput(data: CreateModalInputData): ActionRowBuilder<TextInputBuilder>{
+interface ModalFieldData extends Omit<TextInputData, "customId" | "style"> {
+    style?: TextInputStyle
+}
+export function createModalInput(data: ModalFieldData & { customId: string }): ActionRowBuilder<TextInputBuilder>{
+    data.style??=TextInputStyle.Short;
     return createRow(new TextInputBuilder(data));
 }
-
-type ModalFieldsData = Record<string, Omit<TextInputData, "customId">>;
+type ModalFieldsData = Record<string, ModalFieldData>;
 export function createModalFields(data: ModalFieldsData): ActionRowBuilder<TextInputBuilder>[]{
     return Object.entries(data).map(
         ([customId, data]) => createModalInput(Object.assign({ customId }, data))

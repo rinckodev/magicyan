@@ -87,7 +87,7 @@ interface ChannelUrlInfo {
     channelId?: string;
     guildId?: string;
 }
-export function getChannelUrlInfo(url: string): ChannelUrlInfo{
+export function getChannelUrlInfo(url: string): ChannelUrlInfo {
     const regex = new RegExp(/^https:\/\/discord\.com\/channels\/\d+\/\d+$/);
     if (!regex.test(url)) return {};
     const [channelId, guildId] = url.split("/").reverse();
