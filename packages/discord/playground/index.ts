@@ -1,29 +1,10 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, Client } from "discord.js";
-import { createEmbed, createSubCommandsGroups } from "../src";
+import { ApplicationCommandType, Client } from "discord.js";
+import { brBuilder, commandMention, createEmbed, findCommand } from "../src";
 
 const client = new Client({
     intents: ["Guilds"]
 });
 
-const a = createSubCommandsGroups({
-    manage: {
-        description: "test",
-        subcommands: {
-            nicks: {
-                description: "test",
-            },
-            coins: {
-                description: "salve",
-                options: {
-                    player: {
-                        type: ApplicationCommandOptionType.User,
-                        description: "test",
-                    }
-                }
-            }
-        }
-    }
-});
 
 client.login(process.env.BOT_TOKEN);
 
@@ -35,7 +16,11 @@ client.on("ready", (c) => {
             name: "test",
             description: "test",
             type: ApplicationCommandType.ChatInput,
-            options: a,
+        },
+        {
+            name: "say",
+            description: "test",
+            type: ApplicationCommandType.ChatInput,
         }
     ]);
 });
@@ -44,10 +29,23 @@ client.on("interactionCreate", interaction => {
     if (!interaction.inCachedGuild()) return;
     if (!interaction.isChatInputCommand()) return;
 
+    const { client } = interaction;
+
+    const a = findCommand(client).byName("test")!;
+    const b = findCommand(client).byName("say")!;
+
     const url = new URL("https://discord.com");
     const embed = createEmbed({
-        url, description: "test",
-        title: "testando"
+        url, 
+        title: "testando",
+        description: brBuilder(
+            commandMention(a),
+            commandMention(b, "hy"),
+            commandMention(b),
+            commandMention(a, "manage", "nicks"),
+            commandMention(a, "manage", "coins"),
+            commandMention(a, "manage"),
+        ),
     });
 
     embed.fields.push({ name: "test" });
