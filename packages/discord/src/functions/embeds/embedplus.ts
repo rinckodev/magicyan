@@ -74,7 +74,7 @@ export class EmbedPlusBuilder extends EmbedBuilder {
             ? new Date(timestamp)
             : timestamp
         );
-        embed.setColor((color || colors.embedbg) as ColorResolvable);
+        if (color) embed.setColor(color as ColorResolvable);
         super(embed.data);
         this.fields = new EmbedPlusFields(this);
     }
