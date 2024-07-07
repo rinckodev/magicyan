@@ -3,6 +3,12 @@ import { type EmbedPlusAssetData, createEmbedAsset } from "./assets";
 import { type EmbedPlusFieldData, EmbedPlusFields } from "./fields";
 import { type EmbedPlusFooterData, createEmbedFooter } from "./footer";
 import { chars } from "../../constants/chars";
+import { colors } from "../../constants/colors";
+
+type EmbedPlusBuilderReturn<B> = 
+    undefined extends B ? EmbedPlusBuilder :
+    false extends B ? EmbedPlusBuilder :
+    EmbedPlusBuilder[];
 
 export type EmbedPlusColorData = string&{} | ColorResolvable | null;
 export type EmbedPlusAuthorData = { name: string, url?: string, iconURL?: string }
@@ -17,7 +23,7 @@ export interface EmbedPlusData {
     fields?: Partial<EmbedPlusFieldData>[] | null
     timestamp?: string | number | Date | null;
     footer?: EmbedPlusFooterData;
-    author?: EmbedPlusAuthorData
+    author?: EmbedPlusAuthorData;
 }
 
 export type AnyEmbedData = APIEmbed | Embed | EmbedData;
@@ -68,7 +74,7 @@ export class EmbedPlusBuilder extends EmbedBuilder {
             ? new Date(timestamp)
             : timestamp
         );
-        if (color) embed.setColor(color as ColorResolvable);
+        embed.setColor((color || colors.embedbg) as ColorResolvable);
         super(embed.data);
         this.fields = new EmbedPlusFields(this);
     }
@@ -92,7 +98,7 @@ export class EmbedPlusBuilder extends EmbedBuilder {
     }
     public setBorderColor(color: EmbedPlusColorData | null): this {
         if (color === null){
-            this.setColor("#2B2D31");
+            this.setColor(colors.embedbg as ColorResolvable);
         } else if (typeof color === "number"){
             this.update({ color });
         } else {
@@ -130,12 +136,6 @@ export class EmbedPlusBuilder extends EmbedBuilder {
         }
         return this;
     }
-    public static fromInteraction(interaction: InteractionWithEmbeds, index=0, data: EmbedPlusData = {}){
-        return EmbedPlusBuilder.fromMessage(interaction.message, index, data);
-    }
-    public static fromMessage(message: MessageWithEmbeds, index=0, data: EmbedPlusData = {}){
-        return new EmbedPlusBuilder(Object.assign({ extends: message.embeds[index] }, data));
-    }
 }
 
 export type EmbedPlusProperty<P extends keyof EmbedPlusData> = EmbedPlusData[P];
@@ -145,14 +145,17 @@ interface CreateEmbedOptions<B extends boolean> extends EmbedPlusOptions {
     from?: InteractionWithEmbeds | MessageWithEmbeds;
     fromIndex?: number;
 }
-type CreateEmbedReturn<B> = undefined extends B ? EmbedPlusBuilder : false extends B ? EmbedPlusBuilder : EmbedPlusBuilder[];
-export function createEmbed<B extends boolean>(options: CreateEmbedOptions<B>): CreateEmbedReturn<B>{
+export function createEmbed<B extends boolean>(options: CreateEmbedOptions<B>): EmbedPlusBuilderReturn<B>{
     const { array=false, from, fromIndex=0, ...data } = options;
+    
+    const fromEmbeds = from ? "message" in from ? from.message.embeds : from.embeds : [];
 
-    const embed = from
-        ? "message" in from ? EmbedPlusBuilder.fromInteraction(from, fromIndex, data) 
-        : EmbedPlusBuilder.fromMessage(from, fromIndex, data)
-    : new EmbedPlusBuilder(data);
-
-    return (array ? [embed] : embed) as CreateEmbedReturn<B>; 
+    return (array
+        ? from && fromEmbeds.length > 0 
+            ? fromEmbeds.map(embed => new EmbedPlusBuilder({ extends: embed })) 
+            : [new EmbedPlusBuilder(data)]
+        : from && fromEmbeds.length > 0 
+            ? new EmbedPlusBuilder({ extends: fromEmbeds[fromIndex], ...data }) 
+            : new EmbedPlusBuilder(data)
+    ) as EmbedPlusBuilderReturn<B>;
 }

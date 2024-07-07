@@ -57,9 +57,14 @@ export class EmbedPlusFields {
     }
     public push(...fields: Partial<EmbedPlusFieldData>[]){
         this.embed.addFields(fields.map(this.fieldFormat));
+        return this;
     }
     public set(...fields: Partial<EmbedPlusFieldData>[]){
         this.embed.setFields(fields.map(this.fieldFormat));
+        return this;
+    }
+    public insert(index: number, ...fields: Partial<EmbedPlusFieldData>[]){
+        this.fields.splice(index, 0, ...fields.map(this.fieldFormat));
     }
     public map<U>(callback: (value: EmbedPlusFieldData, index: number, array: EmbedPlusFieldData[]) => U): U[] {
         return this.toArray().map(callback);
