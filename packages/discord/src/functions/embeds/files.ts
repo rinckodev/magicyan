@@ -6,7 +6,7 @@ type ImageElementProperty = "author" | "thumbnail" | "image" | "footer";
 interface CreateEmbedFilesOptions {
     ignore?: ImageElementProperty[]
     extentions?: Record<ImageElementProperty, ImageFileExtention>;
-    names?: Record<ImageElementProperty, ImageFileExtention>;
+    names?: Record<ImageElementProperty, string>;
 }
 /**
  * Turns any embed image url into an attachment and returns an attachment array
