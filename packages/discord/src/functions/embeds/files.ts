@@ -6,12 +6,16 @@ type ImageElementProperty = "author" | "thumbnail" | "image" | "footer";
 interface CreateEmbedFilesOptions {
     ignore?: ImageElementProperty[]
     extentions?: Record<ImageElementProperty, ImageFileExtention>;
+    names?: Record<ImageElementProperty, ImageFileExtention>;
 }
 /**
  * Turns any embed image url into an attachment and returns an attachment array
  */
 export function createEmbedFiles(embed: EmbedBuilder, options?: CreateEmbedFilesOptions): AttachmentBuilder[] {
     const { thumbnail, image, footer, author } = embed.data;
+    const extentions = options?.extentions;
+    const ignore = options?.ignore;
+    const names = options?.names;
 
     const files: AttachmentBuilder[] = [];
 
@@ -20,20 +24,20 @@ export function createEmbedFiles(embed: EmbedBuilder, options?: CreateEmbedFiles
         return `attachment://${name}.${ext}`;
     };
 
-    if (thumbnail?.url && !options?.ignore?.includes("thumbnail")){
-        const url = handle(thumbnail.url, "thumbnail", options?.extentions?.thumbnail);
+    if (thumbnail?.url && !ignore?.includes("thumbnail")){
+        const url = handle(thumbnail.url, names?.thumbnail??"thumbnail", extentions?.thumbnail);
         embed.setThumbnail(url);
     }
-    if (image?.url && !options?.ignore?.includes("image")){
-        const url = handle(image.url, "image", options?.extentions?.image);
+    if (image?.url && !ignore?.includes("image")){
+        const url = handle(image.url, names?.image??"image", extentions?.image);
         embed.setImage(url);
     }
-    if (author?.icon_url && !options?.ignore?.includes("author")){
-        const url = handle(author?.icon_url, "author", options?.extentions?.author);
+    if (author?.icon_url && !ignore?.includes("author")){
+        const url = handle(author?.icon_url, names?.author??"author", extentions?.author);
         embed.setAuthor({ name: author.name, iconURL: url, url: author.url });
     }
-    if (footer?.icon_url && !options?.ignore?.includes("footer")){
-        const url = handle(footer.icon_url, "footer", options?.extentions?.footer);
+    if (footer?.icon_url && !ignore?.includes("footer")){
+        const url = handle(footer.icon_url, names?.footer??"footer", extentions?.footer);
         embed.setFooter({ text: footer.text, iconURL: url });
     }
     return files;
