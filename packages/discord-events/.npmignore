@@ -9,3 +9,4 @@ package-lock.json
 *.development.json
 
 deprecated
+*.txt

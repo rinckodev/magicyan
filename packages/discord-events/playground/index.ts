@@ -1,30 +1,39 @@
-import { Client, ClientEvents, Partials } from "discord.js";
-import "dotenv/config";
+import { ApplicationCommandType, Client, ClientEvents } from "discord.js";
 import { initDiscordEvents } from "../src/index";
 
 const client = new Client({
-    intents: [
-        "GuildVoiceStates", "GuildMembers", "Guilds", 
-        "MessageContent", "GuildMessages",
-        "GuildPresences", "GuildModeration",
-    ],
-    partials: [Partials.Channel, Partials.GuildMember, Partials.User]
+    intents: 53608447,
 });
 
 initDiscordEvents(client);
-
-// client.on("extendedRoleCreate", (role, executor) => {
-//     console.log(role);
-//     console.log(executor.displayName);
-// });
-
 client.on("ready", () => {
     console.log("Bot online");
+    client.guilds.cache.get(process.env.MAIN_GUILD_ID!)!.commands.set([
+        {
+            name: "test",
+            description: "test",
+            type: ApplicationCommandType.ChatInput,
+        }
+    ]);
 });
 
-client.on("messageCreate", a => {
-    const g = a.guild?.members.fetch("test");
-    console.log(g);
+client.on("interactionCreate", async (i) => {
+    if (!i.isCommand()) return;
+    await i.reply({ ephemeral: true, fetchReply: true, content: "opa" });
+    i.editReply({ content: "Mudou" });
+    // i.followUp({ ephemeral: true, content: "Olá" });
+});
+
+client.on("guildMemberTimeoutAdd", (member, executor, expireAt, reason) => {
+    console.log(member.displayName);
+    console.log(executor.displayName);
+    console.log(expireAt);
+    console.log(reason);
+});
+
+client.on("guildMemberTimeoutRemove", (member, executor) => {
+    console.log(member.displayName);
+    console.log(executor.displayName);
 });
 
 client.login(process.env.BOT_TOKEN);

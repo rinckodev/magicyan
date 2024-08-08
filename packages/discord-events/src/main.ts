@@ -47,7 +47,7 @@ export function initDiscordEvents(client: Client){
 }
 interface MagicyanEvents {
     extendedRoleCreate: ExtendedRoleCreateEvent;
-    extendedRoleDelete: ExtendedRoleDeleteEvent;   
+    extendedRoleDelete: ExtendedRoleDeleteEvent; 
     extendedRoleUpdate: ExtendedRoleUpdateEvent;
 
     extendedChannelDelete: ExtendedChannelDeleteEvent;
