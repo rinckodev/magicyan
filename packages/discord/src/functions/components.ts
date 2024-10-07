@@ -5,6 +5,6 @@ export function createRow<Component extends AnyComponentBuilder>(...components: 
 }
 interface CreateLinkButtonData extends Omit<LinkButtonComponentData, "style" | "type"> {}
 export function createLinkButton(data: CreateLinkButtonData){
-    if (!data.label) data.label = data.url;
+    data.label??=data.url;
     return new ButtonBuilder({ style: ButtonStyle.Link, ...data });
 }

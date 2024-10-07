@@ -7,5 +7,5 @@ export type EmbedPlusFooterData = { text?: string | null; iconURL?: string | nul
 export function createEmbedFooter(options: EmbedPlusFooterData): EmbedFooterData | undefined {
     const { text, iconURL } = options;
     return !text && !iconURL ? undefined 
-    : { text: text ?? chars.invisible, iconURL: notFound(iconURL) };
+    : { text: text || chars.invisible, iconURL: notFound(iconURL) };
 }
