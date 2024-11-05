@@ -1,12 +1,5 @@
 type MaybeString = string | null | undefined;
 /**
- * Just returns null
- * @returns null
- */
-export function toNull(){
-    return null;
-}
-/**
  * Receives a possibly null value and returns the value or undefined if falsy
  * @param value Any value
  * @returns 
@@ -15,7 +8,7 @@ export function notFound<T>(value: T): T & {} | undefined {
     return value !== null ? value : undefined;
 }
 /**
- * Creates text with a line break
+ * Creates text with a line break and omit nullish values
  * @param text String Array
  * @returns string
  * ```ts
@@ -30,7 +23,7 @@ export function brBuilder(...text: (MaybeString | MaybeString[])[]): string {
 }
 
 /**
- * Creates text with a spaces
+ * Creates text with a spaces and omit nullish values
  * @param text String array
  * @returns string
  * ```ts

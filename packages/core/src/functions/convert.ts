@@ -9,9 +9,9 @@ type Color = `#${string}` | string;
  */
 export function hexToRgb(color: Color): number{
     if (color.startsWith("#")){
-        return parseInt(color.slice(1), 16);
+        return Number.parseInt(color.slice(1), 16);
     }
-    return parseInt(color, 16);
+    return Number.parseInt(color, 16);
 }
 /**
  * Converts an RGB number to a hexadecimal color string.
