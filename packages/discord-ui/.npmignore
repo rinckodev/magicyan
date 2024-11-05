@@ -1,8 +1,0 @@
-src
-node_modules
-playground
-
-.env
-tsconfig.json
-package-lock.json
-*.development.json
