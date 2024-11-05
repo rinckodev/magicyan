@@ -1,0 +1,46 @@
+{
+    "name": "template",
+    "version": "0.0.0",
+    "description": "Template description",
+    "license": "MIT",
+    "type": "module",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rinckodev/magicyan",
+        "directory": "packages/core"
+    },
+    "author": {
+        "url": "https://github.com/rinckodev",
+        "name": "Rincko Dev"
+    },
+    "bugs": {
+        "url": "https://github.com/rinckodev/magicyan/issues"
+    },
+    "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/template#readme",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "unbuild",
+        "dev": "tsx playground/index.ts",
+        "test": "vitest"
+    },
+    "devDependencies": {
+        "tsx": "^4.7.0",
+        "unbuild": "^2.0.0",
+        "vitest": "^2.1.4"
+    }
+}
