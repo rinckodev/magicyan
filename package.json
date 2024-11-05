@@ -1,11 +1,10 @@
 {
-  "name": "repo",
+  "name": "@magicyan/root",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint": "turbo lint"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
@@ -17,7 +16,6 @@
   },
   "packageManager": "npm@10.2.4",
   "workspaces": [
-    "apps/*",
     "packages/*"
   ]
 }
