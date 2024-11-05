@@ -1,12 +1,14 @@
 import { type ImageURLOptions, type ClientUser, Guild, GuildMember, User } from "discord.js";
 
+type IdentityProperty = "username" | "displayName" | "id" | "globalName" | "nickname"
+
 interface MemberAuthor {
     type: GuildMember;
-    property?: "username" | "displayName" | "id" | "globalName" | "nickname"
+    property?: IdentityProperty;
 }
 interface UserAuthor {
     type: User | ClientUser;
-    property?: "username" | "displayName" | "id" | "globalName"
+    property?: Exclude<IdentityProperty, "nickname">
 }
 interface GuildAuthor {
     type: Guild;
@@ -45,5 +47,5 @@ export function createEmbedAuthor<T extends AuthorType>(type: T, options?: Creat
             break;
         }
     }
-    return { name: `${prefix}${name}${suffix}`, url: url??undefined, iconURL };
+    return { name: `${prefix}${name}${suffix}`, url: url?.toString(), iconURL };
 }

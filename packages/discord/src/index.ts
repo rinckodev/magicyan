@@ -1,5 +1,6 @@
 export * from "./constants/chars";
 export * from "./constants/client";
+export * from "./constants/chars";
 
 export * from "./functions/misc";
 

@@ -23,7 +23,7 @@ client.on("ready", (c) => {
     ]);
 });
 
-client.on("interactionCreate", interaction => {
+client.on("interactionCreate", async interaction => {
     switch(true){
         case interaction.isMessageContextMenuCommand():{
             const embeds = createEmbed({ array: false, from: interaction.targetMessage });
@@ -31,6 +31,12 @@ client.on("interactionCreate", interaction => {
             return;
         }
         case interaction.isChatInputCommand():{
+            await interaction.deferReply({ ephemeral: true });
+
+            const c = interaction.guild?.channels.cache.find(c => c.name.startsWith("c"));
+
+            console.log(c?.name);
+
             const embed = createEmbed({
                 description: "testando a",
                 fields: [
@@ -53,8 +59,7 @@ client.on("interactionCreate", interaction => {
             //     color: "Random",
             //     description: "testando c"
             // });
-            interaction.deferReply({ ephemeral: true });
-            interaction.channel?.send({ embeds: [embed] });
+            // interaction.channel?.send({ embeds: [embed] });
             return;
         }
     }
