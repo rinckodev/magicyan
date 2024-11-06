@@ -1,6 +1,6 @@
 import { defineBuildConfig } from "unbuild";
 
 export default defineBuildConfig({
-    preset: "@magicyan/typescript/build.preset",
+    preset: "@magicyan/config/build.preset",
     entries: ["src/index"]
 });

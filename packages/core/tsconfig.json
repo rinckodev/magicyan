@@ -1,5 +1,5 @@
 {
-    "extends": "@magicyan/typescript/base.json",
+    "extends": "@magicyan/config/base.json",
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
