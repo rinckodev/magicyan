@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "isolatedModules": true,
+    "strict": true,
+    
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": false,
+    "noEmit": true,
+    
+    "lib": ["ESNext"],
+    
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "moduleDetection": "force",
+
+  }
+}
