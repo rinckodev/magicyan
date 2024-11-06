@@ -4,7 +4,8 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "test": "turbo test"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
