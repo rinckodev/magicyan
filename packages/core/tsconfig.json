@@ -1,0 +1,9 @@
+{
+    "extends": "@magicyan/typescript/base.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "#package": ["./src/index.ts"]
+        },
+    }
+}
