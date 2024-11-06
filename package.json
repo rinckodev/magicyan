@@ -5,9 +5,11 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "test": "turbo test"
+    "test": "turbo test",
+    "commit": "better-commits"
   },
   "devDependencies": {
+    "better-commits": "^1.15.7",
     "prettier": "^3.2.5",
     "turbo": "^2.2.3",
     "typescript": "5.5.4",
