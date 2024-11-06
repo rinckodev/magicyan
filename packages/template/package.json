@@ -10,7 +10,7 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/rinckodev/magicyan",
-        "directory": "packages/core"
+        "directory": "packages/template"
     },
     "author": {
         "url": "https://github.com/rinckodev",
@@ -39,6 +39,7 @@
         "test": "vitest"
     },
     "devDependencies": {
+        "@magicyan/typescript": "*",
         "tsx": "^4.7.0",
         "unbuild": "^2.0.0",
         "vitest": "^2.1.4"
