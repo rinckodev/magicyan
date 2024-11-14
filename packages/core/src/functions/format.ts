@@ -1,46 +1,67 @@
 type MaybeString = string | null | undefined;
 /**
- * Receives a possibly null value and returns the value or undefined if falsy
- * @param value Any value
- * @returns 
+ * Returns the given value if it is not `null`; otherwise, returns `undefined`.
+ *
+ * @param value - The value to be checked for `null`.
+ * @returns The original value if it is not `null`, or `undefined` if it is.
+ *
+ * @example
+ * ```ts
+ * const result = notFound("Hello");
+ * console.log(result); // Output: "Hello"
+ *
+ * const notFoundResult = notFound(null);
+ * console.log(notFoundResult); // Output: undefined
+ * ```
  */
 export function notFound<T>(value: T): T & {} | undefined {
     return value !== null ? value : undefined;
 }
 /**
- * Creates text with a line break and omit nullish values
- * @param text String Array
- * @returns string
+ * Joins multiple strings or arrays of strings into a single string, separated by line breaks.
+ * Filters out any `null` or `undefined` values.
+ *
+ * @param text - The text segments to be joined. Each segment can be a string, an array of strings, or `null`/`undefined`.
+ * @returns The concatenated string with each segment separated by a line break.
+ *
+ * @example
  * ```ts
- * const text = brBuilder("Hello world", "This is javascript!")
- * console.log(text) 
- * // Hello world
- * // This is javascript
+ * const result = brBuilder("Hello", [null, "World"], undefined, "!");
+ * console.log(result);
+ * // Output:
+ * // Hello
+ * // World
+ * // !
  * ```
  */
 export function brBuilder(...text: (MaybeString | MaybeString[])[]): string {
-    return text.flat().filter(nonnullish).join("\n");
+    return text.flat().filter(nonNullish).join("\n");
 }
 
 /**
- * Creates text with a spaces and omit nullish values
- * @param text String array
- * @returns string
+ * Joins multiple strings or arrays of strings into a single string, separated by spaces.
+ * Filters out any `null` or `undefined` values.
+ *
+ * @param text - The text segments to be joined. Each segment can be a string, an array of strings, or `null`/`undefined`.
+ * @returns The concatenated string with each segment separated by a space.
+ *
+ * @example
  * ```ts
- * const adm = "Rincko";
- * const action = "promoted"
- * const text = spaceBuilder("Administrator", adm, "has been", action)
- * console.log(text) // Administrator Rincko has been promoted
+ * const result = spaceBuilder("Hello", [null, "World"], undefined, "!");
+ * console.log(result); // Output: "Hello World !"
  * ```
  */
 export function spaceBuilder(...text: (MaybeString | MaybeString[])[]): string {
-    return text.flat().filter(nonnullish).join(" ");
+    return text.flat().filter(nonNullish).join(" ");
 }
+
 /**
- * Replace the text with object variables
- * @param text 
- * @param replaces 
- * @returns 
+ * Replaces occurrences of specified substrings within a text string based on a set of key-value pairs.
+ * Each key in the `replaces` object is replaced with its corresponding value in the text.
+ *
+ * @param text - The original text where replacements will be made.
+ * @param replaces - An object containing the substrings to replace (as keys) and their replacement values.
+ * @returns The modified text with all specified replacements applied.
  * 
  * @example
  * ```ts
@@ -69,30 +90,51 @@ export function replaceText<R extends Record<string, any>>(text: string, replace
 }
 /**
  * Capitalizes the first letter of a word and converts the remaining letters to lowercase.
+ * If `allWords` is true, capitalizes the first letter of each word in the string.
  *
- * @param {string} word - The word to be capitalized.
- * @param {string} allWords - Whether all words should be capitalized
- * @returns {string} The capitalized word.
+ * @param word - The word or sentence to be capitalized.
+ * @param allWords - Whether all words should be capitalized individually. Default is `false`.
+ * @returns The capitalized word or sentence.
  *
  * @example
  * ```ts
- * const capitalizedWord = capitalize("hello");
+ * const capitalizedWord = captalize("hello");
  * console.log(capitalizedWord); // Output: "Hello"
  * 
- * const capitalizedText = capitalize("i love brazil", true);
+ * const capitalizedText = captalize("i love brazil", true);
  * console.log(capitalizedText); // Output: "I Love Brazil"
  * ```
  */
 export function captalize(word: string, allWords: boolean = false): string {
+    word = word.trim();
+    if (!word) return word;
     return allWords
     ? word.split(" ").map(word => captalize(word)).join(" ")
     : word[0].toUpperCase() + word.slice(1).toLowerCase();
 }
 
-export function limitText(text: string, maxLength: number, endText: string = ""){
+/**
+ * Limits the length of a given text to a specified maximum length,
+ * optionally appending additional text if the limit is exceeded.
+ *
+ * @param text - The original text to be truncated if necessary.
+ * @param maxLength - The maximum length of the returned text.
+ * @param endText - The text to append to the truncated text, if the limit is exceeded. Default is an empty string.
+ * @returns The truncated text with optional appended text.
+ *
+ * @example
+ * ```ts
+ * const shortText = limitText("Hello World", 5);
+ * console.log(shortText); // Output: "Hello"
+ *
+ * const truncatedText = limitText("Hello World", 5, "...");
+ * console.log(truncatedText); // Output: "Hello..."
+ * ```
+ */
+export function limitText(text: string, maxLength: number, endText: string = ""): string{
     return text.length >= maxLength ? text.slice(0, maxLength) + endText : text;
 }
 
-function nonnullish(v: unknown): boolean {
+function nonNullish(v: unknown): boolean {
     return v !== null && v !== undefined;
 }
