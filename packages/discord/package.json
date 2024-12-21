@@ -1,0 +1,51 @@
+{
+    "name": "@magicyan/discord",
+    "version": "1.2.2",
+    "description": "Simple functions to facilitate discord bot development",
+    "license": "MIT",
+    "type": "module",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rinckodev/magicyan",
+        "directory": "packages/discord"
+    },
+    "author": {
+        "url": "https://github.com/rinckodev",
+        "name": "Rincko Dev"
+    },
+    "bugs": {
+        "url": "https://github.com/rinckodev/magicyan/issues"
+    },
+    "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/discord#readme",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "unbuild",
+        "dev": "tsx --env-file=.env playground/index.ts",
+        "test": "vitest"
+    },
+    "peerDependencies": {
+        "discord.js": "latest"
+    },
+    "devDependencies": {
+        "@magicyan/config": "*",
+        "tsx": "^4.7.0",
+        "unbuild": "^2.0.0",
+        "vitest": "^2.1.4",
+        "vite-tsconfig-paths": "^5.1.0"
+    }
+}
