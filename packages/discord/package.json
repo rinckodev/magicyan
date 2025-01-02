@@ -47,5 +47,8 @@
         "unbuild": "^2.0.0",
         "vite-tsconfig-paths": "^5.1.0",
         "vitest": "^2.1.4"
+    },
+    "dependencies": {
+        "@magicyan/core": "^1.0.20"
     }
 }
