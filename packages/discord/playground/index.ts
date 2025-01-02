@@ -1,3 +1,3 @@
-import { main } from "#package";
+import { createModalFields } from "#package";
 
-main(1);
+createModalFields({});
