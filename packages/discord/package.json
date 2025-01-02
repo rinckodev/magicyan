@@ -39,13 +39,13 @@
         "test": "vitest"
     },
     "peerDependencies": {
-        "discord.js": "latest"
+        "discord.js": "^14.17.2"
     },
     "devDependencies": {
         "@magicyan/config": "*",
         "tsx": "^4.7.0",
         "unbuild": "^2.0.0",
-        "vitest": "^2.1.4",
-        "vite-tsconfig-paths": "^5.1.0"
+        "vite-tsconfig-paths": "^5.1.0",
+        "vitest": "^2.1.4"
     }
 }

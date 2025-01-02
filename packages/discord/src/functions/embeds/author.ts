@@ -26,6 +26,7 @@ export function createEmbedAuthor<T extends AuthorType>(type: T, options?: Creat
     let name = "";
     let iconURL = icon;
     const imageOptions = { extension, forceStatic, size };
+
     switch(true){
         case type instanceof User:{
             const { property="displayName" } = (options??{}) as CreateEmbedAuthorOptions<User>;

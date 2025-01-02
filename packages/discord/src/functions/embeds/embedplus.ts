@@ -92,7 +92,7 @@ export class EmbedPlusBuilder extends EmbedBuilder {
     public toString(space = 2){
         return JSON.stringify(this, null, space);
     }
-    public toAttachment(data: AttachmentData = { name: "embed.png" }, space = 2){
+    public toAttachment(data: AttachmentData = { name: "embed.json" }, space = 2){
         const buffer = Buffer.from(this.toString(space), "utf-8");
         return new AttachmentBuilder(buffer, data);
     }

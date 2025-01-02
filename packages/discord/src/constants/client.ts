@@ -1,16 +1,16 @@
 import { GatewayIntentBits, IntentsBitField, Partials } from "discord.js";
 
 const Messages = [
+    IntentsBitField.Flags.DirectMessagePolls,
+    IntentsBitField.Flags.DirectMessageReactions,
+    IntentsBitField.Flags.DirectMessageTyping,
     IntentsBitField.Flags.MessageContent,
     IntentsBitField.Flags.GuildMessages,
     IntentsBitField.Flags.GuildMessageReactions,
     IntentsBitField.Flags.GuildMessageTyping,
-    IntentsBitField.Flags.DirectMessages,
-    IntentsBitField.Flags.DirectMessageReactions,
-    IntentsBitField.Flags.DirectMessageTyping,
 ];
 const Guild = [
-    IntentsBitField.Flags.GuildEmojisAndStickers,
+    IntentsBitField.Flags.GuildExpressions,
     IntentsBitField.Flags.GuildIntegrations,
     IntentsBitField.Flags.GuildInvites,
     IntentsBitField.Flags.GuildMembers,
