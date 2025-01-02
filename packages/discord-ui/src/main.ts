@@ -18,7 +18,7 @@ interface DiscordUIDefaults {
             placeholder?: string
         }
     }
-}q
+}
 
 export function discordUI(defaults: DiscordUIDefaults){
     if (defaults.prompts?.confirm?.buttons){
