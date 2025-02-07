@@ -14,7 +14,7 @@ export async function extendedRoleDelete(role: Role) {
         const member = guild.members.cache.get(auditLogEntry.executorId);
         if (!member) return;
 
-        guild.client.emit("extendedRoleCreate", role, member);
+        guild.client.emit("extendedRoleDelete", role, member);
     })
     .catch(() => {});
 }
