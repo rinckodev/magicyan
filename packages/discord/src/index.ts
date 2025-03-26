@@ -20,5 +20,6 @@ export * from "./functions/members";
 export * from "./functions/message";
 export * from "./functions/roles";
 export * from "./functions/regex";
+export * from "./functions/webhooks";
 
 export * from "@magicyan/core";
