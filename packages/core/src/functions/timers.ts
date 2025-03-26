@@ -1,4 +1,23 @@
-import { setTimeout as sleep } from "node:timers/promises";
+import { setTimeout as setSleep } from "node:timers/promises";
+
+type SetTimeoutFunction = (delay: number) => Promise<void>;
+
+type Sleep = SetTimeoutFunction & {
+    seconds: SetTimeoutFunction;
+    minutes: SetTimeoutFunction;
+}
+
+/**
+ * ```ts
+ * await sleep(100); // wait 100 ms
+ * await sleep.seconds(5); // wait 5000 ms
+ * await sleep.minutes(2); // wait 120000 ms
+ * ```
+ */
+const sleep: Sleep = Object.assign(setSleep, {
+    seconds: (time) => setSleep(time * 1000),
+    minutes: (time) => setSleep(time * 1000 * 60),
+} satisfies Record<string, SetTimeoutFunction>);
 
 export { sleep };
 

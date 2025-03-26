@@ -8,6 +8,20 @@ describe("sleep", () => {
     const end = Date.now();
     expect(end - start).toBeGreaterThanOrEqual(1000);
   });
+
+  it("should sleep for the specified seconds", async () => {
+    const start = Date.now();
+    await sleep.seconds(1);
+    const end = Date.now();
+    expect(end - start).toBeGreaterThanOrEqual(1000);
+  });
+
+  it("should sleep for the specified minutes", async () => {
+    const start = Date.now();
+    await sleep.minutes(0.1);
+    const end = Date.now();
+    expect(end - start).toBeGreaterThanOrEqual(6000);
+  });
 });
 
 describe("createInterval", () => {
