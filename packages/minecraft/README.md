@@ -15,6 +15,12 @@ yarn add @magicyan/minecraft
 bun install @magicyan/minecraft
 ```
 
+# Sumary
+- [Skins](#skins)
+- [Server](#server)
+- [Mojang](#mojang)
+- [Mush](#mush)
+
 # Skins
 
 This package is a Starlight Skin API wrapper
@@ -378,15 +384,15 @@ async function getPlayerInfo() {
     
     // Basic player information
     console.log(`Username: ${player.account.username}`);
-    console.log(`UUID: ${player.account.unique_id}`);
+    console.log(`UUID: ${player.account.uniqueId}`);
     console.log(`Online Status: ${player.connected ? 'Online' : 'Offline'}`);
-    console.log(`First Login: ${new Date(player.first_login).toLocaleDateString()}`);
-    console.log(`Last Login: ${new Date(player.last_login).toLocaleDateString()}`);
+    console.log(`First Login: ${new Date(player.firstLogin).toLocaleDateString()}`);
+    console.log(`Last Login: ${new Date(player.lastLogin).toLocaleDateString()}`);
     
     // Player rank and tags
-    console.log(`Rank: ${player.rank_tag.name} (${player.rank_tag.color})`);
-    console.log(`Best Tag: ${player.best_tag.name} (${player.best_tag.color})`);
-    console.log(`Profile Tag: ${player.profile_tag.name} (${player.profile_tag.color})`);
+    console.log(`Rank: ${player.rankTag.name} (${player.rankTag.color})`);
+    console.log(`Best Tag: ${player.bestTag.name} (${player.bestTag.color})`);
+    console.log(`Profile Tag: ${player.profileTag.name} (${player.profileTag.color})`);
     
     // Accessing game stats (example for BedWars)
     const bedwarsStats = player.stats.bedwars;
@@ -414,7 +420,7 @@ async function getLeaderboard() {
     // Display top 5 players
     console.log("=== Top 5 BedWars Players ===");
     leaderboard.slice(0, 5).forEach((player, index) => {
-      console.log(`#${index + 1}: ${player.account.username} - Kills: ${player["bedwars:kills"]}, Wins: ${player["bedwars:wins"]}`);
+      console.log(`#${index + 1}: ${player.account.username} - Kills: ${player.get("kills")}, Wins: ${player.get("wins")}`);
     });
   } else {
     console.error(`Failed to fetch leaderboard: ${result.error}`);

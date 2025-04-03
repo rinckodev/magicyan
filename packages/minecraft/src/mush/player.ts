@@ -1,4 +1,4 @@
-import type { FetchResult } from "@magicyan/config";
+import type { FetchResult, CamelCaseKeys } from "@magicyan/config";
 import type { MushBedWarsStats } from "./stats/bedwars";
 import type { MushBlockpartyStats } from "./stats/blockparty";
 import type { MushBrigdepraticeStats } from "./stats/bridgepratice";
@@ -14,14 +14,17 @@ import type { MushSeekStats } from "./stats/seek";
 import type { MushSkyWarsStats } from "./stats/skywarsr1";
 import { RouteBases } from "../index";
 import { notOkResult } from "../helpers/result";
+import { convertKeysToCamelCase } from "../helpers/format";
 import { MushAPIDataResponse } from "./api";
 
-export interface MushPlayerAccount {
+export interface RawMushPlayerAccount {
     profile_id: number;
     type: string;
     unique_id: string;
     username: string;
 }
+
+export interface MushPlayerAccount extends CamelCaseKeys<RawMushPlayerAccount> {}
 
 export interface MushPlayerTag {
     color: string;
@@ -33,7 +36,7 @@ export interface MushPlayerSkin {
     slim: boolean;
 }
 
-export interface MushPlayerStats {
+export interface RawMushPlayerStats {
     bedwars: MushBedWarsStats
     blockparty: MushBlockpartyStats
     bridgepractice: MushBrigdepraticeStats
@@ -49,8 +52,10 @@ export interface MushPlayerStats {
     skywars_r1: MushSkyWarsStats
 }
 
-export interface MushPlayerInfo {
-    account: MushPlayerAccount
+export interface MushPlayerStats extends CamelCaseKeys<RawMushPlayerStats> {};
+
+export interface RawMushPlayerInfo {
+    account: RawMushPlayerAccount
     best_tag: MushPlayerTag,
     profile_tag: MushPlayerTag;
     rank_tag: MushPlayerTag;
@@ -64,6 +69,8 @@ export interface MushPlayerInfo {
     tags: string[];
 }
 
+export interface MushPlayerInfo extends CamelCaseKeys<RawMushPlayerInfo> {};
+
 export type FetchMushPlayerResult = FetchResult<MushPlayerInfo>
 
 export async function fetchMushPlayerInfo(nickOrUUID: string): Promise<FetchMushPlayerResult> {
@@ -71,7 +78,7 @@ export async function fetchMushPlayerInfo(nickOrUUID: string): Promise<FetchMush
     const response = await fetch(url);
     if (!response.ok) return notOkResult(response);
 
-    const data = await response.json() as MushAPIDataResponse<MushPlayerInfo>;
+    const data = await response.json() as MushAPIDataResponse<RawMushPlayerInfo>;
     if (!data.success){
         return { 
             success: data.success, 
@@ -79,5 +86,7 @@ export async function fetchMushPlayerInfo(nickOrUUID: string): Promise<FetchMush
             error: data.response.message 
         }
     }
-    return { success: true, data: data.response };
+    const info = convertKeysToCamelCase(data.response);
+
+    return { success: true, data: info };
 }

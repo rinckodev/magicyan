@@ -1,14 +1,17 @@
-import { RouteBases } from "../../index";
-import { notOkResult } from "../../helpers/result";
 import type { FetchResult } from "@magicyan/config";
+import { notOkResult } from "../../helpers/result";
+import { RouteBases } from "../../index";
+import type { MushLeaderBoardGameStats } from "./base";
 import type { MushBedwarsLeaderboardItem } from "./bedwars";
-import type { MushSkywarsLeaderboardItem } from "./skywars";
-import type { MushPvpLeaderboardItem } from "./pvp";
-import type { MushPartyLeaderboardItem } from "./party";
 import type { MushCTFLeaderboardItem } from "./ctf";
 import type { MushHGLeaderboardItem } from "./hg";
 import { MushMurderLeaderboardItem } from "./murder";
+import type { MushPartyLeaderboardItem } from "./party";
+import type { MushPvpLeaderboardItem } from "./pvp";
 import { MushQuickbuildersLeaderboardItem } from "./quickbuilders";
+import type { MushSkywarsLeaderboardItem } from "./skywars";
+import { convertKeysToCamelCase } from "../../helpers/format";
+import _ from "lodash";
 
 export type MushLeaderboardGames = 
 | "bedwars"
@@ -43,5 +46,24 @@ export async function fetchMushLeaderboard
     if (!response.ok) return notOkResult(response);
 
     const { records } = await response.json() as { records: MushGameLeaderboard<T> };
-    return { success: true, data: records }
+
+    const data = records.map((raw: any) => ({
+        account: convertKeysToCamelCase(raw.account),
+        avatarURL: raw.avatar_url,
+        color: raw.color,
+        position: raw.pos,
+        get: implementMethod(game),
+        ..._.omit(raw, ["account", "avatar_url", "color", "pos"])
+    })) as MushGameLeaderboard<T>;
+
+    return { success: true, data }
+}
+
+function implementMethod(game: MushLeaderboardGames, ){
+    const key: string = game === "skywars" ? "skywars_r1" :
+    game === "hg" ? "hungergames" : game;
+
+    return function getStats(this: any, stats: MushLeaderBoardGameStats){
+        return this[`${key}:${stats}`] ?? -1;
+    }
 }
