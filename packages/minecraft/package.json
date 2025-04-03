@@ -1,0 +1,64 @@
+{
+    "name": "@magicyan/minecraft",
+    "version": "0.0.0",
+    "description": "Functions to fetch data from various minecraft apis with typed data",
+    "license": "MIT",
+    "type": "module",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/rinckodev/magicyan",
+        "directory": "packages/minecraft"
+    },
+    "author": {
+        "url": "https://github.com/rinckodev",
+        "name": "Rincko Dev"
+    },
+    "bugs": {
+        "url": "https://github.com/rinckodev/magicyan/issues"
+    },
+    "homepage": "https://github.com/rinckodev/magicyan/tree/main/packages/minecraft#readme",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs"
+        },
+        "./skins/*":{
+            "import": "./dist/skins/*.mjs",
+            "require": "./dist/skins/*.cjs"
+        },
+        "./server/*":{
+            "import": "./dist/server/*.mjs",
+            "require": "./dist/server/*.cjs"
+        },
+        "./mojang/*":{
+            "import": "./dist/mojang/*.mjs",
+            "require": "./dist/mojang/*.cjs"
+        },
+        "./mush/*":{
+            "import": "./dist/mush/*.mjs",
+            "require": "./dist/mush/*.cjs"
+        }
+    },
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "unbuild",
+        "dev": "tsx playground/index.ts",
+        "test": "vitest"
+    },
+    "devDependencies": {
+        "@magicyan/config": "*",
+        "tsx": "^4.7.0",
+        "unbuild": "^2.0.0",
+        "vitest": "^2.1.4",
+        "vite-tsconfig-paths": "^5.1.0"
+    }
+}

@@ -2,12 +2,30 @@
     "material-icon-theme.folders.associations": {
         "canvas": "theme",
         "canvas-ui": "layout",
-        "discord": "client",
-        "discord-ui": "layout",
         "discord-events": "event",
         "discord-plus": "tools",
         "flamestore": "firebase",
         "playground": "typescript",
         "magicdb": "database"
-    }
+    },
+    "material-icon-theme.folders.customClones": [
+        {
+            "name": "discord",
+            "base": "client",
+            "color": "indigo-500",
+            "folderNames": ["discord"]
+        },
+        {
+            "name": "discord-ui",
+            "base": "layout",
+            "color": "indigo-500",
+            "folderNames": ["discord-ui"]
+        },
+        {
+            "name": "minecraft",
+            "base": "components",
+            "color": "green-500",
+            "folderNames": ["minecraft"]
+        },
+    ]
 }
