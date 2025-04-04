@@ -26,11 +26,12 @@ export function skinRoute<const T extends SkinRenderType>(
     if (camera) loopParams(url, camera);
     if (lighting) loopParams(url, lighting);
 
-    return url.toString();
+    return decodeURIComponent(url.toString());
 }
 
 export type FetchSkinRenderResult = FetchResult<{ 
-    buffer: Buffer, 
+    buffer: Buffer,
+    arrayBuffer: ArrayBuffer,
     url: string,
     response: Response 
 }>
@@ -51,6 +52,7 @@ export async function fetchSkinRender<T extends SkinRenderType = "default">(
         success: true,
         data: {
             buffer: Buffer.from(arrayBuffer),
+            arrayBuffer,
             url: response.url,
             response,
         }
@@ -60,8 +62,13 @@ export async function fetchSkinRender<T extends SkinRenderType = "default">(
 const loopParams = <T>(url: URL, obj: T) => {
     for (const key in obj) {
         const value = obj[key]
+        if (typeof value === "object"){
+            url.searchParams.set(key, JSON.stringify(value));
+            continue;
+        }
         if (typeof value !== "undefined") {
-            url.searchParams.append(key, JSON.stringify(value));
+            url.searchParams.set(key, `${value}`);
+            continue;
         }
     }
 }

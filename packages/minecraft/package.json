@@ -1,6 +1,6 @@
 {
     "name": "@magicyan/minecraft",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Functions to fetch data from various minecraft apis with typed data",
     "license": "MIT",
     "type": "module",
