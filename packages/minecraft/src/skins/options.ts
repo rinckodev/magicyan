@@ -130,7 +130,7 @@ export interface SkinRenderLightingOptions {
     globalLightIntensity:  number
 }
 
-export type ModelType = "slim" | "wide";
+export type SkinModelType = "slim" | "wide";
 export interface SkinRenderModelOptions {
     /**
      * - This parameter allows the user to define a skin image to use using a url.
@@ -141,7 +141,7 @@ export interface SkinRenderModelOptions {
      * - Must be used with skinUrl, this parameter allows you to choose whether the geometry for your model is slim or wide.
      * - Default Value: `wide`
      */
-    skinType: ModelType;
+    skinType: SkinModelType;
     /**
      * - A link to the model the API will use in the case of a players skin using the wide format. (Must be used with the custom render type.)
      * - Default Value: Value changes based on render type.

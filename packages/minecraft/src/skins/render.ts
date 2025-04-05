@@ -59,7 +59,7 @@ export async function fetchSkinRender<T extends SkinRenderType = "default">(
     }
 }
 
-const loopParams = <T>(url: URL, obj: T) => {
+function loopParams<T>(url: URL, obj: T){
     for (const key in obj) {
         const value = obj[key]
         if (typeof value === "object"){

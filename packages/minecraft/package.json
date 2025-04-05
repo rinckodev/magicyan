@@ -1,6 +1,6 @@
 {
     "name": "@magicyan/minecraft",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Functions to fetch data from various minecraft apis with typed data",
     "license": "MIT",
     "type": "module",
@@ -25,22 +25,6 @@
             "types": "./dist/index.d.ts",
             "import": "./dist/index.mjs",
             "require": "./dist/index.cjs"
-        },
-        "./skins/*": {
-            "import": "./dist/skins/*.mjs",
-            "require": "./dist/skins/*.cjs"
-        },
-        "./server/*": {
-            "import": "./dist/server/*.mjs",
-            "require": "./dist/server/*.cjs"
-        },
-        "./mojang/*": {
-            "import": "./dist/mojang/*.mjs",
-            "require": "./dist/mojang/*.cjs"
-        },
-        "./mush/*": {
-            "import": "./dist/mush/*.mjs",
-            "require": "./dist/mush/*.cjs"
         }
     },
     "main": "./dist/index.cjs",

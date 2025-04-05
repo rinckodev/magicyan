@@ -1,6 +1,19 @@
 import { MushPlayerAccount } from "../player";
 
-export type MushLeaderBoardGameStats = 
+export const mushLeaderboardGames = [
+    "bedwars",
+    "skywars",
+    "pvp",
+    "party",
+    "hg",
+    "murder",
+    "quickbuilders",
+    "ctf"
+] as const;
+
+export type MushLeaderboardGame = (typeof mushLeaderboardGames)[number]
+
+export type MushLeaderboardGameStats = 
 | "wins"
 | "losses"
 | "level"
@@ -25,6 +38,7 @@ export interface MushLeaderboardItem {
     color: string,
     account: MushPlayerAccount,
     avatarURL: string,
+    game: MushLeaderboardGame
 
     /**
      * This function takes the name of a statistic as an argument and returns its value. If the statistic does not exist for the selected game, it returns -1.
@@ -48,5 +62,5 @@ export interface MushLeaderboardItem {
      * - **third_place** : `party`
      * - **captures** : `ctf`
      */
-    get(stats: MushLeaderBoardGameStats): number;
+    get(stats: MushLeaderboardGameStats): number;
 }

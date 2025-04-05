@@ -1,32 +1,35 @@
-export type SkinRenderType =
-    | "default"
-    | "marching"
-    | "walking"
-    | "crouching"
-    | "crossed"
-    | "criss_cross"
-    | "ultimate"
-    | "isometric"
-    | "head"
-    | "custom"
-    | "cheering"
-    | "relaxing"
-    | "trudging"
-    | "cowering"
-    | "pointing"
-    | "lunging"
-    | "dungeons"
-    | "facepalm"
-    | "sleeping"
-    | "dead"
-    | "archer"
-    | "kicking"
-    | "mojavatar"
-    | "reading"
-    | "high_ground"
-    | "clown"
-    | "bitzel"
-    | "pixel"
-    | "ornament"
-    | "skin"
-    | "profile";
+export const skinRenderTypes = [
+    "default",
+    "marching",
+    "walking",
+    "crouching",
+    "crossed",
+    "criss_cross",
+    "ultimate",
+    "isometric",
+    "head",
+    "custom",
+    "cheering",
+    "relaxing",
+    "trudging",
+    "cowering",
+    "pointing",
+    "lunging",
+    "dungeons",
+    "facepalm",
+    "sleeping",
+    "dead",
+    "archer",
+    "kicking",
+    "mojavatar",
+    "reading",
+    "high_ground",
+    "clown",
+    "bitzel",
+    "pixel",
+    "ornament",
+    "skin",
+    "profile"
+] as const;
+
+export type SkinRenderType = (typeof skinRenderTypes)[number];

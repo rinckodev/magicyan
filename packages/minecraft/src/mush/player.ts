@@ -4,7 +4,7 @@ import type { MushBlockpartyStats } from "./stats/blockparty";
 import type { MushBrigdepraticeStats } from "./stats/bridgepratice";
 import type { MushCTFStats } from "./stats/ctf";
 import type { MushDuelsStats } from "./stats/duels";
-import type { MushHungergamesRanking } from "./stats/hungergames";
+import type { MushHungergamesStats } from "./stats/hungergames";
 import type { MushMurderStats } from "./stats/murder";
 import type { MushPartyStats } from "./stats/party";
 import type { MushPlaytimeStats } from "./stats/playtime";
@@ -42,7 +42,7 @@ export interface RawMushPlayerStats {
     bridgepractice: MushBrigdepraticeStats
     ctf: MushCTFStats
     duels: MushDuelsStats
-    hungergames: MushHungergamesRanking
+    hungergames: MushHungergamesStats
     murder: MushMurderStats
     party: MushPartyStats
     play_time: MushPlaytimeStats

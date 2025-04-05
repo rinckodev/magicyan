@@ -1,5 +1,5 @@
 import { RouteBases } from "../index";
-import { ModelType } from "./options";
+import { SkinModelType } from "./options";
 import type { FetchResult } from "@magicyan/config";
 
 export interface SkinInfo {
@@ -12,7 +12,7 @@ export interface SkinInfo {
     /** If the skin's texture height is equal to 32 pixels indicating a classic skin is present, this value will generate a base64 copy of the skin converted to 64x64. */
     processedSkinUrl: string;
     /** Defines whether the geometry for your model is slim or wide. If the skinType parameter is defined this will change to match it. */
-    skinType: ModelType;
+    skinType: SkinModelType;
     /** The width in pixels of the player's skin. Will default to 64 when the skinUrl parameter is defined. */
     skinTextureWidth: number;
     /** The height in pixels of the player's skin. Will default to 64 when the skinUrl parameter is defined. */

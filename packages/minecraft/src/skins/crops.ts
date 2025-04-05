@@ -1,10 +1,13 @@
-export type SkinRenderCrop =
-    | "full"
-    | "bust"
-    | "face"
-    | "head"
-    | "processed"
-    | "barebones";
+export const skinRenderCrops = [
+    "full",
+    "bust",
+    "face",
+    "head",
+    "processed",
+    "barebones"
+] as const;
+
+export type SkinRenderCrop = (typeof skinRenderCrops)[number];
 
 export const skinRenderTypeCrops = {
     default: ["full", "bust", "face"],
