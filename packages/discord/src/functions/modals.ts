@@ -1,5 +1,5 @@
 import { type Collection, type ModalSubmitFields, type TextInputComponent, type TextInputComponentData, ActionRowBuilder, ModalSubmitInteraction, TextInputBuilder, TextInputStyle } from "discord.js";
-import { createRow } from "./components";
+import { createRow } from "./components/row";
 
 type TextInputData = Omit<TextInputComponentData, "type">;
 
@@ -13,15 +13,13 @@ export function createModalInput(data: ModalFieldData): ActionRowBuilder<TextInp
 type ModalFieldsData = Record<string, Omit<ModalFieldData, "customId">>;
 export function createModalFields(data: ModalFieldsData): ActionRowBuilder<TextInputBuilder>[]{
     return Object.entries(data).map(
-        ([customId, data]) => createModalInput(Object.assign({ customId }, data))
+        ([customId, data]) => createModalInput({ customId, ...data })
     );
 }
 
 type ModalFieldsRecord<K extends string> = Record<K, string>;
 export function modalFieldsToRecord<K extends string = string>(fields: ModalSubmitInteraction | ModalSubmitFields | Collection<string, TextInputComponent>): ModalFieldsRecord<K> {
-    const reduceFunction = (data: ModalFieldsRecord<K>, { customId, value }: TextInputComponent) => 
-        Object.assign(data, { [customId]: value }
-    );
+    const reduceFunction = (data: ModalFieldsRecord<K>, { customId, value }: TextInputComponent) => ({ ...data, [customId]: value });
     const modalFields = 
     fields instanceof ModalSubmitInteraction ? fields.fields.fields :
     "fields" in fields ? fields.fields : fields;

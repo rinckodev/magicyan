@@ -1,0 +1,76 @@
+import { describe, it, expect } from "vitest";
+import { createContainer, ContainerData } from "#package";
+import { ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder } from "discord.js"; 
+
+describe("createContainer", () => {
+    it("should create a container with a TextDisplay component", () => {
+        const data: ContainerData = {
+            components: ["Hello, world!"],
+        };
+        const result = createContainer(data);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(1);
+        expect(result.components[0]).toBeInstanceOf(TextDisplayBuilder);
+    });
+
+    it("should create a container with an ActionRow component", () => {
+        const data: ContainerData = {
+            components: [
+                new ActionRowBuilder<ButtonBuilder>().addComponents(new ButtonBuilder().setLabel("Click me")),
+            ],
+        };
+        const result = createContainer(data);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(1);
+        expect(result.components[0]).toBeInstanceOf(ActionRowBuilder);
+    });
+
+    it("should handle multiple types of components", () => {
+        const data: ContainerData = {
+            components: [
+                "Hello, world!",
+                new ActionRowBuilder<ButtonBuilder>().addComponents(new ButtonBuilder().setLabel("Click me")),
+            ],
+        };
+        const result = createContainer(data);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(2);
+        expect(result.components[0]).toBeInstanceOf(TextDisplayBuilder);
+        expect(result.components[1]).toBeInstanceOf(ActionRowBuilder);
+    });
+
+    it("should set accent color when provided", () => {
+        const data: ContainerData = {
+            accentColor: "#ff5733",
+            components: ["Test container with accent color"],
+        };
+        const result = createContainer(data);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.data.accent_color).toBe(16734003);
+    });
+
+    it("should not set accent color when not provided", () => {
+        const data: ContainerData = {
+            components: ["Test container without accent color"],
+        };
+        const result = createContainer(data);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.data.accent_color).toBeUndefined();
+    });
+
+    it("should handle null components and skip them", () => {
+        const data: ContainerData = {
+            components: [null, "Text component", null],
+        };
+        const result = createContainer(data);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(1);
+        expect(result.components[0]).toBeInstanceOf(TextDisplayBuilder);
+    });
+});

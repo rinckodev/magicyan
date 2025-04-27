@@ -1,9 +1,10 @@
+import { brBuilder } from "@magicyan/core";
 import { type APIEmbed, type ColorResolvable, type Embed, type EmbedData, AttachmentBuilder, AttachmentData, EmbedBuilder } from "discord.js";
+import { chars } from "../../constants/chars";
+import { colors } from "../../constants/colors";
 import { type EmbedPlusAssetData, createEmbedAsset } from "./assets";
 import { type EmbedPlusFieldData, EmbedPlusFields } from "./fields";
 import { type EmbedPlusFooterData, createEmbedFooter } from "./footer";
-import { chars } from "../../constants/chars";
-import { colors } from "../../constants/colors";
 
 type EmbedPlusBuilderReturn<B> = 
     undefined extends B ? EmbedPlusBuilder :
@@ -13,16 +14,18 @@ type EmbedPlusBuilderReturn<B> =
 export type EmbedPlusColorData = string&{} | ColorResolvable | null;
 export type EmbedPlusAuthorData = { name: string, url?: string, iconURL?: string }
 
+type MaybeString = string | null | undefined;
+
 export interface EmbedPlusData {
     title?: string | null;
     color?: EmbedPlusColorData | null;
-    description?: string | null;
+    description?: MaybeString | MaybeString[];
     url?: string | null | { toString(): string };
     thumbnail?: EmbedPlusAssetData;
     image?: EmbedPlusAssetData;
     fields?: Partial<EmbedPlusFieldData>[] | null
-    timestamp?: string | number | Date | null;
-    footer?: EmbedPlusFooterData;
+    timestamp?: string | number | Date | null | boolean;
+    footer?: EmbedPlusFooterData | string;
     author?: EmbedPlusAuthorData;
 }
 
@@ -62,16 +65,22 @@ export class EmbedPlusBuilder extends EmbedBuilder {
 
         if (builderData.url) builderData.url = builderData.url.toString();
 
-        const { color, footer, image, thumbnail, timestamp } = embedData;
-        if (footer) Object.assign(builderData, { footer: createEmbedFooter(footer) });
+        const { color, footer, image, thumbnail, timestamp, description } = embedData;
+        if (!footer) delete builderData.footer;
+        if (footer) {
+            Object.assign(builderData, { footer: createEmbedFooter(footer) })
+        };
         if (image) Object.assign(builderData, { image: createEmbedAsset(image) });
         if (thumbnail) Object.assign(builderData, { thumbnail: createEmbedAsset(thumbnail) });
-
+        if (description) builderData.description = brBuilder(description);
+        
         const embed = new EmbedBuilder(builderData);
         
         if (timestamp) embed.setTimestamp(
             typeof timestamp === "string" 
             ? new Date(timestamp)
+            : typeof timestamp === "boolean"
+            ? new Date()
             : timestamp
         );
         if (color) embed.setColor(color as ColorResolvable);
@@ -106,16 +115,6 @@ export class EmbedPlusBuilder extends EmbedBuilder {
         }
         return this;
     }
-    // public setBorderColor(color: EmbedPlusColorData | null): this {
-    //     if (color === null){
-    //         this.setColor(colors.embedbg as ColorResolvable);
-    //     } else if (typeof color === "number"){
-    //         this.update({ color });
-    //     } else {
-    //         this.setColor(color as ColorResolvable);
-    //     }
-    //     return this;
-    // }
     public setAsset(asset: "thumbnail" | "image", source: EmbedPlusAssetData){
         this.update({ [asset]: source });
         return this;
