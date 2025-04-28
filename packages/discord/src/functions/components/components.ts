@@ -1,9 +1,10 @@
-import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, type ContainerBuilder, FileBuilder, MediaGalleryBuilder, type MessageActionRowComponentBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder } from "discord.js";
-import { isAnySelectMenuBuilder } from "../../guards/selectmenu";
+import { ActionRowBuilder, AttachmentBuilder, type ContainerBuilder, FileBuilder, MediaGalleryBuilder, type MessageActionRowComponentBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder } from "discord.js";
 import { isAttachment } from "../../guards/attachment";
+import { isButtonBuilder } from "../../guards/button";
+import { isAnySelectMenuBuilder } from "../../guards/selectmenu";
 import { createMediaGallery } from "./gallery";
-import { createTextDisplay } from "./text";
 import { createRow } from "./row";
+import { createTextDisplay } from "./text";
 
 export type ComponentData =
     | TextDisplayBuilder
@@ -20,15 +21,18 @@ export type ComponentData =
     | undefined
 
 export function createComponents(...data: (ComponentData | ContainerBuilder)[]) {
-    return data.filter(value => value !== null).map(component => {
+    return data.filter(value => value !== null && value !== undefined).map(component => {
         if (typeof component === "string") {
             return createTextDisplay(component);
         }
         if (Array.isArray(component)) {
             return createRow(...component)
         }
-        if (isAnySelectMenuBuilder(component) || component instanceof ButtonBuilder) {
+        if (isAnySelectMenuBuilder(component)) {
             return createRow(component)
+        }
+        if (isButtonBuilder(component)){
+            return createRow(component);
         }
         if (isAttachment(component)){
             return createMediaGallery(component);
@@ -36,3 +40,4 @@ export function createComponents(...data: (ComponentData | ContainerBuilder)[]) 
         return component;
     });
 }
+

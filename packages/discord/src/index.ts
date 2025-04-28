@@ -33,5 +33,6 @@ export * from "./functions/webhooks";
 
 export * from "./guards/attachment";
 export * from "./guards/selectmenu";
+export * from "./guards/button";
 
 export * from "@magicyan/core";

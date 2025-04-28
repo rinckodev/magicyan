@@ -1,4 +1,4 @@
-import { createContainer, createSection, createSeparator } from "#package";
+import { createComponents, createSection, createSeparator } from "#package";
 import { AttachmentBuilder, ButtonBuilder, ButtonStyle, Client, User, UserSelectMenuBuilder } from "discord.js";
 
 const client = new Client({
@@ -38,41 +38,43 @@ function menu<R>(current: number, user: User): R {
         user.displayAvatarURL({ size: 512 }),
         { name: "user.png" }
     );
+
+    const c = createComponents(
+        "# Counter menu",
+        createSection({
+            content: "-# Increment counter",
+            button: new ButtonBuilder({
+                customId: `counter/increment`,
+                label: "+", 
+                style: ButtonStyle.Success
+            })
+        }),
+        createSection({
+            content: "-# -",
+            button: new ButtonBuilder({
+                customId: `counter/${current-1}`,
+                label: "\\/", 
+                style: ButtonStyle.Danger
+            })
+        }),
+        createSeparator({ divider: false, large: true }),
+        `Current: ${current}`,
+        new UserSelectMenuBuilder({
+            customId: "user/select",
+            placeholder: "Selecione um usuário",
+        }),
+    )
     
-    const container = createContainer({
-        accentColor: "Greyple",
-        components: [
-            "# Counter menu",
-            createSection({
-                content: "-# Increment counter",
-                button: new ButtonBuilder({
-                    customId: `counter/increment`,
-                    label: "+", 
-                    style: ButtonStyle.Success
-                })
-            }),
-            createSection({
-                content: "-# -",
-                button: new ButtonBuilder({
-                    customId: `counter/${current-1}`,
-                    label: "\\/", 
-                    style: ButtonStyle.Danger
-                })
-            }),
-            createSeparator({ divider: false, large: true }),
-            `Current: ${current}`,
-            new UserSelectMenuBuilder({
-                customId: "user/select",
-                placeholder: "Selecione um usuário",
-            }),
-        ],
-    })
+    // const container = createContainer({
+    //     accentColor: "Greyple",
+    //     components: c,
+    // })
 
     return {
         flags: [
             "Ephemeral", 
             "IsComponentsV2"],
-        components: [container],
+        components: c,
         files: [image],
     } as R;
 }
