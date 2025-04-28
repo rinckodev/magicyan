@@ -1,0 +1,78 @@
+import { createContainer, createSection, createSeparator } from "#package";
+import { AttachmentBuilder, ButtonBuilder, ButtonStyle, Client, User, UserSelectMenuBuilder } from "discord.js";
+
+const client = new Client({
+    intents: []
+});
+
+client.on("ready", (c) => {
+    console.log("ready!");
+    
+    c.application.commands.set([
+        {
+            name: "ping",
+            description: "Replies with pong",
+        }
+    ])
+});
+
+client.on("interactionCreate", interaction => {
+    if (!interaction.isChatInputCommand()) return;
+    if (interaction.commandName !== "ping") return;
+
+    interaction.reply(menu(0, interaction.user));
+});
+
+client.login(process.env.BOT_TOKEN);
+
+client.on("interactionCreate", async interaction => {
+    if (!interaction.isButton()) return;
+
+    const [_, raw] = interaction.customId.split("/")
+
+    interaction.update(menu(Number.parseInt(raw), interaction.user));
+})
+
+function menu<R>(current: number, user: User): R {
+    const image = new AttachmentBuilder(
+        user.displayAvatarURL({ size: 512 }),
+        { name: "user.png" }
+    );
+    
+    const container = createContainer({
+        accentColor: "Greyple",
+        components: [
+            "# Counter menu",
+            createSection({
+                content: "-# Increment counter",
+                button: new ButtonBuilder({
+                    customId: `counter/increment`,
+                    label: "+", 
+                    style: ButtonStyle.Success
+                })
+            }),
+            createSection({
+                content: "-# -",
+                button: new ButtonBuilder({
+                    customId: `counter/${current-1}`,
+                    label: "\\/", 
+                    style: ButtonStyle.Danger
+                })
+            }),
+            createSeparator({ divider: false, large: true }),
+            `Current: ${current}`,
+            new UserSelectMenuBuilder({
+                customId: "user/select",
+                placeholder: "Selecione um usuário",
+            }),
+        ],
+    })
+
+    return {
+        flags: [
+            "Ephemeral", 
+            "IsComponentsV2"],
+        components: [container],
+        files: [image],
+    } as R;
+}

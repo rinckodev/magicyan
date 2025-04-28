@@ -7,12 +7,12 @@ describe("createSeparator", () => {
         const separator = createSeparator();
 
         expect(separator).toBeInstanceOf(SeparatorBuilder);
-        expect(separator.toJSON().divider).toBe(true);
+        expect(separator.toJSON().divider).toBe(undefined);
         expect(separator.toJSON().spacing).toBe(SeparatorSpacingSize.Small);
     });
 
     it("should create a SeparatorBuilder with divider disabled", () => {
-        const separator = createSeparator({ disabled: true });
+        const separator = createSeparator({ divider: false });
 
         expect(separator).toBeInstanceOf(SeparatorBuilder);
         expect(separator.toJSON().divider).toBe(false);
@@ -23,12 +23,12 @@ describe("createSeparator", () => {
         const separator = createSeparator({ large: true });
 
         expect(separator).toBeInstanceOf(SeparatorBuilder);
-        expect(separator.toJSON().divider).toBe(true);
+        expect(separator.toJSON().divider).toBe(undefined);
         expect(separator.toJSON().spacing).toBe(SeparatorSpacingSize.Large);
     });
 
     it("should create a SeparatorBuilder with divider disabled and large spacing", () => {
-        const separator = createSeparator({ disabled: true, large: true });
+        const separator = createSeparator({ divider: false, large: true });
 
         expect(separator).toBeInstanceOf(SeparatorBuilder);
         expect(separator.toJSON().divider).toBe(false);

@@ -1,6 +1,6 @@
 {
   "name": "@magicyan/discord",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Simple functions to facilitate discord bot development",
   "license": "MIT",
   "type": "module",

@@ -17,6 +17,7 @@ export type ComponentData =
     | AttachmentBuilder | AttachmentBuilder
     | string
     | null
+    | undefined
 
 export function createComponents(...data: (ComponentData | ContainerBuilder)[]) {
     return data.filter(value => value !== null).map(component => {

@@ -1,7 +1,7 @@
 import { SeparatorBuilder, SeparatorSpacingSize } from "discord.js";
 
 export interface SeparatorData {
-    disabled?: boolean;
+    divider?: boolean;
     large?: boolean;
 }
 
@@ -13,10 +13,10 @@ export interface SeparatorData {
  * visible separator with small spacing.
  *
  * **Parameters:**
- * - `disabled` (optional): If `true`, the separator will be disabled and won't be rendered. Default is `false`.
+ * - `divider` (optional): If `false`, the separator divider will be disabled and won't be rendered. Default is `true`.
  * - `large` (optional): If `true`, the separator will have a large spacing. Default is `false` (small spacing).
  *
- * @param data - An object containing the optional properties `disabled` and `large` to configure the separator.
+ * @param data - An object containing the optional properties `divider` and `large` to configure the separator.
  * 
  * @returns A {@link SeparatorBuilder} instance with the specified configuration.
  *
@@ -25,8 +25,8 @@ export interface SeparatorData {
  * const separator = createSeparator();
  *
  * @example
- * // Creating a disabled separator (not visible)
- * const separator = createSeparator({ disabled: true });
+ * // Creating a disabled separator divider (not visible)
+ * const separator = createSeparator({ divider: false });
  *
  * @example
  * // Creating a separator with large spacing
@@ -34,7 +34,7 @@ export interface SeparatorData {
  */
 export function createSeparator(data: SeparatorData = {}){
     return new SeparatorBuilder({
-        divider: !data.disabled,
+        divider: data.divider,
         spacing: data.large 
             ? SeparatorSpacingSize.Large
             : SeparatorSpacingSize.Small
