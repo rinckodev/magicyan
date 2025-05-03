@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { createContainer, ContainerData } from "#package";
-import { ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder } from "discord.js"; 
+import { ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder } from "discord.js";
 
 describe("createContainer", () => {
     it("should create a container with a TextDisplay component", () => {
@@ -68,6 +68,64 @@ describe("createContainer", () => {
             components: [null, "Text component", null],
         };
         const result = createContainer(data);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(1);
+        expect(result.components[0]).toBeInstanceOf(TextDisplayBuilder);
+    });
+});
+
+describe("createContainer simple", () => {
+    it("should create a container with a TextDisplay component", () => {
+        const result = createContainer(
+            "Purple",
+            "Hello, world!"
+        );
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(1);
+        expect(result.components[0]).toBeInstanceOf(TextDisplayBuilder);
+    });
+
+    it("should create a container with an ActionRow component", () => {
+        const result = createContainer("Random",
+            new ActionRowBuilder<ButtonBuilder>().addComponents(new ButtonBuilder().setLabel("Click me"))
+        );
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(1);
+        expect(result.components[0]).toBeInstanceOf(ActionRowBuilder);
+    });
+
+    it("should handle multiple types of components", () => {
+        const result = createContainer("Random",
+            "Hello, world!",
+            new ActionRowBuilder<ButtonBuilder>().addComponents(new ButtonBuilder().setLabel("Click me"))
+        );
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(2);
+        expect(result.components[0]).toBeInstanceOf(TextDisplayBuilder);
+        expect(result.components[1]).toBeInstanceOf(ActionRowBuilder);
+    });
+
+    it("should set accent color when provided", () => {
+        const data = {
+            accentColor: "#ff5733",
+            components: ["Test container with accent color"],
+        } satisfies ContainerData;
+        const result = createContainer(data.accentColor, ...data.components);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.data.accent_color).toBe(16734003);
+    });
+
+    it("should handle null components and skip them", () => {
+        const result = createContainer("Random", 
+            null, 
+            "Text component", 
+            null
+        );
 
         expect(result).toBeInstanceOf(ContainerBuilder);
         expect(result.components.length).toBe(1);

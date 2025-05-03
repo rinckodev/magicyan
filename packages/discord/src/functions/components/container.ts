@@ -1,87 +1,65 @@
-import { hexToRgb } from "@magicyan/core";
-import { ActionRowBuilder, ButtonBuilder, Colors, ContainerBuilder, FileBuilder, MediaGalleryBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder, type ContainerComponentData, type RGBTuple } from "discord.js";
-import { isAnySelectMenuBuilder } from "../../guards/selectmenu";
+import { ActionRowBuilder, ButtonBuilder, ColorResolvable, ContainerBuilder, FileBuilder, MediaGalleryBuilder, resolveColor, SectionBuilder, SeparatorBuilder, TextDisplayBuilder, type ContainerComponentData } from "discord.js";
 import { isAttachment } from "../../guards/attachment";
-import { createMediaGallery } from "./gallery";
+import { isAnySelectMenuBuilder } from "../../guards/selectmenu";
 import { ComponentData } from "./components";
-import { createTextDisplay } from "./text";
+import { createMediaGallery } from "./gallery";
 import { createRow } from "./row";
+import { createTextDisplay } from "./text";
 
-export type PresetColor = keyof typeof Colors;
+export type ContainerColor = (string&{}) | ColorResolvable
 
 export interface ContainerData extends Omit<ContainerComponentData, "accentColor" | "type" | "components"> {
-    accentColor?: (string&{}) | number | null | RGBTuple | PresetColor
+    accentColor?: ContainerColor
     components: ComponentData[],
 }
-
 /**
- * Creates a {@link ContainerBuilder} component with customizable accent color and components.
+ * Creates a {@link ContainerBuilder} component with optional accent color and a set of child components.
  *
- * This function generates a container that can include various components such as text displays, action rows,
- * buttons, media galleries, and more. The container also allows for setting an accent color, which can be 
- * either a string (hex color), a number, a predefined color, or an RGB tuple.
+ * This function can be used in two ways:
+ * 1. By passing an object with `accentColor` and `components` properties.
+ * 2. By passing the `accentColor` directly followed by a list of components.
  *
- * **Parameters:**
- * - `accentColor` (optional): The accent color for the container. This can be:
- *   - A hexadecimal color code (string) such as `"#ff5733"`.
- *   - A numeric value representing the color.
- *   - An {@link RGBTuple} (an array of three numbers representing RGB values).
- *   - A predefined color from the {@link Colors} enum (e.g., `Colors.Red`).
- * - `components`: An array of components that can be added to the container. These components can be:
- *   - {@link TextDisplayBuilder}, a string, {@link ActionRowBuilder}, {@link ButtonBuilder}, 
- *   - {@link SectionBuilder}, {@link MediaGalleryBuilder}, {@link FileBuilder}, or 
- *   - {@link SeparatorBuilder}. Attachments are also accepted and will be handled as media galleries.
+ * The container can include various types of components such as:
+ * - `string` (converted to `TextDisplayBuilder`)
+ * - {@link TextDisplayBuilder}
+ * - {@link ActionRowBuilder}
+ * - Arrays of components (converted to an action row)
+ * - {@link ButtonBuilder}
+ * - {@link SectionBuilder}
+ * - {@link MediaGalleryBuilder}
+ * - {@link FileBuilder}
+ * - {@link SeparatorBuilder}
+ * - Discord attachments (treated as media galleries)
  *
- * @param data - An object containing the properties `accentColor` and `components` for configuring the container.
+ * @param data - Either a `ContainerData` object containing `accentColor` and `components`, or the accent color directly.
+ * @param components - When using the overload with accent color as the first parameter, this is the list of components to include in the container.
  *
- * @returns A {@link ContainerBuilder} instance with the specified configuration.
+ * @returns A {@link ContainerBuilder} instance with all components and styles applied.
  *
  * @example
- * // Creating a container with an accent color and a text display component
+ * // Using ContainerData object
  * const container = createContainer({
- *   accentColor: "#ff5733", // Hex color code
- *   components: [
- *     "This is a text display component"
- *   ]
+ *   accentColor: "#ff5733",
+ *   components: ["Welcome to the app!"]
  * });
  *
  * @example
- * // Creating a container with predefined color and an action row containing a button
- * const container = createContainer({
- *   accentColor: Colors.Green, // Predefined color from Colors enum
- *   components: [
- *       createSection({
- *          content: "-# Increment counter",
- *          button: new ButtonBuilder({
- *              customId: `counter/increment`,
- *              label: "+", 
- *              style: ButtonStyle.Success
- *          })
- *      }),
- *   ]
- * });
+ * // Using color and components as separate arguments
+ * const container = createContainer("Red",
+ *   new TextDisplayBuilder().setText("Alert!"),
+ *   new SeparatorBuilder()
+ * );
  *
  * @example
- * // Creating a container with an RGB tuple as the accent color
- * const container = createContainer({
- *   accentColor: [255, 87, 51], // RGB tuple
- *   components: [
- *     "Here's some content."
- *   ]
- * });
+ * // Using RGB tuple
+ * const container = createContainer([255, 0, 0], "Red alert");
  */
-export function createContainer(data: ContainerData){
+export function createContainer(data: ContainerData): ContainerBuilder
+export function createContainer(data: ColorResolvable | string, ...components: ComponentData[]): ContainerBuilder
+export function createContainer(data: ContainerColor | ContainerData, ...components: ComponentData[]): ContainerBuilder{
     const container = new ContainerBuilder();
-    data.accentColor && container.setAccentColor(
-        typeof data.accentColor === "string" 
-        ? data.accentColor in Colors
-            ? Colors[data.accentColor as keyof typeof Colors]
-            : hexToRgb(data.accentColor)
-        : data.accentColor
-    );
-
-    for(const component of data.components){
-        if (!component) continue;
+    const addComponent = (component: ComponentData) => {
+        if (!component) return;
         if (typeof component === "string"){
             container.addTextDisplayComponents(
                 createTextDisplay(component)
@@ -126,6 +104,27 @@ export function createContainer(data: ContainerData){
             container.addSeparatorComponents(component);
         }
     }
+    const setColor = (color: ContainerColor) => {
+        container.setAccentColor(
+            resolveColor(color as ColorResolvable)
+        )
+    }
+    
+    const isContainerData = (value: any): value is ContainerData =>
+        typeof value === "object" 
+        && "components" in value 
+        && Array.isArray(value.components)
+
+    if (isContainerData(data)){
+        if (data.accentColor) setColor(data.accentColor);
+        if (data.spoiler !== undefined) container.setSpoiler(data.spoiler);
+        if (data.id !== undefined) container.setId(data.id);
+        for(const component of data.components) addComponent(component);
+        return container;
+    }
+    
+    setColor(data);
+    for(const component of components) addComponent(component);
 
     return container;
 }

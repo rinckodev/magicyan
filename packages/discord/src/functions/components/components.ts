@@ -1,4 +1,4 @@
-import { ActionRowBuilder, AttachmentBuilder, type ContainerBuilder, FileBuilder, MediaGalleryBuilder, type MessageActionRowComponentBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder } from "discord.js";
+import { ActionRowBuilder, Attachment, AttachmentBuilder, type ContainerBuilder, FileBuilder, MediaGalleryBuilder, type MessageActionRowComponentBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder } from "discord.js";
 import { isAttachment } from "../../guards/attachment";
 import { isButtonBuilder } from "../../guards/button";
 import { isAnySelectMenuBuilder } from "../../guards/selectmenu";
@@ -15,7 +15,7 @@ export type ComponentData =
     | ActionRowBuilder<MessageActionRowComponentBuilder>
     | MessageActionRowComponentBuilder[]
     | MessageActionRowComponentBuilder
-    | AttachmentBuilder | AttachmentBuilder
+    | Attachment | AttachmentBuilder
     | string
     | null
     | undefined
@@ -40,4 +40,3 @@ export function createComponents(...data: (ComponentData | ContainerBuilder)[]) 
         return component;
     });
 }
-

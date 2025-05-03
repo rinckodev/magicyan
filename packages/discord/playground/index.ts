@@ -1,4 +1,4 @@
-import { createComponents, createSection, createSeparator } from "#package";
+import { createComponents, createContainer, createSection, createSeparator } from "#package";
 import { AttachmentBuilder, ButtonBuilder, ButtonStyle, Client, User, UserSelectMenuBuilder } from "discord.js";
 
 const client = new Client({
@@ -42,17 +42,25 @@ function menu<R>(current: number, user: User): R {
     const c = createComponents(
         "# Counter menu",
         createSection({
-            content: "-# Increment counter",
-            button: new ButtonBuilder({
+            content: ["-# Increment counter", "test"],
+            accessory: new ButtonBuilder({
                 customId: `counter/increment`,
                 label: "+", 
                 style: ButtonStyle.Success
             })
         }),
         createSection({
-            content: "-# -",
+            content: ["-#", "-", "opa"],
             button: new ButtonBuilder({
                 customId: `counter/${current-1}`,
+                label: "\\/", 
+                style: ButtonStyle.Danger
+            })
+        }),
+        createSection({
+            content: ["-#", "-", "2eae"],
+            button: new ButtonBuilder({
+                customId: `counter2/${current-1}`,
                 label: "\\/", 
                 style: ButtonStyle.Danger
             })
@@ -63,6 +71,7 @@ function menu<R>(current: number, user: User): R {
             customId: "user/select",
             placeholder: "Selecione um usuário",
         }),
+        createContainer("Random", "text"),
     )
     
     // const container = createContainer({

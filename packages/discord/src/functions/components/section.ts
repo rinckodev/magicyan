@@ -1,17 +1,31 @@
-import { ButtonBuilder, SectionBuilder } from "discord.js";
+import { ButtonBuilder, ButtonComponentData, SectionBuilder, ThumbnailBuilder } from "discord.js";
 import { createTextDisplay } from "./text";
 import { createThumbnail, ThumbnailData } from "./thumbnail";
 
-export type SectionAcessoryData = {
-    button?: never
-    thumbnail: ThumbnailData
-} | {
-    button: ButtonBuilder
-    thumbnail?: never
-}
+export type SectionThumbnailAccessory = ThumbnailBuilder | ThumbnailData;
+export type SectionButtonAccessory = ButtonBuilder | Partial<ButtonComponentData>;
 
-export type SectionData = SectionAcessoryData & {
-    content: string | string[];
+export type SectionAccessory = SectionThumbnailAccessory | SectionButtonAccessory;
+
+export type SectionAccessoryData =
+    | {
+        accessory: SectionAccessory
+        button?: never
+        thumbnail?: never
+    }
+    | {
+        button: SectionButtonAccessory
+        thumbnail?: never
+        accessory?: never
+    }
+    | {
+        thumbnail: SectionThumbnailAccessory
+        button?: never
+        accessory?: never
+    }
+
+export type SectionData = SectionAccessoryData & {
+    content: | string | string[]
 }
 
 /**
@@ -58,18 +72,35 @@ export type SectionData = SectionAcessoryData & {
 export function createSection(data: SectionData): SectionBuilder {
     const section = new SectionBuilder();
 
-    if (data.button){
-        section.setButtonAccessory(data.button);
-    }
-    if (data.thumbnail){
-        section.setThumbnailAccessory(
-            createThumbnail(data.thumbnail)
+    function setAccessory(data: SectionAccessory){
+        if (data instanceof ButtonBuilder) {
+            return section.setButtonAccessory(data);
+        }
+        if (data instanceof ThumbnailBuilder){
+            return section.setThumbnailAccessory(data);
+        }
+        if (typeof data === "string"){
+            return section.setThumbnailAccessory(
+                createThumbnail(data)
+            );
+        }
+        if ("media" in data || "description" in data){
+            return section.setThumbnailAccessory(
+                createThumbnail(data)
+            );
+        }
+        return section.setButtonAccessory(
+            new ButtonBuilder(data)
         );
     }
 
-    if (Array.isArray(data.content)){
+    if (data.accessory || data.button || data.thumbnail){
+        setAccessory(data.accessory ?? data.button ?? data.thumbnail);
+    }
+
+    if (Array.isArray(data.content)) {
         section.addTextDisplayComponents(
-            data.content.map(createTextDisplay)
+            data.content.map(text => createTextDisplay(text))
         );
     } else {
         section.addTextDisplayComponents(

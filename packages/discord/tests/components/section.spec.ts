@@ -1,97 +1,140 @@
 import { describe, it, expect } from "vitest";
+import {
+  ButtonBuilder,
+  ButtonStyle,
+  ComponentType,
+  SectionBuilder,
+  ThumbnailBuilder
+} from "discord.js";
 import { createSection } from "#package";
-import { SectionBuilder, ButtonBuilder, AttachmentBuilder, ComponentType } from "discord.js";
 
 describe("createSection", () => {
-  it("should create a SectionBuilder with a button accessory and single string content", () => {
+  const sampleUrl = "https://cdn.example.com/image.png";
+
+  it("should create section with 'accessory' as ButtonBuilder", () => {
     const button = new ButtonBuilder()
-      .setLabel("Click me")
-      .setCustomId("click_me")
-      .setStyle(1);
+      .setCustomId("test-btn")
+      .setLabel("Accessory Button")
+      .setStyle(ButtonStyle.Primary);
 
-    const content = "Button content";
-    const section = createSection({ content, button });
+    const section = createSection({
+      content: "With accessory ButtonBuilder",
+      accessory: button
+    });
 
     expect(section).toBeInstanceOf(SectionBuilder);
-    expect(section.toJSON().accessory).toBeDefined();
-    expect(section.toJSON().accessory?.type).toBe(ComponentType.Button); // Button = type 2
-    expect(section.toJSON().components).toHaveLength(1);
-    expect(section.toJSON().components[0].content).toBe(content);
+    const json = section.toJSON();
+    expect(json.accessory).toHaveProperty("type", ComponentType.Button);
+    expect(json.accessory).toHaveProperty("label", "Accessory Button");
   });
 
-  it("should create a SectionBuilder with a button accessory and multiple string contents", () => {
+  it("should create section with 'accessory' as ThumbnailBuilder", () => {
+    const thumbnail = new ThumbnailBuilder({
+      media: { url: sampleUrl },
+      description: "Thumb desc"
+    });
+
+    const section = createSection({
+      content: "With accessory ThumbnailBuilder",
+      accessory: thumbnail
+    });
+
+    const json = section.toJSON();
+    expect(json.accessory).toHaveProperty("type", ComponentType.Thumbnail);
+    expect(json.accessory).toHaveProperty("media", { url: sampleUrl });
+    expect(json.accessory).toHaveProperty("description", "Thumb desc");
+  });
+
+  it("should create section with 'accessory' as string URL (thumbnail)", () => {
+    const section = createSection({
+      content: "With accessory string URL",
+      accessory: sampleUrl
+    });
+
+    const json = section.toJSON();
+    expect(json.accessory).toHaveProperty("type", ComponentType.Thumbnail);
+    expect(json.accessory).toHaveProperty("media", { url: sampleUrl });
+  });
+
+  it("should create section with 'accessory' as raw ThumbnailData", () => {
+    const section = createSection({
+      content: "With accessory as ThumbnailData",
+      accessory: {
+        media: { url: sampleUrl },
+        description: "Raw thumb"
+      }
+    });
+
+    const json = section.toJSON();
+    expect(json.accessory).toHaveProperty("type", ComponentType.Thumbnail);
+    expect(json.accessory).toHaveProperty("media", { url: sampleUrl });
+    expect(json.accessory).toHaveProperty("description", "Raw thumb");
+  });
+
+  it("should create section with 'accessory' as raw ButtonComponentData", () => {
+    const section = createSection({
+      content: "With accessory raw button",
+      accessory: {
+        customId: "raw-btn",
+        label: "Raw Btn",
+        style: ButtonStyle.Secondary
+      }
+    });
+
+    const json = section.toJSON();
+    expect(json.accessory).toHaveProperty("type", ComponentType.Button);
+    expect(json.accessory).toHaveProperty("label", "Raw Btn");
+    expect(json.accessory).toHaveProperty("custom_id", "raw-btn");
+  });
+
+  it("should create section with 'button'", () => {
     const button = new ButtonBuilder()
-      .setLabel("More")
-      .setCustomId("more")
-      .setStyle(1);
+      .setCustomId("btn-key")
+      .setLabel("Button Key")
+      .setStyle(ButtonStyle.Success);
 
-    const contents = ["Line 1", "Line 2"];
-    const section = createSection({ content: contents, button });
+    const section = createSection({
+      content: "With button key",
+      button
+    });
 
-    expect(section).toBeInstanceOf(SectionBuilder);
-    expect(section.toJSON().accessory).toBeDefined();
-    expect(section.toJSON().accessory?.type).toBe(2);
-    expect(section.toJSON().components).toHaveLength(contents.length);
-    expect(section.toJSON().components.map(c => c.content)).toEqual(contents);
+    const json = section.toJSON();
+    expect(json.accessory).toHaveProperty("type", ComponentType.Button);
+    expect(json.accessory).toHaveProperty("label", "Button Key");
   });
 
-  it("should create a SectionBuilder with a thumbnail accessory from string URL", () => {
-    const thumbnail = "https://cdn.example.com/image.png";
-    const content = "Thumbnail with URL";
-    const section = createSection({ content, thumbnail });
+  it("should create section with 'thumbnail'", () => {
+    const thumbnail = new ThumbnailBuilder({
+      media: { url: sampleUrl },
+      description: "Key thumb"
+    });
 
-    expect(section).toBeInstanceOf(SectionBuilder);
-    expect(section.toJSON().accessory).toBeDefined();
-    expect(section.toJSON().accessory?.type).toBe(ComponentType.Thumbnail);
-    //@ts-ignore
-    expect(section.toJSON().accessory?.media.url).toBe(thumbnail);
-    expect(section.toJSON().components[0].content).toBe(content);
+    const section = createSection({
+      content: "With thumbnail key",
+      thumbnail
+    });
+
+    const json = section.toJSON();
+    expect(json.accessory).toHaveProperty("type", ComponentType.Thumbnail);
+    expect(json.accessory).toHaveProperty("media", { url: sampleUrl });
+    expect(json.accessory).toHaveProperty("description", "Key thumb");
   });
 
-  it("should create a SectionBuilder with a thumbnail accessory from AttachmentBuilder", () => {
-    const attachment = new AttachmentBuilder(
-      Buffer.from("test"),
-      { name: "testfile.png" }
-    );
-    const content = "Thumbnail from attachment";
-    const section = createSection({ content, thumbnail: attachment });
+  it("should create section with multiple content strings", () => {
+    const content = ["Line 1", "Line 2"];
+    const button = new ButtonBuilder()
+      .setCustomId("multi-line")
+      .setLabel("Lines")
+      .setStyle(ButtonStyle.Primary);
 
-    expect(section).toBeInstanceOf(SectionBuilder);
-    expect(section.toJSON().accessory).toBeDefined();
-    expect(section.toJSON().accessory?.type).toBe(ComponentType.Thumbnail);
-    //@ts-ignore
-    expect(section.toJSON().accessory?.media.url).toBe(`attachment://${attachment.name}`);
-    expect(section.toJSON().components[0].content).toBe(content);
-  });
+    const section = createSection({
+      content,
+      button
+    });
 
-  it("should create a SectionBuilder with a thumbnail accessory from media object", () => {
-    const media = { url: "https://cdn.example.com/media.png" };
-    const content = "Thumbnail from media object";
-    const section = createSection({ content, thumbnail: { media } });
-
-    expect(section).toBeInstanceOf(SectionBuilder);
-    expect(section.toJSON().accessory).toBeDefined();
-    expect(section.toJSON().accessory?.type).toBe(ComponentType.Thumbnail);
-    //@ts-ignore
-    expect(section.toJSON().accessory?.media.url).toBe(media.url);
-    expect(section.toJSON().components[0].content).toBe(content);
-  });
-
-  it("should create a SectionBuilder with a thumbnail accessory from ThumbnailComponentData", () => {
-    const thumbnailData = { 
-      media: { url: "https://cdn.example.com/thumbnail.png" }, 
-      description: "A cool thumbnail" 
-    };
-    const content = "Thumbnail from ThumbnailComponentData";
-    const section = createSection({ content, thumbnail: thumbnailData });
-
-    expect(section).toBeInstanceOf(SectionBuilder);
-    expect(section.toJSON().accessory).toBeDefined();
-    expect(section.toJSON().accessory?.type).toBe(ComponentType.Thumbnail);
-    //@ts-ignore
-    expect(section.toJSON().accessory?.media.url).toBe(thumbnailData.media.url);
-    //@ts-ignore
-    expect(section.toJSON().accessory?.description).toBe(thumbnailData.description);
-    expect(section.toJSON().components[0].content).toBe(content);
+    const json = section.toJSON();
+    expect(json.components).toHaveLength(2);
+    expect(json.components.map(c => c.content)).toEqual(content);
+    expect(json.accessory).toHaveProperty("label", "Lines");
   });
 });
