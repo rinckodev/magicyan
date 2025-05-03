@@ -1,41 +1,49 @@
 type Color = `#${string}` | string;
 
 /**
- * Converts a hexadecimal color string to a numeric RGB representation.
- * 
- * @param color - The hexadecimal color string (with or without `#`).
- * @returns The RGB color as a number.
+ * Converts a hexadecimal color string to its numeric RGB representation.
+ *
+ * @param color - A hexadecimal color string (e.g., `"#FFFFFF"`) or a plain string representing a hex value.
+ * @returns A number representing the RGB value parsed from the hexadecimal string.
  *
  * @example
- * ```ts
- * const rgb = hexToRgb("#FF5733");
- * console.log(rgb); // Output: 16724755
+ * hexToRgb("#FFFFFF");
+ * // Returns: 16777215
  *
- * const rgbNoHash = hexToRgb("FF5733");
- * console.log(rgbNoHash); // Output: 16724755
- * ```
+ * @example
+ * hexToRgb("000000");
+ * // Returns: 0
+ *
+ * @example
+ * hexToRgb("#FF5733");
+ * // Returns: 16724755
+ *
  */
 export function hexToRgb(color: Color): number{
     return Number.parseInt(color.startsWith("#") ? color.slice(1) : color, 16)
 }
+
 /**
- * Converts an RGB color value to a hexadecimal string.
+ * Converts a numeric RGB value to its hexadecimal color string representation.
  *
- * @param rgb - The RGB color value as a number.
- * @param includeHash - Whether to include the `#` prefix in the returned hexadecimal string. Default is `true`.
- * @returns The hexadecimal color string, optionally prefixed with `#`.
+ * @param rgb - The numeric RGB value to convert.
+ * @param includeHash - Whether to prefix the result with `#`. Defaults to `true`.
+ * @returns A hexadecimal color string representing the RGB value, optionally prefixed with `#`.
  *
  * @example
- * ```ts
- * const hexColor = rgbToHex(16724755);
- * console.log(hexColor); // Output: "#ff5733"
+ * rgbToHex(16777215);
+ * // Returns: "#ffffff"
  *
- * const hexColorWithoutHash = rgbToHex(16724755, false);
- * console.log(hexColorWithoutHash); // Output: "ff5733"
- * ```
+ * @example
+ * rgbToHex(0, false);
+ * // Returns: "000000"
+ *
+ * @example
+ * rgbToHex(16724755);
+ * // Returns: "#ff5733"
  */
 export function rgbToHex(rgb: number, includeHash: boolean = true): string {
     const hexValue = rgb.toString(16);
-    const hexColor = `${"0".repeat(6 - hexValue.length)}${hexValue}`;
+    const hexColor = hexValue.padStart(6, "0");
     return includeHash ? `#${hexColor}` : hexColor;
 }

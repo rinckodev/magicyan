@@ -14,10 +14,14 @@ type Sleep = SetTimeoutFunction & {
  * await sleep.minutes(2); // wait 120000 ms
  * ```
  */
-const sleep: Sleep = Object.assign(setSleep, {
-    seconds: (time) => setSleep(time * 1000),
-    minutes: (time) => setSleep(time * 1000 * 60),
-} satisfies Record<string, SetTimeoutFunction>);
+// const sleep: Sleep = Object.assign(setSleep, {
+//     seconds: (time) => setSleep(time * 1000),
+//     minutes: (time) => setSleep(time * 1000 * 60),
+// } satisfies Record<string, SetTimeoutFunction>);
+const sleep: Sleep = time => setSleep(time);
+
+sleep.seconds = time => setSleep(time * 1000);
+sleep.minutes = time => setSleep(time * 1000 * 60);
 
 export { sleep };
 

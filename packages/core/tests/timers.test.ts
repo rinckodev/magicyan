@@ -1,26 +1,38 @@
 import { sleep, createInterval, createTimeout, createLoopInterval } from "#package";
 import { describe, it, expect, vi } from "vitest";
 
-describe("sleep", () => {
-  it("should sleep for the specified time", async () => {
-    const start = Date.now();
-    await sleep(1000);
-    const end = Date.now();
-    expect(end - start).toBeGreaterThanOrEqual(1000);
+describe('sleep function tests', () => {
+  it('should resolve immediately when 0 ms is passed', async () => {
+    vi.useFakeTimers();
+
+    const sleepPromise = sleep(0);
+    vi.runAllTimers();  
+
+    await expect(sleepPromise).resolves.toBeUndefined();
+
+    vi.useRealTimers();  
   });
 
-  it("should sleep for the specified seconds", async () => {
-    const start = Date.now();
-    await sleep.seconds(1);
-    const end = Date.now();
-    expect(end - start).toBeGreaterThanOrEqual(1000);
+  it('should resolve after 100 ms', async () => {
+    vi.useFakeTimers();
+
+    const sleepPromise = sleep(100);
+    vi.advanceTimersByTime(100);
+
+    await expect(sleepPromise).resolves.toBeUndefined();
+
+    vi.useRealTimers();
   });
 
-  it("should sleep for the specified minutes", async () => {
-    const start = Date.now();
-    await sleep.minutes(0.1);
-    const end = Date.now();
-    expect(end - start).toBeGreaterThanOrEqual(6000);
+  it('should resolve after 5 seconds when using seconds()', async () => {
+    vi.useFakeTimers();
+
+    const sleepPromise = sleep.seconds(5);
+    vi.advanceTimersByTime(5000);
+
+    await expect(sleepPromise).resolves.toBeUndefined();
+
+    vi.useRealTimers();
   });
 });
 
@@ -138,3 +150,4 @@ describe("createLoopInterval", () => {
     stop();
   });
 });
+

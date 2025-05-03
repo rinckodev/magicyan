@@ -1,4 +1,4 @@
-import { brBuilder, captalize, limitText, notFound, replaceText, spaceBuilder } from "#package";
+import { brBuilder, capitalize, limitText, notFound, replaceText, spaceBuilder } from "#package";
 import { expect, it, describe } from "vitest";
 
 describe("notFound", () => {
@@ -66,19 +66,19 @@ describe("replaceText", () => {
 
 describe("captalize", () => {
     it("should capitalize the first letter of the word", () => {
-        expect(captalize("hello")).toBe("Hello");
+        expect(capitalize("hello")).toBe("Hello");
     });
 
     it("should capitalize the first letter of each word if allWords is true", () => {
-        expect(captalize("i love brazil", true)).toBe("I Love Brazil");
+        expect(capitalize("i love brazil", true)).toBe("I Love Brazil");
     });
 
     it("should handle multiple spaces correctly", () => {
-        expect(captalize("  hello world  ")).toBe("Hello world");
+        expect(capitalize("  hello world  ")).toBe("Hello world");
     });
 
     it("should handle empty strings", () => {
-        expect(captalize("")).toBe("");
+        expect(capitalize("")).toBe("");
     });
 });
 
