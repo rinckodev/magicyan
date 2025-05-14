@@ -6,36 +6,50 @@ export interface SeparatorData {
 }
 
 /**
- * Creates a {@link SeparatorBuilder} component with customizable options for visibility and spacing.
+ * Creates a {@link SeparatorBuilder} component with configurable visibility and spacing.
  *
- * This function generates a separator that can be configured to either be visible or disabled, 
- * and can have either small or large spacing between components. The default settings are for a 
- * visible separator with small spacing.
+ * This function generates a separator component that can be customized for:
+ * - Visibility (`divider`: whether the visual divider line is shown).
+ * - Spacing (`large`: whether to use large or small spacing).
  *
- * **Parameters:**
- * - `divider` (optional): If `false`, the separator divider will be disabled and won't be rendered. Default is `true`.
- * - `large` (optional): If `true`, the separator will have a large spacing. Default is `false` (small spacing).
+ * It accepts parameters in two formats:
  *
- * @param data - An object containing the optional properties `divider` and `large` to configure the separator.
- * 
+ * **1. As an object:**
+ * @param data - An optional object with the following properties:
+ * - `divider` (boolean, optional): Whether the divider is visible. Defaults to `true`.
+ * - `large` (boolean, optional): Whether to use large spacing. Defaults to `false`.
+ *
+ * **2. As positional arguments:**
+ * @param large - Whether to use large spacing. Defaults to `false`.
+ * @param divider - Whether the divider is visible. Defaults to `true`.
+ *
  * @returns A {@link SeparatorBuilder} instance with the specified configuration.
  *
  * @example
- * // Creating a separator with default settings (visible and small spacing)
- * const separator = createSeparator();
+ * // Using object syntax with default options
+ * const separator = createSeparator(); 
  *
  * @example
- * // Creating a disabled separator divider (not visible)
- * const separator = createSeparator({ divider: false });
+ * // Using object syntax to disable the divider and enable large spacing
+ * const separator = createSeparator({ divider: false, large: true });
  *
  * @example
- * // Creating a separator with large spacing
- * const separator = createSeparator({ large: true });
+ * // Using positional arguments: large spacing, visible divider
+ * const separator = createSeparator(true, true);
+ *
+ * @example
+ * // Using positional arguments: small spacing, hidden divider
+ * const separator = createSeparator(false, false);
  */
-export function createSeparator(data: SeparatorData = {}){
+export function createSeparator(large?: boolean, divider?: boolean): SeparatorBuilder
+export function createSeparator(data?: SeparatorData): SeparatorBuilder
+export function createSeparator(argA?: SeparatorData | boolean, argB?: boolean): SeparatorBuilder{
+    const [large, divider] = typeof argA === "object" 
+        ? [argA.large, argA.divider] 
+        : [argA, argB];
     return new SeparatorBuilder({
-        divider: data.divider,
-        spacing: data.large 
+        divider: divider,
+        spacing: large 
             ? SeparatorSpacingSize.Large
             : SeparatorSpacingSize.Small
     });

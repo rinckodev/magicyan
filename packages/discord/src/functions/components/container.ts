@@ -55,8 +55,8 @@ export interface ContainerData extends Omit<ContainerComponentData, "accentColor
  * const container = createContainer([255, 0, 0], "Red alert");
  */
 export function createContainer(data: ContainerData): ContainerBuilder
-export function createContainer(data: ColorResolvable | string, ...components: ComponentData[]): ContainerBuilder
-export function createContainer(data: ContainerColor | ContainerData, ...components: ComponentData[]): ContainerBuilder{
+export function createContainer(data: ColorResolvable | string, ...components: (ComponentData | ComponentData[])[]): ContainerBuilder
+export function createContainer(data: ContainerColor | ContainerData, ...items: (ComponentData | ComponentData[])[]): ContainerBuilder{
     const container = new ContainerBuilder();
     const addComponent = (component: ComponentData) => {
         if (!component) return;
@@ -124,7 +124,8 @@ export function createContainer(data: ContainerColor | ContainerData, ...compone
     }
     
     setColor(data);
-    for(const component of components) addComponent(component);
+    
+    for(const component of items.flat()) addComponent(component);
 
     return container;
 }

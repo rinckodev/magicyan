@@ -1,6 +1,7 @@
 export * from "./constants/chars";
 export * from "./constants/client";
 export * from "./constants/embed";
+export * from "./constants/separator";
 
 export * from "./functions/misc";
 

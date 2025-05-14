@@ -29,83 +29,89 @@ export type SectionData = SectionAccessoryData & {
 }
 
 /**
- * Creates a {@link SectionBuilder} component with customizable content, thumbnail, and optional button.
+ * Creates a {@link SectionBuilder} component with customizable text content and a single visual accessory.
  *
- * This function generates a section that can either have a button, a thumbnail, or both as accessories,
- * along with the provided content. The content can be a single string or an array of strings.
- * If both a button and a thumbnail are provided, only one can be set, as specified in the types.
+ * This function allows you to generate a section with content (as a string or an array of strings)
+ * and optionally include a single accessory, which can be a button or a thumbnail.
+ * You can provide the accessory in multiple forms: a builder instance, a plain data object, or a URL string (for thumbnails).
  *
- * **Parameters:**
- * - `content`: The main content of the section. This can either be a single string or an array of strings to be displayed.
- * - `button` (optional): A {@link ButtonBuilder} instance to be added as a button accessory. If provided, no thumbnail can be set.
- * - `thumbnail` (optional): A {@link ThumbnailData} object to set as the thumbnail accessory. If provided, no button can be set.
+ * ---
+ * ### Overloads:
  *
- * @param data - An object containing the properties `content`, `button`, and `thumbnail` for configuring the section.
+ * 1. `createSection(content, accessory)`  
+ *    Pass content as a string and an accessory separately.
  *
- * @returns A {@link SectionBuilder} instance with the specified configuration.
+ * 2. `createSection({ content, accessory | button | thumbnail })`  
+ *    Pass an object with full configuration, using only one of the accessory types.
+ *
+ * ---
+ *
+ * @param content - The main content of the section. Only used in overload 1.
+ * @param accessory - A {@link ButtonBuilder}, {@link ThumbnailBuilder}, or raw data used to build the accessory. Only used in overload 1.
+ *
+ * @param data - An object in overload 2 containing:
+ * - `content`: A string or array of strings for display.
+ * - `accessory`: (optional) A single accessory, either a button or thumbnail.
+ * - `button`: (optional) A {@link ButtonBuilder} or partial button data. Mutually exclusive with `thumbnail` and `accessory`.
+ * - `thumbnail`: (optional) A {@link ThumbnailBuilder}, {@link ThumbnailData}, or image URL. Mutually exclusive with `button` and `accessory`.
+ *
+ * @returns A configured {@link SectionBuilder} instance with the provided content and accessory.
  *
  * @example
- * // Creating a section with a success button
- * const section = createSection({
- *   content: "Welcome to the section!",
- *   button: new ButtonBuilder({
- *     customId: "welcome/button",
- *     label: "Click Me",
- *     style: ButtonStyle.Success,
- *   }),
- * });
+ * // Overload 1: Using content and accessory separately
+ * const section = createSection("Hello World", new ButtonBuilder().setLabel("Click"));
  *
  * @example
- * // Creating a section with a thumbnail and content
+ * // Overload 2: Using content and thumbnail URL via `thumbnail`
  * const section = createSection({
- *   content: "This is a section with a thumbnail.",
+ *   content: "Here's an image section",
  *   thumbnail: "https://example.com/image.png"
  * });
  *
  * @example
- * // Creating a section with an array of content strings and a thumbnail
+ * // Overload 2: Using content and button via `accessory`
  * const section = createSection({
- *   content: ["Line 1", "Line 2", "Line 3"],
- *   thumbnail: "https://example.com/image.png"
+ *   content: "Button section",
+ *   accessory: new ButtonBuilder().setCustomId("id").setLabel("Press").setStyle(ButtonStyle.Primary)
  * });
  */
-export function createSection(data: SectionData): SectionBuilder {
+export function createSection(content: string, accessory: SectionAccessory): SectionBuilder;
+export function createSection(data: SectionData): SectionBuilder;
+export function createSection(argA: SectionData | string, argB?: SectionAccessory): SectionBuilder {
     const section = new SectionBuilder();
 
-    function setAccessory(data: SectionAccessory){
+    function setAccessory(data: SectionAccessory) {
         if (data instanceof ButtonBuilder) {
             return section.setButtonAccessory(data);
         }
-        if (data instanceof ThumbnailBuilder){
+        if (data instanceof ThumbnailBuilder) {
             return section.setThumbnailAccessory(data);
         }
-        if (typeof data === "string"){
-            return section.setThumbnailAccessory(
-                createThumbnail(data)
-            );
+        if (typeof data === "string") {
+            return section.setThumbnailAccessory(createThumbnail(data));
         }
-        if ("media" in data || "description" in data){
-            return section.setThumbnailAccessory(
-                createThumbnail(data)
-            );
+        if ("media" in data || "description" in data) {
+            return section.setThumbnailAccessory(createThumbnail(data));
         }
-        return section.setButtonAccessory(
-            new ButtonBuilder(data)
-        );
+        return section.setButtonAccessory(new ButtonBuilder(data));
     }
 
-    if (data.accessory || data.button || data.thumbnail){
+    const data: SectionData =
+        typeof argA === "string"
+            ? { content: argA, accessory: argB! }
+            : argA;
+
+    if (data.accessory || data.button || data.thumbnail) {
         setAccessory(data.accessory ?? data.button ?? data.thumbnail);
     }
 
     if (Array.isArray(data.content)) {
         section.addTextDisplayComponents(
-            data.content.map(text => createTextDisplay(text))
+            data.content.map((text) => createTextDisplay(text))
         );
     } else {
-        section.addTextDisplayComponents(
-            createTextDisplay(data.content)
-        );
+        section.addTextDisplayComponents(createTextDisplay(data.content));
     }
+
     return section;
 }
