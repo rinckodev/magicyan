@@ -27,5 +27,9 @@
             "color": "green-500",
             "folderNames": ["minecraft"]
         },
+    ],
+    "typescript.preferences.autoImportSpecifierExcludeRegexes": [
+      "^.*dist.*$",
     ]
+      
 }

@@ -71,7 +71,7 @@ describe("extendedRoleDelete", () => {
         expect(emitSpy).not.toHaveBeenCalled();
     });
 
-    it("should emit 'extendedRoleCreate' with correct parameters", async () => {
+    it("should emit 'extendedRoleDelete' with correct parameters", async () => {
         (mockGuild.fetchAuditLogs as Mock).mockResolvedValue({
             entries: [
                 { targetId: mockRole.id, executorId: mockMember.id } as GuildAuditLogsEntry,
@@ -82,7 +82,7 @@ describe("extendedRoleDelete", () => {
 
         await extendedRoleDelete(mockRole);
 
-        expect(emitSpy).toHaveBeenCalledWith("extendedRoleCreate", mockRole, mockMember);
+        expect(emitSpy).toHaveBeenCalledWith("extendedRoleDelete", mockRole, mockMember);
     });
 
     it("should handle errors gracefully", async () => {

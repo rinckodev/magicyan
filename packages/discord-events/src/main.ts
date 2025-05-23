@@ -45,7 +45,7 @@ export function initDiscordEvents(client: Client){
         webhookMessageCreate(message);
     });
 }
-interface MagicyanEvents {
+interface MagicyanDiscordEvents {
     extendedRoleCreate: ExtendedRoleCreateEvent;
     extendedRoleDelete: ExtendedRoleDeleteEvent; 
     extendedRoleUpdate: ExtendedRoleUpdateEvent;
@@ -69,5 +69,5 @@ interface MagicyanEvents {
 }
 
 declare module "discord.js" {
-	interface ClientEvents extends MagicyanEvents {}
+	interface ClientEvents extends MagicyanDiscordEvents {}
 }

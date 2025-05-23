@@ -43,9 +43,10 @@ export const CustomPartials = {
         Partials.Channel,
         Partials.GuildMember,
         Partials.GuildScheduledEvent,
+        Partials.SoundboardSound,
         Partials.Message,
         Partials.Reaction,
         Partials.ThreadMember,
-        Partials.User,
+        Partials.User
     ]
 };

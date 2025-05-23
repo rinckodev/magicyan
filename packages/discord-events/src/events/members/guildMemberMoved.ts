@@ -18,7 +18,7 @@ export async function guildMemberMoved(oldState: VoiceState, newState: VoiceStat
     .then(({ entries }) => {
         const entry = entries.find(entry => entry.extra.channel.id === newChannel.id);
         if (!entry || !entry.executor) return;
-    
+        
         const executor = guild.members.cache.get(entry.executor.id);
         if (!executor) return;
     
