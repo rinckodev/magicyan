@@ -18,6 +18,7 @@ export * from "./functions/components/gallery";
 export * from "./functions/components/separator";
 export * from "./functions/components/section";
 export * from "./functions/components/text";
+export * from "./functions/components/thumbarea";
 export * from "./functions/components/thumbnail";
 export * from "./functions/components/components";
 export * from "./functions/components/container";

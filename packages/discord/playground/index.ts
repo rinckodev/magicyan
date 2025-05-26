@@ -1,4 +1,4 @@
-import { createComponents, createSeparator } from "#package";
+import { createComponents, createSection, createSeparator } from "#package";
 import { AttachmentBuilder, Client, User } from "discord.js";
 
 const client = new Client({
@@ -38,6 +38,11 @@ function menu<R>(current: number, user: User): R {
         user.displayAvatarURL({ size: 512 }),
         { name: "user.png" }
     );
+
+    const section = createSection({
+        content: "test",
+        thumbnail: "",
+    });
 
     const c = createComponents(
         `# Counter menu ${current}`,
