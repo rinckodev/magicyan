@@ -5,6 +5,7 @@ import { isAnySelectMenuBuilder } from "../../guards/selectmenu";
 import { createMediaGallery } from "./gallery";
 import { createRow } from "./row";
 import { createTextDisplay } from "./text";
+import { isDefined } from "@magicyan/core";
 
 export type ComponentData =
     | TextDisplayBuilder
@@ -26,7 +27,8 @@ type CreateComponentData = ComponentData | ContainerBuilder;
 
 export function createComponents(...data: (CreateComponentData | CreateComponentData[])[]) {
     return data.flat()
-    .filter(value => value !== null && value !== undefined)
+    .filter(value => isDefined(value))
+    .filter(value => typeof value !== "boolean")
     .map(component => {
         if (typeof component === "string") {
             return createTextDisplay(component);

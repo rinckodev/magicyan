@@ -1,5 +1,5 @@
-import { createComponents, createSection, createSeparator } from "#package";
-import { AttachmentBuilder, Client, User } from "discord.js";
+import { createContainer, Separator } from "#package";
+import { Client, User } from "discord.js";
 
 const client = new Client({
     intents: []
@@ -7,7 +7,7 @@ const client = new Client({
 
 client.on("ready", (c) => {
     console.log("ready!");
-    
+
     c.application.commands.set([
         {
             name: "ping",
@@ -20,7 +20,7 @@ client.on("interactionCreate", interaction => {
     if (!interaction.isChatInputCommand()) return;
     if (interaction.commandName !== "ping") return;
 
-    interaction.reply(menu(0, interaction.user));
+    interaction.reply(menu(0));
 });
 
 client.login(process.env.BOT_TOKEN);
@@ -30,72 +30,23 @@ client.on("interactionCreate", async interaction => {
 
     const [_, raw] = interaction.customId.split("/")
 
-    interaction.update(menu(Number.parseInt(raw), interaction.user));
+    interaction.update(menu(Number.parseInt(raw)));
 })
 
-function menu<R>(current: number, user: User): R {
-    const image = new AttachmentBuilder(
-        user.displayAvatarURL({ size: 512 }),
-        { name: "user.png" }
-    );
+function menu<R>(current: number, user?: User): R {
 
-    const section = createSection({
-        content: "test",
-        thumbnail: "",
-    });
-
-    const value: boolean | undefined = false;
-
-    const a = value && "test";
-
-    const c = createComponents(
+    const container = createContainer("Greyple",
         `# Counter menu ${current}`,
         "Text 01",
-        createSeparator({ large: true, divider: false }),
-        "Text 02"
-        // createSection({
-        //     content: ["-# Increment counter", "test"],
-        //     accessory: new ButtonBuilder({
-        //         customId: `counter/increment`,
-        //         label: "+", 
-        //         style: ButtonStyle.Success
-        //     })
-        // }),
-        // createSection({
-        //     content: ["-#", "-", "opa"],
-        //     button: new ButtonBuilder({
-        //         customId: `counter/${current-1}`,
-        //         label: "\\/", 
-        //         style: ButtonStyle.Danger
-        //     })
-        // }),
-        // createSection({
-        //     content: ["-#", "-", "2eae"],
-        //     button: new ButtonBuilder({
-        //         customId: `counter2/${current-1}`,
-        //         label: "\\/", 
-        //         style: ButtonStyle.Danger
-        //     })
-        // }),
-        // createSeparator({ divider: false, large: true }),
-        // `Current: ${current}`,
-        // new UserSelectMenuBuilder({
-        //     customId: "user/select",
-        //     placeholder: "Selecione um usuário",
-        // }),
-        // createContainer("Random", "text"),
+        user && user.displayName,
+        Separator.Default,
+        "Text 02",
     )
-    
-    // const container = createContainer({
-    //     accentColor: "Greyple",
-    //     components: c,
-    // })
 
     return {
         flags: [
-            "Ephemeral", 
+            "Ephemeral",
             "IsComponentsV2"],
-        components: c,
-        files: [image],
+        components: [container],
     } as R;
 }
