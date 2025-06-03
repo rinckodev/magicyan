@@ -19,12 +19,15 @@ export type ComponentData =
     | string
     | null
     | undefined
+    | boolean;
 
 
 type CreateComponentData = ComponentData | ContainerBuilder;
 
 export function createComponents(...data: (CreateComponentData | CreateComponentData[])[]) {
-    return data.flat().filter(value => value !== null && value !== undefined).map(component => {
+    return data.flat()
+    .filter(value => value !== null && value !== undefined)
+    .map(component => {
         if (typeof component === "string") {
             return createTextDisplay(component);
         }

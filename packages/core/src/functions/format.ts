@@ -1,4 +1,7 @@
-export type MaybeString = string | null | undefined;
+import { isDefined } from "./validation";
+
+export type CanBeString = string | { toString(): string };
+export type MaybeString = CanBeString | null | undefined
 /**
  * Ensures that a value is either kept as is (if not `null`) or converted to `undefined`.
  *
@@ -38,7 +41,7 @@ export function notFound<T>(value: T): T & {} | undefined {
  * ```
  */
 export function brBuilder(...texts: (MaybeString | MaybeString[])[]): string {
-    return texts.flat().filter(nonNullish).join("\n");
+    return texts.flat().filter(isDefined).map(txt => `${txt}`).join("\n");
 }
 
 /**
@@ -60,7 +63,7 @@ export function brBuilder(...texts: (MaybeString | MaybeString[])[]): string {
  * // Returns: "Only this"
  */
 export function spaceBuilder(...texts: (MaybeString | MaybeString[])[]): string {
-    return texts.flat().filter(nonNullish).join(" ");
+    return texts.flat().filter(isDefined).map(txt => `${txt}`).join(" ");
 }
 
 /**
@@ -82,10 +85,10 @@ export function spaceBuilder(...texts: (MaybeString | MaybeString[])[]): string 
  * replaceText("Price is {price} dollars", { "{price}": (match) => `$${match.replace(/\D/g, "")}` });
  * // Returns: "Price is $100 dollars"
  */
-export function replaceText<R extends Record<string, any>>(text: string, replaces: R){
+export function replaceText<R extends Record<string, CanBeString>>(text: string, replaces: R){
     let result = String(text);
     for (const prop in replaces){
-        result = result.replaceAll(prop, replaces[prop]);
+        result = result.replaceAll(prop, `${replaces[prop]}`);
     }
     return result;
 }
@@ -135,8 +138,4 @@ export function capitalize(word: string, allWords: boolean = false): string {
  */
 export function limitText(text: string, maxLength: number, endText: string = ""): string{
     return text.length >= maxLength ? text.slice(0, maxLength) + endText : text;
-}
-
-function nonNullish(v: unknown): boolean {
-    return v !== null && v !== undefined;
 }

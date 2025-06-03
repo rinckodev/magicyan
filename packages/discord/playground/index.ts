@@ -44,6 +44,10 @@ function menu<R>(current: number, user: User): R {
         thumbnail: "",
     });
 
+    const value: boolean | undefined = false;
+
+    const a = value && "test";
+
     const c = createComponents(
         `# Counter menu ${current}`,
         "Text 01",

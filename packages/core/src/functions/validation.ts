@@ -52,3 +52,15 @@ export function isUrl(url: string): boolean {
 export function isNumeric(text: string): boolean {
   	return new RegExp(/^\d+$/).test(text);
 }
+
+export function isDefined<T>(value: T): value is NonNullable<T> {
+  return value !== null && value !== undefined;
+}
+
+export function isPromise<T = unknown>(value: unknown): value is Promise<T> {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as any).then === "function"
+  );
+}
