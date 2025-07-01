@@ -1,5 +1,5 @@
 import { createContainer, Separator } from "#package";
-import { Client, User } from "discord.js";
+import { AttachmentBuilder, Client, User } from "discord.js";
 
 const client = new Client({
     intents: []
@@ -34,13 +34,13 @@ client.on("interactionCreate", async interaction => {
 })
 
 function menu<R>(current: number, user?: User): R {
-
     const container = createContainer("Greyple",
         `# Counter menu ${current}`,
         "Text 01",
         user && user.displayName,
         Separator.Default,
         "Text 02",
+        [new AttachmentBuilder(""), "test"],
     )
 
     return {

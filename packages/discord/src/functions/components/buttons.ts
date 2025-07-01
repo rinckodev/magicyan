@@ -1,8 +1,18 @@
-import { type LinkButtonComponentData, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { type LinkButtonComponentData, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentEmojiResolvable } from "discord.js";
 import { createRow } from "./row";
 
 interface CreateLinkButtonData extends Omit<LinkButtonComponentData, "style" | "type"> {}
-export function createLinkButton(data: CreateLinkButtonData){
+export function createLinkButton(link: string, label?: string, emoji?: ComponentEmojiResolvable): ButtonBuilder
+export function createLinkButton(data: CreateLinkButtonData): ButtonBuilder 
+export function createLinkButton(data: CreateLinkButtonData | string, label?: string, emoji?: ComponentEmojiResolvable): ButtonBuilder {
+    if (typeof data === "string"){
+        label??=data;
+        return new ButtonBuilder({
+            style: ButtonStyle.Link,
+            label, url: data,
+            emoji,
+        });
+    }
     data.label??=data.url;
     return new ButtonBuilder({ style: ButtonStyle.Link, ...data });
 }

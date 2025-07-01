@@ -36,8 +36,10 @@ import { type AnyComponentBuilder, ActionRowBuilder } from "discord.js";
  *     )
  * ]);
  */
-export function createRow<Component extends AnyComponentBuilder>(...components: (Component | Component[])[]){
+export function createRow<Component extends AnyComponentBuilder>(
+    ...components: (Component | Component[])[]
+): ActionRowBuilder<Component> {
     return new ActionRowBuilder<Component>({ 
-        components: components.flat() 
+        components: components.flat()
     });
 }

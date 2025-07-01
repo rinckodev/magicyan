@@ -73,11 +73,6 @@ export function createContainer(data: ContainerColor | ContainerData, ...items: 
         if (component instanceof ActionRowBuilder){
             container.addActionRowComponents(component);
         }
-        if (Array.isArray(component)){
-            container.addActionRowComponents(
-                createRow(...component)
-            );
-        }
         if (isAnySelectMenuBuilder(component) || component instanceof ButtonBuilder){
             container.addActionRowComponents(
                 createRow(component)

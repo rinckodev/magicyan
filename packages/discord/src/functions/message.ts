@@ -1,5 +1,5 @@
 import { equalsIgnoreCase, includesIgnoreCase } from "@magicyan/core";
-import type { GuildTextBasedChannel, Message } from "discord.js";
+import type { Client, Guild, GuildTextBasedChannel, Message } from "discord.js";
 
 type FindMessageFilter = (role: Message<true>) => boolean;
 
@@ -47,14 +47,41 @@ export function findMessage(channel: GuildTextBasedChannel){
         }
     };   
 }
-interface MessageUrlInfo {
-    messageId?: string; 
+
+type MessageURLInfo = 
+| {
+    channelId: string;
+    guildId: string;
+    messageId: string; 
+}
+| {
+    messageId?: undefined; 
     channelId?: string;
     guildId?: string;
 }
-export function getMessageUrlInfo(url: string): MessageUrlInfo {
-    const regex = new RegExp(/^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/);
-    if (!regex.test(url)) return { };
-    const [messageId, channelId, guildId] = url.split("/").reverse();
-    return { messageId, channelId, guildId };
+
+export function getMessageURLInfo(url: string): MessageURLInfo {
+  const match = url.match(/^https:\/\/discord\.com\/channels\/(\d+)\/(\d+)\/(\d+)$/);
+  if (!match) return {};
+
+  const [_, guildId, channelId, messageId] = match;
+  return { guildId, channelId, messageId };
+}
+
+export async function fetchMessageFromURL(guild: Guild, url: string): Promise<Message<true> | null>
+export async function fetchMessageFromURL(client: Client | Client, url: string): Promise<Message | null>
+export async function fetchMessageFromURL(gc: Guild | Client, url: string): Promise<Message | null> {
+    const { messageId, channelId } = getMessageURLInfo(url);
+    
+    if (!messageId) return null;
+    
+    const channel = await gc.channels
+        .fetch(channelId)
+        .catch(() => null);
+
+    if (!channel || !("messages" in channel)) return null;
+
+    return channel.messages
+        .fetch(messageId)
+        .catch(() => null);
 }

@@ -1,8 +1,9 @@
 import { Attachment, AttachmentBuilder, MediaGalleryBuilder, MediaGalleryItemData } from "discord.js";
 import { isAttachment } from "../../guards/attachment";
+import { isDefined } from "@magicyan/core";
 
 
-type MediaGallerySource = MediaGalleryItemData | string | Attachment | AttachmentBuilder
+export type MediaGallerySource = MediaGalleryItemData | string | Attachment | AttachmentBuilder | null | undefined
 
 /**
  * Creates a {@link MediaGalleryBuilder} instance with a collection of media items, which can be images, attachments, or URLs.
@@ -44,21 +45,17 @@ type MediaGallerySource = MediaGalleryItemData | string | Attachment | Attachmen
  * );
  *
  */
-export function createMediaGallery(...items: MediaGallerySource[]): MediaGalleryBuilder {
+export function createMediaGallery(...items: (MediaGallerySource | MediaGallerySource[])[]): MediaGalleryBuilder {
     const gallery = new MediaGalleryBuilder();
 
-    for (const item of items) {
+    for (const item of items.flat().filter(isDefined)) {
         if (typeof item === "string") {
-            gallery.addItems({
-                media: { url: item }
-            });
+            gallery.addItems({ media: { url: item } });
             continue;
         }
 
         if (isAttachment(item)) {
-            gallery.addItems({
-                media: { url: `attachment://${item.name}` }
-            });
+            gallery.addItems({ media: { url: `attachment://${item.name}` }});
             continue;
         }
 
