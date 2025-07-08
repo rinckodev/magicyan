@@ -1,5 +1,5 @@
 import { isDefined } from "@magicyan/core";
-import { ActionRowBuilder, Attachment, AttachmentBuilder, type ContainerBuilder, ContainerComponentBuilder, FileBuilder, MediaGalleryBuilder, type MessageActionRowComponentBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder } from "discord.js";
+import { ActionRowBuilder, Attachment, AttachmentBuilder, type ContainerBuilder, ContainerComponentBuilder as DiscordContainerComponentBuilder, FileBuilder, MediaGalleryBuilder, type MessageActionRowComponentBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder } from "discord.js";
 import { isAttachment } from "../../guards/attachment";
 import { isButtonBuilder } from "../../guards/components/button";
 import { isAnySelectMenuBuilder } from "../../guards/components/selectmenu";
@@ -30,6 +30,10 @@ export type ComponentData =
 
 export type CreateComponentData = ComponentData | ContainerBuilder;
 
+export type ContainerComponentBuilder = 
+    | Exclude<DiscordContainerComponentBuilder, ActionRowBuilder>
+    | ActionRowBuilder<MessageActionRowComponentBuilder>;
+
 type CreateComponentsReturn<IsContainer> = IsContainer extends true 
     ? ContainerComponentBuilder[]
     : (ContainerComponentBuilder | ContainerBuilder)[];
@@ -41,7 +45,7 @@ type CreateComponentsData<IsContainer> = IsContainer extends true
 export function createComponents<
     IsContainer extends boolean = false,
     Data extends CreateComponentsData<IsContainer> = CreateComponentsData<IsContainer>
->(...data: (Data | Data[])[]){
+>(...data: (Data | Data[])[]): CreateComponentsReturn<IsContainer> {
     return data.flat()
     .filter(value => isDefined(value))
     .filter(value => typeof value !== "boolean")
