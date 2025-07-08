@@ -1,34 +1,51 @@
 import { isDefined } from "@magicyan/core";
-import { ActionRowBuilder, Attachment, AttachmentBuilder, type ContainerBuilder, FileBuilder, MediaGalleryBuilder, type MessageActionRowComponentBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder } from "discord.js";
+import { ActionRowBuilder, Attachment, AttachmentBuilder, type ContainerBuilder, ContainerComponentBuilder, FileBuilder, MediaGalleryBuilder, type MessageActionRowComponentBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder } from "discord.js";
 import { isAttachment } from "../../guards/attachment";
-import { isButtonBuilder } from "../../guards/button";
-import { isAnySelectMenuBuilder } from "../../guards/selectmenu";
+import { isButtonBuilder } from "../../guards/components/button";
+import { isAnySelectMenuBuilder } from "../../guards/components/selectmenu";
 import { createMediaGallery } from "./gallery";
 import { createRow } from "./row";
 import { createTextDisplay } from "./text";
 
-export type ComponentData =
+export type MagicComponentData =
+    | string
+    | Attachment 
+    | AttachmentBuilder
+    | MessageActionRowComponentBuilder
+
+export type ComponentBuildersData = 
     | TextDisplayBuilder
     | SeparatorBuilder
     | FileBuilder
     | SectionBuilder
     | MediaGalleryBuilder
-    | ActionRowBuilder<MessageActionRowComponentBuilder>
-    | MessageActionRowComponentBuilder
-    | Attachment | AttachmentBuilder
-    | string
+    | ActionRowBuilder<MessageActionRowComponentBuilder>;
+
+export type ComponentData =
+    | ComponentBuildersData
+    | MagicComponentData
     | null
     | undefined
     | boolean;
 
 export type CreateComponentData = ComponentData | ContainerBuilder;
 
-export function createComponents(...data: (CreateComponentData | CreateComponentData[])[]) {
-    return data
-    .flat()
+type CreateComponentsReturn<IsContainer> = IsContainer extends true 
+    ? ContainerComponentBuilder[]
+    : (ContainerComponentBuilder | ContainerBuilder)[];
+
+type CreateComponentsData<IsContainer> = IsContainer extends true 
+    ? ComponentData
+    : ComponentData | ContainerBuilder;
+
+export function createComponents<
+    IsContainer extends boolean = false,
+    Data extends CreateComponentsData<IsContainer> = CreateComponentsData<IsContainer>
+>(...data: (Data | Data[])[]){
+    return data.flat()
     .filter(value => isDefined(value))
     .filter(value => typeof value !== "boolean")
-    .map(component => {
+    .map((component) => {
         if (typeof component === "string") {
             return createTextDisplay(component);
         }
@@ -42,5 +59,5 @@ export function createComponents(...data: (CreateComponentData | CreateComponent
             return createMediaGallery(component);
         }
         return component;
-    });
+    }) as CreateComponentsReturn<IsContainer>;
 }

@@ -59,7 +59,10 @@ export type SectionData = SectionAccessoryData & {
  *
  * @example
  * // Overload 1: Using content and accessory separately
- * const section = createSection("Hello World", new ButtonBuilder().setLabel("Click"));
+ * const section = createSection(
+ *    "Hello World", 
+ *    new ButtonBuilder({ customId: "click", label: "Click", style: ButtonStyle.Success })
+ * );
  *
  * @example
  * // Overload 2: Using content and thumbnail URL via `thumbnail`
@@ -72,7 +75,7 @@ export type SectionData = SectionAccessoryData & {
  * // Overload 2: Using content and button via `accessory`
  * const section = createSection({
  *   content: "Button section",
- *   accessory: new ButtonBuilder().setCustomId("id").setLabel("Press").setStyle(ButtonStyle.Primary)
+ *   accessory: new ButtonBuilder({ customId: "id", label: "Press", style: ButtonStyle.Primary });
  * });
  */
 export function createSection(content: string, accessory: SectionAccessory): SectionBuilder;

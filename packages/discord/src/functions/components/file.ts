@@ -1,4 +1,5 @@
 import { APIUnfurledMediaItem, Attachment, AttachmentBuilder, FileBuilder } from "discord.js";
+import { isAttachment } from "../../guards/attachment";
 
 type FileSource = string | Attachment | AttachmentBuilder
 
@@ -22,8 +23,8 @@ interface CreateFileOptions extends Omit<APIUnfurledMediaItem, "url"> {
  * 
  * @example
  * // Creating a file from an AttachmentBuilder
- * const attachmentBuilder = new AttachmentBuilder("path/to/image.png");
- * const file = createFile(attachmentBuilder);
+ * const attachment = new AttachmentBuilder("path/to/image.png");
+ * const file = createFile(attachment);
  *
  * @example
  * // Creating a file from an attachment reference string
@@ -35,18 +36,12 @@ interface CreateFileOptions extends Omit<APIUnfurledMediaItem, "url"> {
  */
 export function createFile(source: FileSource, options: CreateFileOptions = {}): FileBuilder {
     const prefix = "attachment://"
-    const url = (
-        source instanceof AttachmentBuilder ||
-        source instanceof Attachment
-    )
-    ? `${prefix}${source.name}`
-    : source
+    const url = isAttachment(source)
+        ? `${prefix}${source.name}`
+        : source
 
     return new FileBuilder({
         spoiler: options.spoiler,
-        file: {
-            ...options,
-            url, 
-        }
-    })
+        file: { ...options, url }
+    });
 }

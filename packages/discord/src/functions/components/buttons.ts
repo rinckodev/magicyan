@@ -3,7 +3,7 @@ import { createRow } from "./row";
 
 interface CreateLinkButtonData extends Omit<LinkButtonComponentData, "style" | "type"> {}
 export function createLinkButton(link: string, label?: string, emoji?: ComponentEmojiResolvable): ButtonBuilder
-export function createLinkButton(data: CreateLinkButtonData): ButtonBuilder 
+export function createLinkButton(data: CreateLinkButtonData): ButtonBuilder
 export function createLinkButton(data: CreateLinkButtonData | string, label?: string, emoji?: ComponentEmojiResolvable): ButtonBuilder {
     if (typeof data === "string"){
         label??=data;
@@ -30,9 +30,9 @@ export function createLinkButton(data: CreateLinkButtonData | string, label?: st
  * @returns An array of {@link ActionRowBuilder} instances, each containing up to `maxItemsPerRow` buttons.
  *
  * @example
- * const button1 = new ButtonBuilder().setLabel("A").setCustomId("a").setStyle(ButtonStyle.Primary);
- * const button2 = new ButtonBuilder().setLabel("B").setCustomId("b").setStyle(ButtonStyle.Primary);
- * const button3 = new ButtonBuilder().setLabel("C").setCustomId("c").setStyle(ButtonStyle.Primary);
+ * const button1 = new ButtonBuilder({ customId: "a", label: "A", style: ButtonStyle.Success });
+ * const button2 = new ButtonBuilder({ customId: "b", label: "B", style: ButtonStyle.Primary });
+ * const button3 = new ButtonBuilder({ customId: "c", label: "C", style: ButtonStyle.Danger });
  *
  * const rows = wrapButtons(2, button1, button2, button3);
  * // Result: Two rows, the first with [button1, button2], the second with [button3]

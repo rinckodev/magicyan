@@ -20,21 +20,24 @@ import { type AnyComponentBuilder, ActionRowBuilder } from "discord.js";
  * @example
  * // Create a row with two buttons
  * const row = createRow(
- *   new ButtonBuilder().setCustomId("yes").setLabel("Yes").setStyle(ButtonStyle.Success),
- *   new ButtonBuilder().setCustomId("no").setLabel("No").setStyle(ButtonStyle.Danger)
+ *     new ButtonBuilder({ customId: "a", label: "A", style: ButtonStyle.Success }),
+ *     new ButtonBuilder({ customId: "b", label: "B", style: ButtonStyle.Primary }),
+ *     new ButtonBuilder({ customId: "c", label: "C", style: ButtonStyle.Danger })
  * );
  *
  * @example
  * // Create a row with a string select menu
- * const row = createRow([
- *   new StringSelectMenuBuilder()
- *     .setCustomId("choose")
- *     .setPlaceholder("Make a selection")
- *     .addOptions(
- *       { label: "Option 1", value: "opt1" },
- *       { label: "Option 2", value: "opt2" }
- *     )
- * ]);
+ * const row = createRow(
+ *     new StringSelectMenuBuilder({
+ *         customId: "choose",
+ *         placeholder: "Make a selection",
+ *         options: [
+ *             { label: "Option 1", value: "opt1" },
+ *             { label: "Option 2", value: "opt2" },
+ *             { label: "Option 3", value: "opt3" },
+ *         ]
+ *     })
+ * );
  */
 export function createRow<Component extends AnyComponentBuilder>(
     ...components: (Component | Component[])[]

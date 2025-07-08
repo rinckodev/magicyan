@@ -1,9 +1,9 @@
 import { Attachment, AttachmentBuilder, ThumbnailBuilder, ThumbnailComponentData } from "discord.js";
 
 export type ThumbnailData = 
-| Partial<Omit<ThumbnailComponentData, "type">> 
-| Attachment | AttachmentBuilder
-| string 
+    | Partial<Omit<ThumbnailComponentData, "type">> 
+    | Attachment | AttachmentBuilder
+    | string 
 
 /**
  * Creates a {@link ThumbnailBuilder} from a URL, an attachment, or partial thumbnail data.

@@ -30,7 +30,6 @@ const Other = [
     IntentsBitField.Flags.AutoModerationExecution,
 ];
 
-
 export const CustomItents = {
     Messages,
     Guild,

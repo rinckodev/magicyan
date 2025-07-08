@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { createContainer, ContainerData } from "#package";
-import { ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder } from "discord.js";
+import { createContainer, ContainerData, Separator } from "#package";
+import { ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, SeparatorBuilder, ComponentType } from "discord.js";
 
 describe("createContainer", () => {
     it("should create a container with a TextDisplay component", () => {
@@ -89,7 +89,15 @@ describe("createContainer simple", () => {
 
     it("should create a container with an ActionRow component", () => {
         const result = createContainer("Random",
-            new ActionRowBuilder<ButtonBuilder>().addComponents(new ButtonBuilder().setLabel("Click me"))
+            new ActionRowBuilder<ButtonBuilder>({
+                components: [
+                    new ButtonBuilder({
+                        customId: "click/me",
+                        label: "Click me", 
+                        style: ButtonStyle.Success
+                    })
+                ]
+            })
         );
 
         expect(result).toBeInstanceOf(ContainerBuilder);
@@ -130,5 +138,80 @@ describe("createContainer simple", () => {
         expect(result).toBeInstanceOf(ContainerBuilder);
         expect(result.components.length).toBe(1);
         expect(result.components[0]).toBeInstanceOf(TextDisplayBuilder);
+    });
+
+    it("should set a component at a position", () => {
+        const result = createContainer("Random", 
+            "Text component", 
+            Separator.Default,
+            "Other text component"
+        );
+
+        result.setComponent(1, new ButtonBuilder({
+            customId: "test",
+            style: ButtonStyle.Success,
+            label: "Test"
+        }));
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(3);
+        expect(result.components[1]).toBeInstanceOf(ActionRowBuilder);
+    });
+
+    it("should remove a component at a position", () => {
+        const result = createContainer("Random", 
+            "Text component", 
+            Separator.Default,
+            "Other text component"
+        );
+
+        result.setComponent(1, null);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(2);
+    });
+
+    it("should retrieve a component at a position", () => {
+        const result = createContainer("Random", 
+            "Text component", 
+            Separator.Default,
+            "Other text component"
+        );
+
+        const component = result.componentAt(1);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(3);
+        expect(component).toBeInstanceOf(SeparatorBuilder);
+    });
+
+    it("should retrieve a component with specific type at a position", () => {
+        const result = createContainer("Random", 
+            "Text component", 
+            Separator.Default,
+            "Other text component"
+        );
+
+        const component = result.componentAt(1, ComponentType.TextDisplay);
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(result.components.length).toBe(3);
+        expect(component).toBeInstanceOf(TextDisplayBuilder);
+    });
+
+    it("should create a container from another", () => {
+        const result = createContainer("Random", 
+            "Text component", 
+            Separator.Default,
+            "Other text component"
+        );
+
+        const container = createContainer({ from: result });
+
+        expect(result).toBeInstanceOf(ContainerBuilder);
+        expect(container).toBeInstanceOf(ContainerBuilder);
+        
+        expect(result.components.length).toBe(3);
+        expect(container.components.length).toBe(3);
     });
 });
