@@ -23,6 +23,14 @@ export type MaybeString = CanBeString | null | undefined
 export function notFound<T>(value: T): T & {} | undefined {
     return value !== null ? value : undefined;
 }
+
+function textFilter<T>(text: T[]){
+    return text
+        .filter(isDefined)
+        .filter(bol => bol !== false)
+        .map(txt => `${txt}`)
+}
+
 /**
  * Joins multiple strings or arrays of strings into a single string, separated by line breaks.
  * Filters out any `null` or `undefined` values.
@@ -41,7 +49,7 @@ export function notFound<T>(value: T): T & {} | undefined {
  * ```
  */
 export function brBuilder(...texts: (MaybeString | MaybeString[])[]): string {
-    return texts.flat().filter(isDefined).map(txt => `${txt}`).join("\n");
+    return textFilter(texts.flat()).join("\n");
 }
 
 /**
@@ -63,7 +71,7 @@ export function brBuilder(...texts: (MaybeString | MaybeString[])[]): string {
  * // Returns: "Only this"
  */
 export function spaceBuilder(...texts: (MaybeString | MaybeString[])[]): string {
-    return texts.flat().filter(isDefined).map(txt => `${txt}`).join(" ");
+    return textFilter(texts.flat()).join(" ");
 }
 
 /**

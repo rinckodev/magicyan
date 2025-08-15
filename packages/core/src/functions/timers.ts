@@ -1,11 +1,14 @@
 import { setTimeout as setSleep } from "node:timers/promises";
+import { withProperties } from "./with";
 
 type SetTimeoutFunction = (delay: number) => Promise<void>;
 
-type Sleep = SetTimeoutFunction & {
+interface SleepTimes {
     seconds: SetTimeoutFunction;
     minutes: SetTimeoutFunction;
 }
+
+type Sleep = SetTimeoutFunction & SleepTimes;
 
 /**
  * ```ts
@@ -18,12 +21,21 @@ type Sleep = SetTimeoutFunction & {
 //     seconds: (time) => setSleep(time * 1000),
 //     minutes: (time) => setSleep(time * 1000 * 60),
 // } satisfies Record<string, SetTimeoutFunction>);
-const sleep: Sleep = time => setSleep(time);
+// const sleep: Sleep = time => setSleep(time);
 
-sleep.seconds = time => setSleep(time * 1000);
-sleep.minutes = time => setSleep(time * 1000 * 60);
 
-export { sleep };
+export const sleep: Sleep = withProperties<SetTimeoutFunction, SleepTimes>(
+    time => setSleep(time), 
+    {
+        seconds: time => setSleep(time * 1000),
+        minutes: time => setSleep(time * 1000 * 60)
+    }
+);
+
+// sleep.seconds = time => setSleep(time * 1000);
+// sleep.minutes = time => setSleep(time * 1000 * 60);
+
+// export { sleep };
 
 interface CreateIntervalOptions {
     time: number;
