@@ -5,7 +5,7 @@ import { isMessage } from "../../guards/message";
 
 export type ContainerColor = (string & {}) | ColorResolvable;
 
-export type ContainerInComponentType = 
+export type ContainerInComponentType =
     | ComponentType.TextDisplay
     | ComponentType.ActionRow
     | ComponentType.Section
@@ -15,21 +15,25 @@ export type ContainerInComponentType =
 
 type ContainerType = ContainerBuilder | ContainerPlusBuilder | ContainerComponent;
 
+type InteractionWithMessage = { message: Message };
+
 export interface ContainerData extends Omit<ContainerComponentData, "accentColor" | "type" | "components"> {
     accentColor?: ContainerColor | null
     components?: ComponentData[],
-    from?: ContainerType | Message;
+    from?: ContainerType | Message | InteractionWithMessage;
     fromIndex?: number;
 }
 export class ContainerPlusBuilder extends ContainerBuilder {
     constructor(data?: ContainerData) {
+        const extractData = (message: Message) => message.components
+            .filter(v => v.type === ComponentType.Container)
+            .at(data?.fromIndex ?? 0)?.toJSON() ?? {}
+
         const constructorData: Partial<APIContainerComponent> = isDefined(data?.from)
-            ? isMessage(data.from)
-                ? data.from.components
-                    .filter(v => v.type === ComponentType.Container)
-                    .at(data.fromIndex ?? 0)?.toJSON() ?? {}
+            ? "message" in data.from ? extractData(data.from.message) 
+            : isMessage(data.from) ? extractData(data.from) 
                 : data.from.toJSON()
-            : {};
+                : {}
 
         if (isDefined(data?.accentColor)) {
             constructorData.accent_color = resolveColor(
@@ -95,14 +99,14 @@ export class ContainerPlusBuilder extends ContainerBuilder {
      * const button = container.componentAt(0, ComponentType.ActionRow);
      * const firstComponent = container.componentAt(0);
      */
-    public componentAt(index: number): ContainerComponentBuilder | undefined 
-    public componentAt(index: number, type: ComponentType.TextDisplay): TextDisplayBuilder | undefined 
-    public componentAt(index: number, type: ComponentType.ActionRow): ActionRowBuilder | undefined 
-    public componentAt(index: number, type: ComponentType.Separator): SeparatorBuilder | undefined 
-    public componentAt(index: number, type: ComponentType.MediaGallery): MediaGalleryBuilder | undefined 
-    public componentAt(index: number, type: ComponentType.File): FileBuilder | undefined 
+    public componentAt(index: number): ContainerComponentBuilder | undefined
+    public componentAt(index: number, type: ComponentType.TextDisplay): TextDisplayBuilder | undefined
+    public componentAt(index: number, type: ComponentType.ActionRow): ActionRowBuilder | undefined
+    public componentAt(index: number, type: ComponentType.Separator): SeparatorBuilder | undefined
+    public componentAt(index: number, type: ComponentType.MediaGallery): MediaGalleryBuilder | undefined
+    public componentAt(index: number, type: ComponentType.File): FileBuilder | undefined
     public componentAt(index: number, type?: ContainerInComponentType): ContainerComponentBuilder | undefined {
-        return isDefined(type) 
+        return isDefined(type)
             ? this.components
                 .filter(builder => builder.data.type === type)
                 .at(index)

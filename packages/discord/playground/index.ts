@@ -38,7 +38,7 @@ client.on("interactionCreate", async interaction => {
             : "Ocorreu um erro"
     );
 
-    const container = createContainer({ from: interaction.message });
+    const container = createContainer({ from: interaction });
     container.components
         .filter(row => isActionRowBuilder(row, "buttons"))
         .flatMap(row => row.components)
