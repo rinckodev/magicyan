@@ -19,11 +19,16 @@ export function createModalFields(data: ModalFieldsData): ActionRowBuilder<TextI
 
 export type ModalFieldsRecord<K extends string> = Record<K, string>;
 export function modalFieldsToRecord<K extends string = string>(fields: ModalSubmitInteraction | ModalSubmitFields | Collection<string, TextInputComponent>): ModalFieldsRecord<K> {
-    const reduceFunction = (data: ModalFieldsRecord<K>, { customId, value }: TextInputComponent) => ({ ...data, [customId]: value });
-    const modalFields = 
-    fields instanceof ModalSubmitInteraction ? fields.fields.fields :
-    "fields" in fields ? fields.fields : fields;
-    return modalFields.reduce(reduceFunction, {} as ModalFieldsRecord<K>);
+    const modalFields = fields instanceof ModalSubmitInteraction 
+        ? fields.fields.fields 
+        : "fields" in fields 
+            ? fields.fields 
+            : fields;
+
+    return modalFields.reduce((acc, { customId, value }) => {
+        acc[customId as K] = value;
+        return acc;
+    }, {} as ModalFieldsRecord<K>);
 }
 
 export interface CreateModalData {

@@ -1,7 +1,6 @@
 import { brBuilder } from "@magicyan/core";
 import { type APIEmbed, type ColorResolvable, type Embed, type EmbedData, AttachmentBuilder, AttachmentData, EmbedBuilder } from "discord.js";
 import { chars } from "../../constants/chars";
-import { colors } from "../../constants/colors";
 import { type EmbedPlusAssetData, createEmbedAsset } from "./assets";
 import { type EmbedPlusFieldData, EmbedPlusFields } from "./fields";
 import { type EmbedPlusFooterData, createEmbedFooter } from "./footer";
@@ -107,7 +106,7 @@ export class EmbedPlusBuilder extends EmbedBuilder {
     }
     public override setColor(color: ColorResolvable | null): this {
         if (color === null){
-            super.setColor(colors.embedbg as ColorResolvable);
+            super.setColor("#2B2D31");
         } else if (typeof color === "number"){
             this.update({ color });
         } else {

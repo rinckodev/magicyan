@@ -4,6 +4,7 @@ const Messages = [
     IntentsBitField.Flags.DirectMessagePolls,
     IntentsBitField.Flags.DirectMessageReactions,
     IntentsBitField.Flags.DirectMessageTyping,
+    IntentsBitField.Flags.DirectMessages,
     IntentsBitField.Flags.MessageContent,
     IntentsBitField.Flags.GuildMessages,
     IntentsBitField.Flags.GuildMessageReactions,
