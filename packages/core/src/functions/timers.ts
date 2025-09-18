@@ -10,20 +10,6 @@ interface SleepTimes {
 
 type Sleep = SetTimeoutFunction & SleepTimes;
 
-/**
- * ```ts
- * await sleep(100); // wait 100 ms
- * await sleep.seconds(5); // wait 5000 ms
- * await sleep.minutes(2); // wait 120000 ms
- * ```
- */
-// const sleep: Sleep = Object.assign(setSleep, {
-//     seconds: (time) => setSleep(time * 1000),
-//     minutes: (time) => setSleep(time * 1000 * 60),
-// } satisfies Record<string, SetTimeoutFunction>);
-// const sleep: Sleep = time => setSleep(time);
-
-
 export const sleep: Sleep = withProperties<SetTimeoutFunction, SleepTimes>(
     time => setSleep(time), 
     {
@@ -31,11 +17,6 @@ export const sleep: Sleep = withProperties<SetTimeoutFunction, SleepTimes>(
         minutes: time => setSleep(time * 1000 * 60)
     }
 );
-
-// sleep.seconds = time => setSleep(time * 1000);
-// sleep.minutes = time => setSleep(time * 1000 * 60);
-
-// export { sleep };
 
 interface CreateIntervalOptions {
     time: number;

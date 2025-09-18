@@ -6,3 +6,4 @@ export * from "./functions/ms";
 export * from "./functions/timers";
 export * from "./functions/validation";
 export * from "./functions/with";
+export * from "./functions/date";
