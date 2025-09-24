@@ -138,26 +138,26 @@ export class DatePlus extends Date {
      * console.log(d2.diff(d1, "milliseconds")); // 777600000
      */
     public diff(other: Date | DatePlus, unit: DateUnit = "milliseconds"): number {
-        const msDiff = this.getTime() - other.getTime();
+        const msDiff = Math.abs(this.getTime() - other.getTime());
 
         switch (unit) {
             case "milliseconds":
                 return msDiff;
             case "seconds":
-                return msDiff / 1000;
+                return Math.floor(msDiff / 1000);
             case "minutes":
-                return msDiff / (1000 * 60);
+                return Math.floor(msDiff / (1000 * 60));
             case "hours":
-                return msDiff / (1000 * 60 * 60);
+                return Math.floor(msDiff / (1000 * 60 * 60));
             case "days":
-                return msDiff / (1000 * 60 * 60 * 24);
+                return Math.floor(msDiff / (1000 * 60 * 60 * 24));
             case "months": {
                 const years = this.getFullYear() - other.getFullYear();
                 const months = this.getMonth() - other.getMonth();
-                return years * 12 + months;
+                return Math.abs(years * 12 + months);
             }
             case "years":
-                return this.getFullYear() - other.getFullYear();
+                return Math.abs(this.getFullYear() - other.getFullYear());
         }
     }
 }

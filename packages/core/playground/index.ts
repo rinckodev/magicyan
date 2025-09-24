@@ -9,3 +9,4 @@ date.setHours(12, 0, 0, 0);
 
 console.log(date.toLocaleString("pt-BR"));
 
+console.log(date.diff(createDate(), "months"));
