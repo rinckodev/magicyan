@@ -4,8 +4,8 @@ type FindCommandFilter = (command: ApplicationCommand) => boolean
 
 export function findCommand(guildOrClient: Guild | Client<true>){
     const commands = guildOrClient instanceof Client
-    ? guildOrClient.application.commands.cache
-    : guildOrClient.commands.cache;
+        ? guildOrClient.application.commands.cache
+        : guildOrClient.commands.cache;
 
     return {
         byName(name: string, and: FindCommandFilter = () => true){

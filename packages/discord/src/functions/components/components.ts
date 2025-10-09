@@ -47,8 +47,7 @@ export function createComponents<
     Data extends CreateComponentsData<IsContainer> = CreateComponentsData<IsContainer>
 >(...data: (Data | Data[])[]): CreateComponentsReturn<IsContainer> {
     return data.flat()
-    .filter(value => isDefined(value))
-    .filter(value => typeof value !== "boolean")
+    .filter(value => isDefined(value) && typeof value !== "boolean")
     .map((component) => {
         if (typeof component === "string") {
             return createTextDisplay(component);

@@ -46,21 +46,16 @@ export type MediaGallerySource = MediaGalleryItemData | string | Attachment | At
  *
  */
 export function createMediaGallery(...items: (MediaGallerySource | MediaGallerySource[])[]): MediaGalleryBuilder {
-    const gallery = new MediaGalleryBuilder();
-
-    for (const item of items.flat().filter(isDefined)) {
-        if (typeof item === "string") {
-            gallery.addItems({ media: { url: item } });
-            continue;
-        }
-
-        if (isAttachment(item)) {
-            gallery.addItems({ media: { url: `attachment://${item.name}` }});
-            continue;
-        }
-
-        gallery.addItems(item);
-    }
-
-    return gallery;
+    return new MediaGalleryBuilder({
+        items: items.flat().filter(isDefined)
+            .map(item => {
+                if (typeof item === "string"){
+                    return { media: { url: item } }
+                }
+                if (isAttachment(item)){
+                    return { media: { url: `attachment://${item.name}` } }
+                }
+                return item;
+            })
+    });
 }
