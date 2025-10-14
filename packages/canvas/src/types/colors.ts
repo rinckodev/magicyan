@@ -1,4 +1,5 @@
-export type CssColors = "black" 
+export type CssColors = 
+| "black" 
 | "silver" 
 | "gray" 
 | "white" 

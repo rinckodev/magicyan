@@ -1,7 +1,7 @@
 {
     "name": "@magicyan/canvas",
-    "version": "0.0.10",
-    "description": "A @napi-rs/canvas wrapper",
+    "version": "1.0.0",
+    "description": "Utilities for canvas",
     "license": "MIT",
     "type": "module",
     "publishConfig": {
@@ -45,7 +45,7 @@
         "vite-tsconfig-paths": "^5.1.0",
         "vitest": "^2.1.4"
     },
-    "dependencies": {
-        "@napi-rs/canvas": "^0.1.65"
+    "peerDependencies": {
+        "@napi-rs/canvas": "^0.1.78"
     }
 }

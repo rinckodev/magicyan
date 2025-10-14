@@ -23,6 +23,6 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "moduleDetection": "force",
-
+    "ignoreDeprecations": "6.0"
   }
 }

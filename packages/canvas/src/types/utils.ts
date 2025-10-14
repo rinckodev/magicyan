@@ -1,0 +1,1 @@
+export type StrOr<Completions> = (string&{}) | Completions;

@@ -1,42 +1,44 @@
-import { BlurFilter, BrightnessFilter, ContrastFilter, DropShadowFilter, GrayscaleFilter, HueRotateFilter, InvertFilter, OpacityFilter, SepiaFilter } from "../types/CanvasFilter";
-import { ContextColor } from "../types/CanvasContext";
+import type { StrOr } from "../types/utils";
+import type { CssColors } from "../types/colors";
 
-export function blurFilter(amount: number): BlurFilter {
-    return `blur(${amount}px)`;
-}
-export function opacityFilter(percentage: number): OpacityFilter {
-    return `opacity(${percentage}%)`;
-}
-export function hueRotateFilter(deg: number): HueRotateFilter {
-    return `hue-rotate(${deg}deg)`;
-}
-export function sepiaFilter(percentage: number): SepiaFilter {
-    return `sepia(${percentage}%)`;
-}
-export function brightnessFilter(percentage: number): BrightnessFilter {
-    return `brightness(${percentage}%)`;
-}
-export function contrastFilter(percentage: number): ContrastFilter {
-    return `contrast(${percentage}%)`;
-}
-export function invertFilter(percentage: number): InvertFilter {
-    return `invert(${percentage}%)`;
-}
-export function grayscaleFilter(percentage: number): GrayscaleFilter {
-    return `grayscale(${percentage}%)`;
-}
-export function dropShadowFilter(x: number, y: number, blur: number, color: ContextColor = "black"): DropShadowFilter {
-    return `drop-shadow(${x}px ${y}px ${blur}px ${color})`;
-}
+export const Filter = {
+    blur(amount: number): string {
+        return `blur(${amount}px)`;
+    },
+    opacity(percentage: number): string {
+        return `opacity(${percentage}%)`;
+    },
+    hueRotate(deg: number): string {
+        return `hue-rotate(${deg}deg)`;
+    },
+    sepia(percentage: number): string {
+        return `sepia(${percentage}%)`;
+    },
+    brightness(percentage: number): string {
+        return `brightness(${percentage}%)`;
+    },
+    contrast(percentage: number): string {
+        return `contrast(${percentage}%)`;
+    },
+    invert(percentage: number): string {
+        return `invert(${percentage}%)`;
+    },
+    grayscale(percentage: number): string {
+        return `grayscale(${percentage}%)`;
+    },
+    dropShadow(x: number, y: number, blur: number, color: StrOr<CssColors> = "black"): string {
+        return `drop-shadow(${x}px ${y}px ${blur}px ${color})`;
+    }
+} as const;
 
-export const filter = {
-    blur: blurFilter,
-    opacity: opacityFilter,
-    hueRotate: hueRotateFilter,
-    sepia: sepiaFilter,
-    brightness: brightnessFilter,
-    contrast: contrastFilter,
-    invert: invertFilter,
-    grayscale: grayscaleFilter,
-    drop: dropShadowFilter
-};
+export const {
+    blur,
+    opacity,
+    hueRotate,
+    sepia,
+    brightness,
+    contrast,
+    invert,
+    grayscale,
+    dropShadow
+} = Filter;
