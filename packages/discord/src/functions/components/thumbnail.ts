@@ -1,9 +1,9 @@
 import { Attachment, AttachmentBuilder, ThumbnailBuilder, ThumbnailComponentData } from "discord.js";
 
-export type ThumbnailData = 
-    | Partial<Omit<ThumbnailComponentData, "type">> 
+export type ThumbnailData =
+    | Partial<Omit<ThumbnailComponentData, "type">>
     | Attachment | AttachmentBuilder
-    | string 
+    | string
 
 /**
  * Creates a {@link ThumbnailBuilder} from a URL, an attachment, or partial thumbnail data.
@@ -33,13 +33,13 @@ export type ThumbnailData =
 export function createThumbnail(data: ThumbnailData): ThumbnailBuilder {
     const thumbnail = new ThumbnailBuilder();
 
-    if (typeof data === "string"){
+    if (typeof data === "string") {
         return thumbnail.setURL(data);
     }
-    if (data instanceof AttachmentBuilder || data instanceof Attachment){
+    if (data instanceof AttachmentBuilder || data instanceof Attachment) {
         return thumbnail
-        .setURL(`attachment://${data.name}`)
-        .setSpoiler(data.spoiler);
+            .setURL(`attachment://${data.name}`)
+            .setSpoiler(data.spoiler);
     }
     return new ThumbnailBuilder(data);
 }

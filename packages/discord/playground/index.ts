@@ -1,5 +1,5 @@
-import { brBuilder, createFileUpload, createLabel, createModalFields, createTextInput, CustomItents, modalFieldsToRecord } from "#package";
-import { ChannelSelectMenuBuilder, ChannelType, Client, codeBlock } from "discord.js";
+import { brBuilder, createFileUpload, createLabel, createModalFields, CustomItents, modalFieldsToRecord } from "#package";
+import { Client, codeBlock } from "discord.js";
 
 const client = new Client({
     intents: CustomItents.All
@@ -28,27 +28,20 @@ client.on("interactionCreate", async interaction => {
             "-# Footer",
         ),
         createLabel(
-            "Título",
-            createTextInput({
-                customId: "title",
-                placeholder: "\"Minha nova postagem\"",
-                required: false
-            })
-        ),
-        createLabel(
-            "Canal",
-            new ChannelSelectMenuBuilder({
-                customId: "channel",
-                placeholder: "Escolha o canal da postagem",
-                channelTypes: [ChannelType.GuildText]
-            })
-        ),
-        createLabel(
             "Envie arquivos",
-            createFileUpload({
-                customId: "upload",
-                required: false
-            })
+            createFileUpload("upload")
+        ),
+        createLabel(
+            "Envie arquivos mais",
+            createFileUpload("uploadplus1", false)
+        ),
+        createLabel(
+            "Envie arquivos mais ainda",
+            createFileUpload("uploadplus2", true, 5)
+        ),
+        createLabel(
+            "Envie arquivos mais do que mais ainda",
+            createFileUpload("uploadplus3", false, 4)
         )
     );
 

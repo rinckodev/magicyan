@@ -3,7 +3,7 @@ import { createSeparator } from "../functions/components/separator";
 /**
  * Predefined separator spacing variants for quick use.
  */
-export const Separator = {
+export const Separator = Object.freeze({
     /**
      * Default separator with small spacing and visible divider.
      * Equivalent to: `createSeparator()`
@@ -33,5 +33,4 @@ export const Separator = {
     get Hidden(){
         return createSeparator(false, false)
     }
-} as const;
-
+});
