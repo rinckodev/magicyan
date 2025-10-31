@@ -1,5 +1,5 @@
 import { isDefined } from "@magicyan/core";
-import { Collection, ComponentType, LabelBuilder, LabelComponentData, ModalData, TextDisplayBuilder, TextDisplayComponentData } from "discord.js";
+import { Attachment, Collection, ComponentType, LabelBuilder, LabelComponentData, ModalData, TextDisplayBuilder, TextDisplayComponentData } from "discord.js";
 
 type ModalComponents =
     | LabelBuilder
@@ -16,9 +16,39 @@ type ResolveModalData =
 
 type ModalFieldsRecord = Record<string, string | string[]>;
 
-export function modalFieldsToRecord<T = ModalFieldsRecord>(data: ResolveModalData): ModalFieldsRecord
-export function modalFieldsToRecord<T = ModalFieldsRecord>(data: ResolveModalData, parse: (record: ModalFieldsRecord) => T): T
-export function modalFieldsToRecord<T = ModalFieldsRecord>(data: ResolveModalData, parse?: (record: ModalFieldsRecord) => T): ModalFieldsRecord | T {
+/**
+ * Converts modal submitted fields into a plain record object, mapping each component `customId` to its value.
+ *
+ * This function supports multiple modal submission data shapes coming from Discord.js,
+ * automatically extracting and normalizing values from:
+ * - Text input fields (`ComponentType.TextInput`) → string
+ * - Select menus & other multi-value components → string[]
+ * - File upload fields (`ComponentType.FileUpload`) → string[] of attachment URLs
+ *
+ * Optionally, a parser callback may be provided to transform the resulting record before returning it.
+ *
+ * @template T The expected return type after optional parsing.
+ * @param {ResolveModalData} data - The modal submission data, usually from an interaction.
+ * @param {(record: ModalFieldsRecord) => T} [parse] - Optional transform function applied to the resulting record.
+ * @returns {ModalFieldsRecord | T} The processed fields as a record, or the parser result if provided.
+ *
+ * @example
+ * ```ts
+ * const fields = modalFieldsToRecord(interaction.fields);
+ * console.log(fields.username); // "JohnDoe"
+ * ```
+ *
+ * @example With parsing
+ * ```ts
+ * const result = modalFieldsToRecord(interaction.fields, fields => ({
+ *   name: fields.username.trim(),
+ *   age: Number.parseInt(fields.age),
+ * }));
+ * ```
+ */
+export function modalFieldsToRecord<const T = ModalFieldsRecord>(data: ResolveModalData): T
+export function modalFieldsToRecord<const T = ModalFieldsRecord>(data: ResolveModalData, parse: (record: ModalFieldsRecord) => T): T
+export function modalFieldsToRecord<const T = ModalFieldsRecord>(data: ResolveModalData, parse?: (record: ModalFieldsRecord) => T): ModalFieldsRecord | T {
     const collection = "fields" in data
         ? "fields" in data.fields
             ? data.fields.fields
@@ -26,9 +56,19 @@ export function modalFieldsToRecord<T = ModalFieldsRecord>(data: ResolveModalDat
         : data;
 
     const record = collection.reduce((acc, data) => {
-        acc[data.customId] = data.type === ComponentType.TextInput
-            ? data.value : Array.from(data.values??[]);
-
+        if (data.type === ComponentType.TextInput){
+            acc[data.customId] = data.value;
+            return acc;
+        }
+        if (data.type === ComponentType.FileUpload){
+            //@ts-ignore
+            const attachments = data.attachments as Collection<string, Attachment> | undefined;
+            acc[data.customId] = Array
+                .from(attachments?.values()??[])
+                .map(data => data.url);
+            return acc;
+        }
+        acc[data.customId] = Array.from(data.values ?? []);
         return acc;
     }, {} as ModalFieldsRecord);
 

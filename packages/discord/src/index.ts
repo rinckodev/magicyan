@@ -27,6 +27,7 @@ export * from "./functions/components/separator";
 export * from "./functions/components/text";
 export * from "./functions/components/thumbarea";
 export * from "./functions/components/thumbnail";
+export * from "./functions/components/upload";
 
 export * from "./functions/embeds/assets";
 export * from "./functions/embeds/author";

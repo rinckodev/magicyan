@@ -1,4 +1,4 @@
-import { brBuilder, createLabel, createModalFields, createTextInput, CustomItents, modalFieldsToRecord } from "#package";
+import { brBuilder, createFileUpload, createLabel, createModalFields, createTextInput, CustomItents, modalFieldsToRecord } from "#package";
 import { ChannelSelectMenuBuilder, ChannelType, Client, codeBlock } from "discord.js";
 
 const client = new Client({
@@ -31,7 +31,8 @@ client.on("interactionCreate", async interaction => {
             "Título",
             createTextInput({
                 customId: "title",
-                placeholder: "\"Minha nova postagem\""
+                placeholder: "\"Minha nova postagem\"",
+                required: false
             })
         ),
         createLabel(
@@ -40,6 +41,13 @@ client.on("interactionCreate", async interaction => {
                 customId: "channel",
                 placeholder: "Escolha o canal da postagem",
                 channelTypes: [ChannelType.GuildText]
+            })
+        ),
+        createLabel(
+            "Envie arquivos",
+            createFileUpload({
+                customId: "upload",
+                required: false
             })
         )
     );
@@ -56,69 +64,8 @@ client.on("interactionCreate", async interaction => {
 
 client.on("interactionCreate", async interaction => {
     if (!interaction.isModalSubmit()) return;
-    console.log(modalFieldsToRecord(interaction.fields));
-    console.log(modalFieldsToRecord(interaction.fields.fields));
+    const data = modalFieldsToRecord(interaction);
+    
+    console.log(data);
 });
 client.login(process.env.BOT_TOKEN);
-
-// client.on("interactionCreate", async interaction => {
-//     if (!interaction.isButton()) return;
-
-//     const isSuccess = interaction.customId === "success";
-//     const color = isSuccess ? "Green" : "Red";
-
-//     const toast = createContainer(color,
-//         isSuccess
-//             ? "Tudo certo!"
-//             : "Ocorreu um erro"
-//     );
-
-//     const container = createContainer({ from: interaction });
-//     container.components
-//         .filter(row => isActionRowBuilder(row, "buttons"))
-//         .flatMap(row => row.components)
-//         .forEach(button => {
-//             if (button.data.style === ButtonStyle.Success) {
-//                 button.setDisabled(isSuccess);
-//             } else {
-//                 button.setDisabled(!isSuccess);
-//             }
-//         });
-    
-//     container.setColor(color);
-
-//     const text = container.componentAt(0, ComponentType.TextDisplay);
-//     console.log(text?.data.content);
-
-//     await interaction.update({
-//         components: [container, toast]
-//     });
-// })
-
-// function menu<R>(user?: User, toast?: ContainerBuilder): R {
-//     const container = createContainer("Green",
-//         Separator.Default,
-//         createThumbArea(
-//             `Escolha uma ação ${user?.displayName ?? ""}`,
-//             user?.displayAvatarURL({ size: 512 })
-//         ),
-//         createRow(
-//             new ButtonBuilder({
-//                 customId: "success",
-//                 label: "Success",
-//                 style: ButtonStyle.Success
-//             }),
-//             new ButtonBuilder({
-//                 customId: "danger",
-//                 label: "Danger",
-//                 style: ButtonStyle.Danger
-//             })
-//         ),
-//         "Meu texto"
-//     )
-
-//     return ({
-//         flags: ["Ephemeral", "IsComponentsV2"],
-//         components: [container, toast].filter(isDefined),
-//     } satisfies InteractionReplyOptions) as R;
-// }

@@ -1,5 +1,5 @@
-import { createModalFields, createModalInput } from "#package";
-import { ActionRowBuilder, ComponentType, LabelBuilder, TextDisplayBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { createModalFields, createModalInput, modalFieldsToRecord } from "#package";
+import { ActionRowBuilder, Attachment, Collection, ComponentType, LabelBuilder, TextDisplayBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { describe, expect, it } from "vitest";
 
 describe("createModalInput", () => {
@@ -86,18 +86,47 @@ describe("createModalFields", () => {
     });
 });
 
-// describe("modalFieldsToRecord", () => {
 
-//     it("should handle ModalSubmitFields correctly", () => {
-//         const mockFields = {
-//             fields: [
-//                 { customId: "field1", value: "value1" },
-//                 { customId: "field2", value: "value2" }
-//             ]
-//         };
+describe("modalFieldsToRecord (FileUpload field)", () => {
+    const attachment1 = { url: "https://example.com/file1.png" } as Attachment;
+    const attachment2 = { url: "https://example.com/file2.jpg" } as Attachment;
 
-//         const result = modalFieldsToRecord(mockFields as unknown as ModalSubmitFields);
+    const attachments = new Collection<string, Attachment>([
+        ["file1", attachment1],
+        ["file2", attachment2],
+    ]);
+    
+    const modalField = {
+        type: ComponentType.FileUpload,
+        customId: "uploadedFiles",
+        attachments,
+    };
 
-//         expect(result).toEqual({ field1: "value1", field2: "value2" });
-//     });
-// });
+    const data = new Collection<string, any>([
+        ["uploadedFiles", modalField]
+    ]);
+
+    it("should return an array of URLs when the field is a FileUpload component (interaction)", () => {
+        const result = modalFieldsToRecord({
+            fields: { fields: data }
+        });
+
+        expect(result).toEqual({
+            uploadedFiles: [
+                attachment1.url, 
+                attachment2.url
+            ]
+        });
+    });
+
+    it("should return an array of URLs when the field is a FileUpload component", () => {
+        const result = modalFieldsToRecord(data);
+
+        expect(result).toEqual({
+            uploadedFiles: [
+                attachment1.url, 
+                attachment2.url
+            ]
+        });
+    });
+});
