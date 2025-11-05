@@ -7,19 +7,7 @@ export type DateUnit =
     | "months"
     | "years";
 
-export class DatePlus extends Date {
-    /**
-     * Creates a new `DatePlus` instance.
-     * @param date Initial date. Can be a `string`, `number` (timestamp), or `Date`. Defaults to the current date/time.
-     * 
-     * @example
-     * const d1 = new DatePlus(); // now
-     * @example
-     * const d2 = new DatePlus("2025-01-01"); // specific date
-     */
-    constructor(date?: string | number | Date) {
-        super(date ?? Date.now());
-    }
+export interface DatePlus extends Date {
     /**
      * Adds a value to a specific unit of the date.
      * @param unit Time unit to add to (`days`, `hours`, `minutes`, `seconds`, `milliseconds`, `months`, `years`).
@@ -32,32 +20,7 @@ export class DatePlus extends Date {
      * @example
      * d.add("hours", 12); // adds 12 hours
      */
-    public add(unit: DateUnit, value: number): this {
-        switch (unit) {
-            case "days":
-                this.setDate(this.getDate() + value);
-                break;
-            case "hours":
-                this.setHours(this.getHours() + value);
-                break;
-            case "minutes":
-                this.setMinutes(this.getMinutes() + value);
-                break;
-            case "seconds":
-                this.setSeconds(this.getSeconds() + value);
-                break;
-            case "milliseconds":
-                this.setMilliseconds(this.getMilliseconds() + value);
-                break;
-            case "months":
-                this.setMonth(this.getMonth() + value);
-                break;
-            case "years":
-                this.setFullYear(this.getFullYear() + value);
-                break;
-        }
-        return this;
-    }
+    add(unit: DateUnit, value: number): this;
     /**
      * Subtracts a value from a specific unit of the date.
      * @param unit Time unit to subtract from (`days`, `hours`, `minutes`, `seconds`, `milliseconds`, `months`, `years`).
@@ -70,9 +33,7 @@ export class DatePlus extends Date {
      * @example
      * d.sub("hours", 5); // subtracts 5 hours
      */
-    public sub(unit: DateUnit, value: number): this {
-        return this.add(unit, -value);
-    }
+    sub(unit: DateUnit, value: number): this;
     /**
      * Sets a specific unit of the date to an absolute value.
      * @param unit Time unit to set (`days`, `hours`, `minutes`, `seconds`, `milliseconds`, `months`, `years`).
@@ -85,32 +46,7 @@ export class DatePlus extends Date {
      * @example
      * d.set("days", 10); // sets the day of the month to 10
      */
-    public set(unit: DateUnit, value: number): this {
-        switch (unit) {
-            case "days":
-                this.setDate(value);
-                break;
-            case "hours":
-                this.setHours(value);
-                break;
-            case "minutes":
-                this.setMinutes(value);
-                break;
-            case "seconds":
-                this.setSeconds(value);
-                break;
-            case "milliseconds":
-                this.setMilliseconds(value);
-                break;
-            case "months":
-                this.setMonth(value);
-                break;
-            case "years":
-                this.setFullYear(value);
-                break;
-        }
-        return this;
-    }
+    set(unit: DateUnit, value: number): this;
     /**
      * Creates a clone of the current `DatePlus` instance.
      * @returns A new `DatePlus` instance with the same date/time.
@@ -121,9 +57,7 @@ export class DatePlus extends Date {
      * @example
      * d2.add("days", 5); // d1 remains unchanged
      */
-    public clone(): DatePlus {
-        return new DatePlus(this.getTime());
-    }
+    clone(): DatePlus;
     /**
      * Calculates the difference between this date and another date.
      * @param other The other `Date` or `DatePlus` instance to compare against.
@@ -137,31 +71,8 @@ export class DatePlus extends Date {
      * @example
      * console.log(d2.diff(d1, "milliseconds")); // 777600000
      */
-    public diff(other: Date | DatePlus, unit: DateUnit = "milliseconds"): number {
-        const msDiff = Math.abs(this.getTime() - other.getTime());
-
-        switch (unit) {
-            case "milliseconds":
-                return msDiff;
-            case "seconds":
-                return Math.floor(msDiff / 1000);
-            case "minutes":
-                return Math.floor(msDiff / (1000 * 60));
-            case "hours":
-                return Math.floor(msDiff / (1000 * 60 * 60));
-            case "days":
-                return Math.floor(msDiff / (1000 * 60 * 60 * 24));
-            case "months": {
-                const years = this.getFullYear() - other.getFullYear();
-                const months = this.getMonth() - other.getMonth();
-                return Math.abs(years * 12 + months);
-            }
-            case "years":
-                return Math.abs(this.getFullYear() - other.getFullYear());
-        }
-    }
+    diff(other: Date | DatePlus, unit?: DateUnit): number;
 }
-
 /**
  * Helper function to create a `DatePlus` instance.
  * @param date Optional initial date (`string`, `number`, or `Date`). Defaults to current date/time.
@@ -172,6 +83,90 @@ export class DatePlus extends Date {
  * @example
  * const now = createDate(); // current date/time
  */
-export function createDate(date?: string | number | Date) {
-    return new DatePlus(date);
+export function createDate(date?: string | number | Date): DatePlus {
+    const _date = new Date(date ?? Date.now());
+
+    return Object.assign(_date, {
+        add(unit: DateUnit, value: number) {
+            switch (unit) {
+                case "days":
+                    _date.setDate(_date.getDate() + value);
+                    break;
+                case "hours":
+                    _date.setHours(_date.getHours() + value);
+                    break;
+                case "minutes":
+                    _date.setMinutes(_date.getMinutes() + value);
+                    break;
+                case "seconds":
+                    _date.setSeconds(_date.getSeconds() + value);
+                    break;
+                case "milliseconds":
+                    _date.setMilliseconds(_date.getMilliseconds() + value);
+                    break;
+                case "months":
+                    _date.setMonth(_date.getMonth() + value);
+                    break;
+                case "years":
+                    _date.setFullYear(_date.getFullYear() + value);
+                    break;
+            }
+            return this;
+        },
+        sub(unit: DateUnit, value: number) {
+            return this.add(unit, -value);
+        },
+        set(unit: DateUnit, value: number) {
+            switch (unit) {
+                case "days":
+                    _date.setDate(value);
+                    break;
+                case "hours":
+                    _date.setHours(value);
+                    break;
+                case "minutes":
+                    _date.setMinutes(value);
+                    break;
+                case "seconds":
+                    _date.setSeconds(value);
+                    break;
+                case "milliseconds":
+                    _date.setMilliseconds(value);
+                    break;
+                case "months":
+                    _date.setMonth(value);
+                    break;
+                case "years":
+                    _date.setFullYear(value);
+                    break;
+            }
+            return this;
+        },
+        diff(other: Date | DatePlus, unit: DateUnit = "milliseconds") {
+            const msDiff = Math.abs(_date.getTime() - other.getTime());
+
+            switch (unit) {
+                case "milliseconds":
+                    return msDiff;
+                case "seconds":
+                    return Math.floor(msDiff / 1000);
+                case "minutes":
+                    return Math.floor(msDiff / (1000 * 60));
+                case "hours":
+                    return Math.floor(msDiff / (1000 * 60 * 60));
+                case "days":
+                    return Math.floor(msDiff / (1000 * 60 * 60 * 24));
+                case "months": {
+                    const years = _date.getFullYear() - other.getFullYear();
+                    const months = _date.getMonth() - other.getMonth();
+                    return Math.abs(years * 12 + months);
+                }
+                case "years":
+                    return Math.abs(_date.getFullYear() - other.getFullYear());
+            }
+        },
+        clone(){
+            return createDate(_date.getTime());
+        }
+    }) as DatePlus;
 }

@@ -1,6 +1,6 @@
 {
     "name": "@magicyan/core",
-    "version": "1.1.5",
+    "version": "1.2.0",
     "description": "A collection of simple, lightweight utility functions for common tasks in projects.",
     "license": "MIT",
     "type": "module",

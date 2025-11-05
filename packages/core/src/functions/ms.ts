@@ -2,7 +2,7 @@ import { withProperties } from "./with";
 
 type TimeUnit = "seconds" | "minutes" | "hours" | "days";
 
-const timeUnits  = Object.freeze({
+const timeUnits = Object.freeze({
     seconds: (value: number) => value * 1000,
     minutes: (value: number) => timeUnits.seconds(value * 60),
     hours: (value: number) => timeUnits.minutes(value * 60),
