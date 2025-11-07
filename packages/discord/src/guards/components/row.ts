@@ -1,8 +1,7 @@
-import { ActionRowBuilder, ButtonBuilder, TextInputBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder } from "discord.js";
 import { AnySelectMenuBuilder, isAnySelectMenuBuilder } from "./selectmenu";
 import { isButtonBuilder } from "./button";
 import { hasConstructor } from "../utils";
-import { isTextInputBuilder } from "./textinput";
 
 /**
  * Checks whether the given value is an {@link ActionRowBuilder}, optionally filtered by component type.
@@ -35,7 +34,6 @@ import { isTextInputBuilder } from "./textinput";
 export function isActionRowBuilder(value: unknown): value is ActionRowBuilder
 export function isActionRowBuilder(value: unknown, withComponents: "selects"): value is ActionRowBuilder<AnySelectMenuBuilder>
 export function isActionRowBuilder(value: unknown, withComponents: "buttons"): value is ActionRowBuilder<ButtonBuilder> 
-export function isActionRowBuilder(value: unknown, withComponents: "inputs"): value is ActionRowBuilder<TextInputBuilder>
 export function isActionRowBuilder(value: unknown, withComponent?: string): value is ActionRowBuilder {
     const isActionRow = hasConstructor(value) &&
         value.constructor.name === ActionRowBuilder.name &&
@@ -44,8 +42,7 @@ export function isActionRowBuilder(value: unknown, withComponent?: string): valu
     if (isActionRow && withComponent){
         const guard = 
             withComponent === "selects" ? isAnySelectMenuBuilder :
-            withComponent === "buttons" ? isButtonBuilder :
-            isTextInputBuilder;
+            isButtonBuilder;
             
         return (value as ActionRowBuilder).components.some(guard)
     }

@@ -44,8 +44,8 @@ type CreateComponentsData<IsContainer> = IsContainer extends true
 
 export function createComponents<
     IsContainer extends boolean = false,
-    Data extends CreateComponentsData<IsContainer> = CreateComponentsData<IsContainer>
->(...data: (Data | Data[])[]): CreateComponentsReturn<IsContainer> {
+    Data extends CreateComponentsData<IsContainer>[] = CreateComponentsData<IsContainer>[]
+>(...data: (Data | Data[])): CreateComponentsReturn<IsContainer> {
     return data.flat()
     .filter(value => isDefined(value) && typeof value !== "boolean")
     .map((component) => {

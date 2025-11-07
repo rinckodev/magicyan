@@ -43,6 +43,7 @@ export * from "./guards/components/modal";
 export * from "./guards/components/row";
 export * from "./guards/components/section";
 export * from "./guards/components/selectmenu";
+export * from "./guards/components/file";
 export * from "./guards/components/separator";
 export * from "./guards/components/textdisplay";
 export * from "./guards/components/textinput";

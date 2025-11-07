@@ -2,6 +2,13 @@ import { isDefined } from "@magicyan/core";
 import { ActionRowBuilder, APIContainerComponent, ButtonBuilder, ColorResolvable, ComponentType, ContainerBuilder, ContainerComponent, ContainerComponentBuilder, FileBuilder, MediaGalleryBuilder, Message, resolveColor, SectionBuilder, SeparatorBuilder, TextDisplayBuilder, type ContainerComponentData } from "discord.js";
 import { ComponentData, createComponents } from "./components";
 import { isMessage } from "../../guards/message";
+import { isActionRowBuilder } from "../../guards/components/row";
+import { isSectionBuilder } from "../../guards/components/section";
+import { isButtonBuilder } from "../../guards/components/button";
+import { isTextDisplayBuilder } from "../../guards/components/textdisplay";
+import { isMediaGalleryBuilder } from "../../guards/components/gallery";
+import { isFileBuilder } from "../../guards/components/file";
+import { isSeparatorBuilder } from "../../guards/components/separator";
 
 export type ContainerColor = (string & {}) | ColorResolvable;
 
@@ -30,10 +37,10 @@ export class ContainerPlusBuilder extends ContainerBuilder {
             .at(data?.fromIndex ?? 0)?.toJSON() ?? {}
 
         const constructorData: Partial<APIContainerComponent> = isDefined(data?.from)
-            ? "message" in data.from ? extractData(data.from.message) 
-            : isMessage(data.from) ? extractData(data.from) 
-                : data.from.toJSON()
-                : {}
+            ? "message" in data.from ? extractData(data.from.message)
+                : isMessage(data.from) ? extractData(data.from)
+                    : data.from.toJSON()
+            : {}
 
         if (isDefined(data?.accentColor)) {
             constructorData.accent_color = resolveColor(
@@ -81,7 +88,18 @@ export class ContainerPlusBuilder extends ContainerBuilder {
      * container.setComponent(1, null); // Removes the component at index 1.
      */
     public setComponent(index: number, data: ComponentData | null) {
-        const args: [number, number, ...ContainerComponentBuilder[]] = [index, 1];
+        return this._spliceComponents(index, 1, data);
+    }
+    public insertComponent(data: ComponentData): this
+    public insertComponent(index: number, data?: ComponentData): this
+    public insertComponent(argA: number | ComponentData, argB?: ComponentData) {
+        if (typeof argA === "number"){
+            return this._spliceComponents(argA, 0, argB);
+        }
+        return this._spliceComponents(this.components.length, 0, argA);
+    }
+    private _spliceComponents(index: number, deleteCount: number, data: ComponentData | null) {
+        const args: [number, number, ...ContainerComponentBuilder[]] = [index, deleteCount];
         if (isDefined(data)) args.push(...createComponents<true>(data));
         return this.spliceComponents(...args);
     }
@@ -111,6 +129,49 @@ export class ContainerPlusBuilder extends ContainerBuilder {
                 .filter(builder => builder.data.type === type)
                 .at(index)
             : this.components.at(index);
+    }
+    public get buttonComponents() {
+        return this.components
+            .filter(
+                comp =>
+                    isActionRowBuilder(comp, "buttons") ||
+                    isSectionBuilder(comp)
+            )
+            .flatMap(comp => {
+                if (isSectionBuilder(comp)) {
+                    if (!comp.accessory || !isButtonBuilder(comp.accessory)) return [];
+                    return [comp.accessory];
+                }
+                return comp.components;
+            })
+    }
+    public get sectionComponents() {
+        return this.components.filter(isSectionBuilder);
+    }
+    public get selectMenuComponents() {
+        return this.components
+            .filter(comp =>
+                isActionRowBuilder(comp, "selects")
+            )
+            .flatMap(comp => comp.components)
+    }
+    public get textDisplayComponents() {
+        return this.components.filter(isTextDisplayBuilder);
+    }
+    public get actionRowComponents() {
+        return this.components.filter(row =>
+            isActionRowBuilder(row, "buttons") ||
+            isActionRowBuilder(row, "selects")
+        );
+    }
+    public get mediaGalleryComponents() {
+        return this.components.filter(isMediaGalleryBuilder);
+    }
+    public get fileComponents() {
+        return this.components.filter(isFileBuilder);
+    }
+    public get separatorComponents() {
+        return this.components.filter(isSeparatorBuilder);
     }
 }
 /**

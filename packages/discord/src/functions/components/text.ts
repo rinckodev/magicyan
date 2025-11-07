@@ -19,7 +19,7 @@ import { TextDisplayBuilder } from "discord.js";
  * // Creating a text display component with a custom ID
  * const textDisplay = createTextDisplay("Welcome!", 123);
  */
-export function createTextDisplay(content: string, id?: number){
+export function createTextDisplay(content: string, id?: number): TextDisplayBuilder {
     return new TextDisplayBuilder({
         content, id
     });
