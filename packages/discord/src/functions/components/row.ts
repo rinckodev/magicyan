@@ -1,4 +1,7 @@
-import { type AnyComponentBuilder, ActionRowBuilder } from "discord.js";
+import { isDefined } from "@magicyan/core";
+import { type AnyComponentBuilder, ActionRowBuilder, ButtonBuilder } from "discord.js";
+
+type NullableValues = | null | undefined | boolean;
 
 /**
  * Creates an {@link ActionRowBuilder} containing one or more UI components.
@@ -40,9 +43,11 @@ import { type AnyComponentBuilder, ActionRowBuilder } from "discord.js";
  * );
  */
 export function createRow<Component extends AnyComponentBuilder>(
-    ...components: (Component | Component[])[]
+    ...components: (NullableValues | Component | Component[])[]
 ): ActionRowBuilder<Component> {
-    return new ActionRowBuilder<Component>({ 
+    return new ActionRowBuilder<Component>({
         components: components.flat()
+            .filter(c => typeof c !== "boolean")
+            .filter(c => isDefined(c))
     });
 }

@@ -2,8 +2,10 @@ import { Attachment, AttachmentBuilder, MediaGalleryBuilder, MediaGalleryItemDat
 import { isAttachment } from "../../guards/attachment";
 import { isDefined } from "@magicyan/core";
 
-
-export type MediaGallerySource = MediaGalleryItemData | string | Attachment | AttachmentBuilder | null | undefined
+export type MediaGallerySource =
+    | MediaGalleryItemData
+    | Attachment | AttachmentBuilder
+    | string | null | undefined | boolean
 
 /**
  * Creates a {@link MediaGalleryBuilder} instance with a collection of media items, which can be images, attachments, or URLs.
@@ -47,12 +49,14 @@ export type MediaGallerySource = MediaGalleryItemData | string | Attachment | At
  */
 export function createMediaGallery(...items: (MediaGallerySource | MediaGallerySource[])[]): MediaGalleryBuilder {
     return new MediaGalleryBuilder({
-        items: items.flat().filter(isDefined)
+        items: items.flat()
+            .filter(item => typeof item !== "boolean")
+            .filter(isDefined)
             .map(item => {
-                if (typeof item === "string"){
+                if (typeof item === "string") {
                     return { media: { url: item } }
                 }
-                if (isAttachment(item)){
+                if (isAttachment(item)) {
                     return { media: { url: `attachment://${item.name}` } }
                 }
                 return item;

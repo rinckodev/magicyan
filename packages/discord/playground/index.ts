@@ -1,5 +1,5 @@
-import { createComponents, createContainer, createMediaGallery, createRow, createSection, CustomItents, Separator, sleep } from "#package";
-import { ButtonBuilder, ButtonStyle, Client, StringSelectMenuBuilder } from "discord.js";
+import { createContainer, createLabel, createModalFields, CustomItents, Separator, sleep } from "#package";
+import { Client, ComponentType } from "discord.js";
 
 const client = new Client({
     intents: CustomItents.All
@@ -20,89 +20,62 @@ client.on("interactionCreate", async interaction => {
     if (!interaction.isChatInputCommand()) return;
     if (interaction.commandName !== "test") return;
 
-    const container = createContainer("Random",
-        createSection(
-            "Section example",
-            new ButtonBuilder({
-                customId: "/example/section",
-                label: "Example button section",
-                style: ButtonStyle.Primary
-            })
-        ),
-        "Text Display example",
-        Separator.Large,
-        new StringSelectMenuBuilder({
-            customId: "/example/select",
-            placeholder: "Select menu example",
-            options: [
-                { label: "A", value: "a" },
-                { label: "B", value: "b" }
-            ]
-        }),
-        Separator.Default,
-        createRow(
-            new ButtonBuilder({
-                customId: "/example/row/button/a",
-                label: "Example row button A",
-                style: ButtonStyle.Success
-            }),
-            new ButtonBuilder({
-                customId: "/example/row/button/b",
-                label: "Example row button B",
-                style: ButtonStyle.Danger
-            }),
-        ),
-        createMediaGallery(
-            "https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1&pp=ygUXbmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXCgBwE%3D"
-        )
-    )
+    createLabel({
+        
+    })
 
-    await interaction.reply({
-        flags: ["Ephemeral", "IsComponentsV2"],
-        components: [container]
-    });
-    await interaction.followUp({
-        flags: ["Ephemeral", "IsComponentsV2"],
-        components: createComponents(
-            createSection(
-                "Section example",
-                new ButtonBuilder({
-                    customId: "/example/section",
-                    label: "Example button section",
-                    style: ButtonStyle.Primary
-                })
+    await interaction.showModal({
+        title: "test",
+        customId: "test",
+        components: createModalFields(
+            "Texto de boas vindas",
+            createLabel(
+                "Nome",
+                "Digite seu nome", {
+                    type: ComponentType.Checkbox,
+                    customId: "test12",
+                    default: true,
+                }
             ),
-            "Text Display example",
-            Separator.Large,
-            new StringSelectMenuBuilder({
-                customId: "/example/select",
-                placeholder: "Select menu example",
-                options: [
-                    { label: "A", value: "a" },
-                    { label: "B", value: "b" }
-                ]
+            createLabel(
+                "Selecione", "test", {
+                    type: ComponentType.CheckboxGroup,
+                    customId: "test2",
+                    minValues: 2,
+                    maxValues: 5,
+                    "options": [
+                        { "value": "march-4", "label": "March 4th" },
+                        { "value": "march-5", "label": "March 5th" },
+                        { "value": "march-7", "label": "March 7th", "description": "I know this is a Saturday and is tough" },
+                        { "value": "march-9", "label": "March 9th" },
+                        { "value": "march-10", "label": "March 10th" }
+                    ]
+                }
+            ),
+            createLabel({
+                label: "Selecione 2", 
+                description: "test3",
+                component: {
+                    type: ComponentType.RadioGroup,
+                    customId: "test3",
+                    required: true,
+                    "options": [
+                        { "value": "march-4", "label": "March 4th" },
+                        { "value": "march-5", "label": "March 5th" },
+                        { "value": "march-7", "label": "March 7th", "description": "I know this is a Saturday and is tough" },
+                        { "value": "march-9", "label": "March 9th" },
+                        { "value": "march-10", "label": "March 10th" }
+                    ]
+                }
             }),
-            Separator.Default,
-            createRow(
-                new ButtonBuilder({
-                    customId: "/example/row/button/a",
-                    label: "Example row button A",
-                    style: ButtonStyle.Success
-                }),
-                new ButtonBuilder({
-                    customId: "/example/row/button/b",
-                    label: "Example row button B",
-                    style: ButtonStyle.Danger
-                }),
-            ),
-            createMediaGallery(
-                "https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1&pp=ygUXbmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXCgBwE%3D"
-            )
         )
     });
 });
 
 client.on("interactionCreate", async interaction => {
+    if (interaction.isModalSubmit()){
+        console.log(interaction.fields.fields.values());
+    }
     if (!interaction.isMessageComponent()) return;
     const container = createContainer({
         from: interaction

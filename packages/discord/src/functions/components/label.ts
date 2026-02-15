@@ -1,39 +1,53 @@
-import { LabelBuilder, LabelBuilderData } from "discord.js";
+import { ComponentInLabelData, isJSONEncodable, LabelBuilder, LabelBuilderData } from "discord.js";
+import { Unstable_CheckboxData, Unstable_CheckboxGroupData } from "./checkbox";
+import { Unstable_RadioGroupData } from "./radio";
 
-export type CreateLabelData = Omit<LabelBuilderData, "type">
-
-export type ComponentInLabelBuilder = NonNullable<CreateLabelData["component"]>;
+interface CreateLabelData extends Omit<LabelBuilderData, "type" | "component"> {
+    component?: LabelBuilderData["component"] | ComponentInLabelData
+        | Unstable_CheckboxData
+        | Unstable_CheckboxGroupData
+        | Unstable_RadioGroupData
+}
 
 export function createLabel(data: CreateLabelData): LabelBuilder 
-export function createLabel(label: string, description?: string, component?: ComponentInLabelBuilder, id?: number): LabelBuilder 
-export function createLabel(label: string, component?: ComponentInLabelBuilder, id?: number): LabelBuilder 
+export function createLabel(label: string, description?: string, component?: CreateLabelData["component"], id?: number): LabelBuilder 
+export function createLabel(label: string, component?: CreateLabelData["component"], id?: number): LabelBuilder 
 export function createLabel(
-    argA: string | CreateLabelData,
-    argB?: string | ComponentInLabelBuilder,
-    argC?: ComponentInLabelBuilder | number,
-    argD?: number
+    a: string | CreateLabelData,
+    b?: string | CreateLabelData["component"],
+    c?: CreateLabelData["component"] | number,
+    d?: number
 ): LabelBuilder {
-    if (typeof argA === "object"){
-        const { component, ...data } = argA;
-        return new LabelBuilder({
-            ...data,  component: component?.toJSON()
+    const label = new LabelBuilder();
+    if (typeof a === "object"){
+        const { component, ...data } = a;
+        Object.assign(label.data, { ...data,
+            component: isJSONEncodable(component)
+                ? component.toJSON()
+                : component
         });
+        return label;
     }
-    if (typeof argB === "string"){
-        return new LabelBuilder({
-            label: argA, 
-            description: argB,
-            ...(typeof argC === "number" 
-                ? { id: argC } 
-                : { component: argC?.toJSON(), id: argD })
+    if (typeof b === "string"){
+        Object.assign(label.data, {
+            label: a, description: b,
+            ...(typeof c === "number" 
+                ? { id: c } 
+                : { 
+                    component: isJSONEncodable(c) 
+                        ? c.toJSON() : c, 
+                    id: d
+                })
         });
+        return label;
     }
-    return new LabelBuilder({
-        label: argA,
-        component: argB?.toJSON(),
-        ...(typeof argC === "number" 
-                ? { id: argC } 
+    Object.assign(label.data, {
+        label: a,
+        component: isJSONEncodable(b) ? b.toJSON() : b,
+        ...(typeof c === "number" 
+                ? { id: c } 
                 : {}
         )
-    }) 
+    });
+    return label;
 }

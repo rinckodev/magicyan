@@ -1,5 +1,5 @@
 import { isDefined } from "@magicyan/core";
-import { Attachment, Collection, ComponentType, LabelBuilder, LabelComponentData, ModalData, TextDisplayBuilder, TextDisplayComponentData } from "discord.js";
+import { Attachment, Collection, ComponentType, LabelBuilder, LabelComponentData, ModalBuilder, ModalData, TextDisplayBuilder, TextDisplayComponentData } from "discord.js";
 
 type ModalComponents =
     | LabelBuilder
@@ -87,4 +87,32 @@ export function createModalFields(...components: ModalComponents[]): ModalFields
             } satisfies TextDisplayComponentData;
             return data.data as unknown as LabelComponentData
         });
+}
+
+export interface CreateModalOptions {
+    customId: string;
+    title: string;
+    components: ModalComponents[]
+}
+export function createModal(data: Partial<CreateModalOptions>): ModalBuilder 
+export function createModal(customId: string): ModalBuilder
+export function createModal(customId: string, title: string): ModalBuilder
+export function createModal(customId: string, title: string, ...components: ModalComponents[]): ModalBuilder
+export function createModal(
+    data: string | Partial<CreateModalOptions>, 
+    title?: string,
+    ...components: ModalComponents[]
+): ModalBuilder {
+    if (typeof data === "string"){
+        return new ModalBuilder({
+            customId: data,
+            title,
+            components: createModalFields(...components)
+        });
+    }
+    return new ModalBuilder({
+        customId: data.title,
+        title: data.title,
+        components: createModalFields(...data.components??[])
+    });
 }
