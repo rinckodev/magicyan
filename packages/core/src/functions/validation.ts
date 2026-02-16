@@ -53,7 +53,7 @@ export function isNumeric(text: string): boolean {
   	return new RegExp(/^\d+$/).test(text);
 }
 
-export function isDefined<T>(value: T): value is NonNullable<T> {
+export function isDefined<T>(value: T): value is (T & {}) {
   return value !== null && value !== undefined;
 }
 

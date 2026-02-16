@@ -9,10 +9,9 @@ const timeUnits = Object.freeze({
     days: (value: number) => timeUnits.hours(value * 24),
 });
 
-function toMsFunc(value: number, unit: TimeUnit = "seconds"){
-    return timeUnits [unit](value);
+function toMsFunc(value: number, unit: TimeUnit = "seconds") {
+    return timeUnits[unit](value);
 }
-
 /**
  * Converts a numeric value from a specified time unit into milliseconds.
  *
