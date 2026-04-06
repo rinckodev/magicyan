@@ -1,5 +1,5 @@
-import { createContainer, createLabel, createModalFields, CustomItents, Separator, sleep } from "#package";
-import { Client, ComponentType } from "discord.js";
+import { createCheckboxGroup, createContainer, createLabel, createModalFields, createRadioGroup, CustomItents, Separator, sleep } from "#package";
+import { Client } from "discord.js";
 
 const client = new Client({
     intents: CustomItents.All
@@ -20,61 +20,63 @@ client.on("interactionCreate", async interaction => {
     if (!interaction.isChatInputCommand()) return;
     if (interaction.commandName !== "test") return;
 
-    createLabel({
-        
-    })
-
     await interaction.showModal({
         title: "test",
         customId: "test",
         components: createModalFields(
             "Texto de boas vindas",
             createLabel(
-                "Nome",
-                "Digite seu nome", {
-                    type: ComponentType.Checkbox,
-                    customId: "test12",
-                    default: true,
-                }
+                "Nome 123",
+                "Digite seu nome 123",
+                createRadioGroup({
+                    customId: "test",
+                    options: [
+                        { label: "a", value: "a" },
+                        { label: "b", value: "b", default: true },
+                        { label: "c", value: "c" },
+                    ]
+                })
+                // createCheckbox("test",  true)
             ),
             createLabel(
-                "Selecione", "test", {
-                    type: ComponentType.CheckboxGroup,
+                "Selecione", "test", 
+                createCheckboxGroup({
                     customId: "test2",
                     minValues: 2,
-                    maxValues: 5,
-                    "options": [
+                    maxValues: 3,
+                    required: false,
+                    options: [
                         { "value": "march-4", "label": "March 4th" },
                         { "value": "march-5", "label": "March 5th" },
                         { "value": "march-7", "label": "March 7th", "description": "I know this is a Saturday and is tough" },
                         { "value": "march-9", "label": "March 9th" },
                         { "value": "march-10", "label": "March 10th" }
                     ]
-                }
+                })
             ),
-            createLabel({
-                label: "Selecione 2", 
-                description: "test3",
-                component: {
-                    type: ComponentType.RadioGroup,
-                    customId: "test3",
-                    required: true,
-                    "options": [
-                        { "value": "march-4", "label": "March 4th" },
-                        { "value": "march-5", "label": "March 5th" },
-                        { "value": "march-7", "label": "March 7th", "description": "I know this is a Saturday and is tough" },
-                        { "value": "march-9", "label": "March 9th" },
-                        { "value": "march-10", "label": "March 10th" }
-                    ]
-                }
-            }),
+            // createLabel({
+            //     label: "Selecione 2", 
+            //     description: "test3",
+            //     component: new RadioGroupBuilder({
+            //         custom_id: "test3",
+            //         required: true,
+            //         "options": [
+            //             { "value": "march-4", "label": "March 4th" },
+            //             { "value": "march-5", "label": "March 5th" },
+            //             { "value": "march-7", "label": "March 7th", "description": "I know this is a Saturday and is tough" },
+            //             { "value": "march-9", "label": "March 9th" },
+            //             { "value": "march-10", "label": "March 10th" }
+            //         ]
+            //     })
+            // }),
         )
     });
 });
 
 client.on("interactionCreate", async interaction => {
-    if (interaction.isModalSubmit()){
+    if (interaction.isModalSubmit()) {
         console.log(interaction.fields.fields.values());
+        await interaction.deferUpdate();
     }
     if (!interaction.isMessageComponent()) return;
     const container = createContainer({

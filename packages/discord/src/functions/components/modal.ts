@@ -14,7 +14,7 @@ type ResolveModalData =
     | { fields: Collection<string, ModalData> }
     | Collection<string, ModalData>;
 
-type ModalFieldsRecord = Record<string, string | string[]>;
+type ModalFieldsRecord = Record<string, string | string[] | boolean | null>;
 
 /**
  * Converts modal submitted fields into a plain record object, mapping each component `customId` to its value.
@@ -66,6 +66,18 @@ export function modalFieldsToRecord<const T = ModalFieldsRecord>(data: ResolveMo
             acc[data.customId] = Array
                 .from(attachments?.values()??[])
                 .map(data => data.url);
+            return acc;
+        }
+        if (data.type === ComponentType.CheckboxGroup){
+            acc[data.customId] = Array.from(data.values);
+            return acc;
+        }
+        if (data.type === ComponentType.Checkbox){
+            acc[data.customId] = data.value;
+            return acc;
+        }
+        if (data.type === ComponentType.RadioGroup){
+            acc[data.customId] = data.value;
             return acc;
         }
         acc[data.customId] = Array.from(data.values ?? []);
