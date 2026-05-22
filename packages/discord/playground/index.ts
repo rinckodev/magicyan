@@ -1,5 +1,5 @@
-import { createCheckboxGroup, createContainer, createLabel, createModalFields, createRadioGroup, CustomItents, Separator, sleep } from "#package";
-import { Client } from "discord.js";
+import { CustomItents, findMessageComponentById, flattenMessageComponents } from "#package";
+import { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, Client, ComponentType, ContainerBuilder, FileBuilder, MediaGalleryBuilder, MediaGalleryItemBuilder, SectionBuilder, SeparatorBuilder, TextDisplayBuilder, ThumbnailBuilder } from "discord.js";
 
 const client = new Client({
     intents: CustomItents.All
@@ -16,105 +16,111 @@ client.on("clientReady", (c) => {
     ]);
 });
 
+const menuIds = {
+    Section: 1,
+    SectionText: 2,
+    SectionThumb: 3,
+    Row: 4,
+    RowButton: 5,
+    Gallery: 6,
+    Separator: 7,
+    File: 8,
+    Text: 9,
+} as const;
+
 client.on("interactionCreate", async interaction => {
     if (!interaction.isChatInputCommand()) return;
-    if (interaction.commandName !== "test") return;
 
-    await interaction.showModal({
-        title: "test",
-        customId: "test",
-        components: createModalFields(
-            "Texto de boas vindas",
-            createLabel(
-                "Nome 123",
-                "Digite seu nome 123",
-                createRadioGroup({
+    const container = new ContainerBuilder();
+
+    container.addSectionComponents(
+        new SectionBuilder()
+            .setId(menuIds.Section)
+            .addTextDisplayComponents(
+                new TextDisplayBuilder()
+                    .setContent("Magicyan is awesome!")
+                    .setId(menuIds.SectionText)
+            )
+            .setThumbnailAccessory(
+                new ThumbnailBuilder()
+                    .setURL(interaction.user.displayAvatarURL())
+                    .setId(menuIds.SectionThumb)
+            )
+    )
+    container.addActionRowComponents(
+        new ActionRowBuilder<ButtonBuilder>({
+            id: menuIds.Row,
+            components: [
+                new ButtonBuilder({
+                    id: menuIds.RowButton,
                     customId: "test",
-                    options: [
-                        { label: "a", value: "a" },
-                        { label: "b", value: "b", default: true },
-                        { label: "c", value: "c" },
-                    ]
+                    style: ButtonStyle.Success,
+                    label: "Test"
                 })
-                // createCheckbox("test",  true)
-            ),
-            createLabel(
-                "Selecione", "test", 
-                createCheckboxGroup({
-                    customId: "test2",
-                    minValues: 2,
-                    maxValues: 3,
-                    required: false,
-                    options: [
-                        { "value": "march-4", "label": "March 4th" },
-                        { "value": "march-5", "label": "March 5th" },
-                        { "value": "march-7", "label": "March 7th", "description": "I know this is a Saturday and is tough" },
-                        { "value": "march-9", "label": "March 9th" },
-                        { "value": "march-10", "label": "March 10th" }
-                    ]
-                })
-            ),
-            // createLabel({
-            //     label: "Selecione 2", 
-            //     description: "test3",
-            //     component: new RadioGroupBuilder({
-            //         custom_id: "test3",
-            //         required: true,
-            //         "options": [
-            //             { "value": "march-4", "label": "March 4th" },
-            //             { "value": "march-5", "label": "March 5th" },
-            //             { "value": "march-7", "label": "March 7th", "description": "I know this is a Saturday and is tough" },
-            //             { "value": "march-9", "label": "March 9th" },
-            //             { "value": "march-10", "label": "March 10th" }
-            //         ]
-            //     })
-            // }),
-        )
-    });
+            ]
+        })
+    )
+    container.addMediaGalleryComponents(
+        new MediaGalleryBuilder()
+            .setId(menuIds.Gallery)
+            .addItems(
+                new MediaGalleryItemBuilder()
+                    .setURL(interaction.user.displayAvatarURL())
+            )
+    )
+    container.addSeparatorComponents(
+        new SeparatorBuilder()
+            .setId(menuIds.Separator)
+    )
+    container.addFileComponents(
+        new FileBuilder()
+            .setId(menuIds.File)
+            .setURL("attachment://file.json")
+    )
+    container.addTextDisplayComponents(
+        new TextDisplayBuilder()
+            .setId(menuIds.Text)
+            .setContent("-# Server")
+    )
+
+    await interaction.reply({
+        flags: ["Ephemeral", "IsComponentsV2"],
+        components: [container],
+        files: [
+            new AttachmentBuilder(Buffer.from("{}", "utf-8"), {
+                name: "file.json"
+            })
+        ]
+    })
 });
 
 client.on("interactionCreate", async interaction => {
-    if (interaction.isModalSubmit()) {
-        console.log(interaction.fields.fields.values());
-        await interaction.deferUpdate();
-    }
-    if (!interaction.isMessageComponent()) return;
-    const container = createContainer({
-        from: interaction
-    });
+    if (!interaction.isButton()) return;
+    await interaction.deferUpdate();
 
-    container.buttonComponents.forEach(button => {
-        button.setDisabled(true);
-    });
-    container.separatorComponents.forEach(button => {
-        button.setDivider(false);
-    });
+    const flatten = flattenMessageComponents(interaction);
 
-    container.insertComponent(0, Separator.Default);
+    const File = findMessageComponentById(flatten, menuIds.File, ComponentType.File)
+    const Gallery = findMessageComponentById(flatten, menuIds.Gallery, ComponentType.MediaGallery)
+    const Row = findMessageComponentById(flatten, menuIds.Row, ComponentType.ActionRow)
+    const RowButton = findMessageComponentById(flatten, menuIds.RowButton, ComponentType.Button)
+    const Section = findMessageComponentById(flatten, menuIds.Section, ComponentType.Section)
+    const SectionText = findMessageComponentById(flatten, menuIds.SectionText, ComponentType.TextDisplay)
+    const SectionThumb = findMessageComponentById(flatten, menuIds.SectionThumb, ComponentType.Thumbnail)
+    const Separator = findMessageComponentById(flatten, menuIds.Separator, ComponentType.Separator)
+    const Text = findMessageComponentById(flatten, menuIds.Text, ComponentType.TextDisplay)
 
-    await interaction.update({
-        components: [container]
-    });
+    console.log(
+        File,
+        Gallery,
+        Row,
+        RowButton,
+        Section,
+        SectionText,
+        SectionThumb,
+        Separator,
+        Text,
+    )
+})
 
-    console.log("buttons", container.buttonComponents.length);
-    console.log("selects", container.selectMenuComponents.length);
-    console.log("sections", container.sectionComponents.length);
-    console.log("texts", container.textDisplayComponents.length);
-    console.log("galleries", container.mediaGalleryComponents.length);
-    console.log("separators", container.separatorComponents.length);
-
-    await sleep.seconds(4);
-
-    container.buttonComponents.forEach(button => {
-        button.setDisabled(false);
-    });
-    container.separatorComponents.forEach(button => {
-        button.setDivider(true);
-    });
-
-
-    await interaction.editReply({
-        components: [container]
-    });
-});
 client.login(process.env.BOT_TOKEN);

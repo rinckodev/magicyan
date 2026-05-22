@@ -30,16 +30,19 @@ export type ThumbnailData =
  *   spoiler: true
  * });
  */
-export function createThumbnail(data: ThumbnailData): ThumbnailBuilder {
-    const thumbnail = new ThumbnailBuilder();
-
+export function createThumbnail(data: ThumbnailData, id?: number): ThumbnailBuilder {
     if (typeof data === "string") {
-        return thumbnail.setURL(data);
+        return new ThumbnailBuilder({
+            id, media: { url: data }
+        });
     }
     if (data instanceof AttachmentBuilder || data instanceof Attachment) {
-        return thumbnail
-            .setURL(`attachment://${data.name}`)
-            .setSpoiler(data.spoiler);
+        return new ThumbnailBuilder({
+            media: { url: `attachment://${data.name}` },
+            spoiler: data.spoiler,
+            id,
+        });
     }
+    data.id??=id;
     return new ThumbnailBuilder(data);
 }

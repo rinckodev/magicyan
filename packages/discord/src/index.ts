@@ -30,6 +30,8 @@ export * from "./functions/components/thumbnail";
 export * from "./functions/components/upload";
 export * from "./functions/components/checkbox";
 export * from "./functions/components/radio";
+export * from "./functions/components/flatten";
+export * from "./functions/components/find";
 
 export * from "./functions/embeds/assets";
 export * from "./functions/embeds/author";
